@@ -2,6 +2,7 @@ import {
   clampProgress,
   getProgressBarClassName,
 } from "../utils/quarterly"
+import { memo } from "react"
 
 type Props = {
   value?: number | null
@@ -20,4 +21,4 @@ function ProgressBar({ value }: Props) {
   )
 }
 
-export default ProgressBar
+export default memo(ProgressBar)

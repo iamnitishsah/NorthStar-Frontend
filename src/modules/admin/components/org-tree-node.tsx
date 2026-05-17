@@ -1,5 +1,5 @@
 import { ChevronDown, ChevronRight } from "lucide-react"
-import { useState } from "react"
+import { memo, useState } from "react"
 
 import type { HierarchyNode } from "@/types/goal"
 
@@ -68,4 +68,4 @@ function OrgTreeNode({
   )
 }
 
-export default OrgTreeNode
+export default memo(OrgTreeNode)

@@ -1,7 +1,6 @@
 import { Navigate } from "react-router-dom"
 
 import { useAuthStore } from "@/app/store/auth-store"
-import { getRoleHomePath } from "@/app/navigation"
 import type { UserRole } from "@/types/auth"
 
 type Props = {
@@ -31,7 +30,7 @@ function RoleProtectedRoute({
   ) {
     return (
       <Navigate
-        to={getRoleHomePath(user.role)}
+        to="/unauthorized"
         replace
       />
     )

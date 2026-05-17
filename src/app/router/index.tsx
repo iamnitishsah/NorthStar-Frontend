@@ -1,25 +1,46 @@
+/* eslint-disable react-refresh/only-export-components */
+import { lazy, Suspense } from "react"
+import type { ReactNode } from "react"
 import {
   createBrowserRouter,
   Navigate,
 } from "react-router-dom"
 
-import LoginPage from "@/pages/LoginPage"
-
-import EmployeeDashboard from "@/pages/employee/EmployeeDashboard"
-import MyGoalsPage from "@/pages/employee/MyGoalsPage"
-
-import ManagerDashboard from "@/pages/manager/ManagerDashboard"
-import ManagerProgressPage from "@/pages/manager/ManagerProgressPage"
-import ReviewGoalsPage from "@/pages/manager/ReviewGoalsPage"
-
-import AdminDashboard from "@/pages/admin/AdminDashboard"
-import AdminLogsPage from "@/pages/admin/AdminLogsPage"
-
+import LoadingSkeleton from "@/components/ui/loading-skeleton"
 import DashboardLayout from "@/layouts/DashboardLayout"
-
 import ProtectedRoute from "@/components/auth/ProtectedRoute"
 import { roleHomePath } from "@/app/navigation"
 import RoleProtectedRoute from "@/components/auth/RoleProtectedRoute"
+
+const LoginPage = lazy(() => import("@/pages/LoginPage"))
+const NotFoundPage = lazy(() => import("@/pages/NotFoundPage"))
+const UnauthorizedPage = lazy(() => import("@/pages/UnauthorizedPage"))
+
+const EmployeeDashboard = lazy(() => import("@/pages/employee/EmployeeDashboard"))
+const MyGoalsPage = lazy(() => import("@/pages/employee/MyGoalsPage"))
+
+const ManagerDashboard = lazy(() => import("@/pages/manager/ManagerDashboard"))
+const ManagerProgressPage = lazy(() => import("@/pages/manager/ManagerProgressPage"))
+const ReviewGoalsPage = lazy(() => import("@/pages/manager/ReviewGoalsPage"))
+
+const AdminDashboard = lazy(() => import("@/pages/admin/AdminDashboard"))
+const AdminLogsPage = lazy(() => import("@/pages/admin/AdminLogsPage"))
+
+function RouteFallback() {
+  return (
+    <div className="p-6">
+      <LoadingSkeleton rows={3} />
+    </div>
+  )
+}
+
+function withSuspense(element: ReactNode) {
+  return (
+    <Suspense fallback={<RouteFallback />}>
+      {element}
+    </Suspense>
+  )
+}
 
 export const router = createBrowserRouter([
   {
@@ -28,7 +49,11 @@ export const router = createBrowserRouter([
   },
   {
     path: "/login",
-    element: <LoginPage />,
+    element: withSuspense(<LoginPage />),
+  },
+  {
+    path: "/unauthorized",
+    element: withSuspense(<UnauthorizedPage />),
   },
 
   {
@@ -53,11 +78,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "dashboard",
-        element: <EmployeeDashboard />,
+        element: withSuspense(<EmployeeDashboard />),
       },
       {
         path: "goals",
-        element: <MyGoalsPage />,
+        element: withSuspense(<MyGoalsPage />),
       },
     ],
   },
@@ -65,13 +90,11 @@ export const router = createBrowserRouter([
   {
     path: "/manager",
     element: (
-    <ProtectedRoute>
-      <RoleProtectedRoute
-        allowedRoles={["MANAGER"]}
-      >
-        <DashboardLayout />
-      </RoleProtectedRoute>
-    </ProtectedRoute>
+      <ProtectedRoute>
+        <RoleProtectedRoute allowedRoles={["MANAGER"]}>
+          <DashboardLayout />
+        </RoleProtectedRoute>
+      </ProtectedRoute>
     ),
 
     children: [
@@ -86,15 +109,15 @@ export const router = createBrowserRouter([
       },
       {
         path: "dashboard",
-        element: <ManagerDashboard />,
+        element: withSuspense(<ManagerDashboard />),
       },
       {
         path: "review",
-        element: <ReviewGoalsPage />,
+        element: withSuspense(<ReviewGoalsPage />),
       },
       {
         path: "progress",
-        element: <ManagerProgressPage />,
+        element: withSuspense(<ManagerProgressPage />),
       },
     ],
   },
@@ -102,13 +125,11 @@ export const router = createBrowserRouter([
   {
     path: "/admin",
     element: (
-    <ProtectedRoute>
-      <RoleProtectedRoute
-        allowedRoles={["ADMIN"]}
-      >
-        <DashboardLayout />
-      </RoleProtectedRoute>
-    </ProtectedRoute>
+      <ProtectedRoute>
+        <RoleProtectedRoute allowedRoles={["ADMIN"]}>
+          <DashboardLayout />
+        </RoleProtectedRoute>
+      </ProtectedRoute>
     ),
 
     children: [
@@ -123,17 +144,17 @@ export const router = createBrowserRouter([
       },
       {
         path: "dashboard",
-        element: <AdminDashboard />,
+        element: withSuspense(<AdminDashboard />),
       },
       {
         path: "logs",
-        element: <AdminLogsPage />,
+        element: withSuspense(<AdminLogsPage />),
       },
     ],
   },
 
   {
     path: "*",
-    element: <Navigate to="/login" replace />,
+    element: withSuspense(<NotFoundPage />),
   },
 ])

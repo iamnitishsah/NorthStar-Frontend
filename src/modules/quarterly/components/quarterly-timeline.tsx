@@ -1,4 +1,5 @@
 import { MessageSquare, Share2 } from "lucide-react"
+import { memo } from "react"
 
 import type { Goal } from "@/types/goal"
 
@@ -102,4 +103,4 @@ function QuarterlyTimeline({
   )
 }
 
-export default QuarterlyTimeline
+export default memo(QuarterlyTimeline)
