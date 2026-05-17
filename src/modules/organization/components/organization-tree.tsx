@@ -41,12 +41,14 @@ function OrganizationTree({
         </div>
       )}
 
-      <div className="space-y-3 overflow-x-auto">
+      <div className="overflow-x-auto pb-4">
         {hierarchy.map((node) => (
-          <OrgTreeNode
+          <div
+            className="mb-8 flex min-w-[320px] justify-center last:mb-0"
             key={node.employee_id}
-            node={node}
-          />
+          >
+            <OrgTreeNode node={node} />
+          </div>
         ))}
       </div>
     </section>

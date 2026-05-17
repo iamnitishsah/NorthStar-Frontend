@@ -26,14 +26,46 @@ export function getProgressBarClassName(progress?: number | null) {
   return "bg-amber-500"
 }
 
-export function getDisplayProgress(goal: Goal, quarter: QuarterKey) {
+export function getQuarterProgress(goal: Goal, quarter: QuarterKey) {
   const quarterProgress = goal.quarter?.[quarter]?.progress_percentage
 
   if (quarterProgress !== undefined && quarterProgress !== null) {
     return quarterProgress
   }
 
-  return goal.progress_percentage ?? null
+  const quarterIndex = quarterKeys.indexOf(quarter)
+
+  for (let index = quarterIndex - 1; index >= 0; index -= 1) {
+    const previousProgress =
+      goal.quarter?.[quarterKeys[index]]?.progress_percentage
+
+    if (previousProgress !== undefined && previousProgress !== null) {
+      return previousProgress
+    }
+  }
+
+  return null
+}
+
+export function getQuarterAchievement(goal: Goal, quarter: QuarterKey) {
+  const quarterAchievement = goal.quarter?.[quarter]?.achievement_value
+
+  if (quarterAchievement !== undefined && quarterAchievement !== null) {
+    return quarterAchievement
+  }
+
+  const quarterIndex = quarterKeys.indexOf(quarter)
+
+  for (let index = quarterIndex - 1; index >= 0; index -= 1) {
+    const previousAchievement =
+      goal.quarter?.[quarterKeys[index]]?.achievement_value
+
+    if (previousAchievement !== undefined && previousAchievement !== null) {
+      return previousAchievement
+    }
+  }
+
+  return null
 }
 
 export function clampProgress(progress?: number | null) {

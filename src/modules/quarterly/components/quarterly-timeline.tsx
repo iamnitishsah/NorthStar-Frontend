@@ -5,7 +5,8 @@ import type { Goal } from "@/types/goal"
 
 import ProgressBar from "./progress-bar"
 import {
-  getDisplayProgress,
+  getQuarterAchievement,
+  getQuarterProgress,
   getProgressStatusClassName,
   getQuarterLabel,
   quarterKeys,
@@ -40,7 +41,8 @@ function QuarterlyTimeline({
       <div className={compact ? "grid gap-3" : "grid gap-3 sm:grid-cols-2 xl:grid-cols-4"}>
         {quarterKeys.map((quarter) => {
           const checkin = goal.quarter?.[quarter]
-          const progress = getDisplayProgress(goal, quarter)
+          const progress = getQuarterProgress(goal, quarter)
+          const achievement = getQuarterAchievement(goal, quarter)
           const quarterNumber = Number(quarter)
 
           return (
@@ -63,7 +65,9 @@ function QuarterlyTimeline({
                 <div className="flex justify-between text-sm">
                   <span className="text-slate-500">Achievement</span>
                   <span className="font-medium text-slate-900">
-                    {checkin ? checkin.achievement_value : "-"}
+                    {achievement === null || achievement === undefined
+                      ? "-"
+                      : achievement}
                   </span>
                 </div>
 
