@@ -9,6 +9,12 @@ export type ProgressStatus =
   | "ON_TRACK"
   | "COMPLETED"
 
+export type QuarterKey =
+  | "1"
+  | "2"
+  | "3"
+  | "4"
+
 export type UOMType =
   | "NUMERIC"
   | "PERCENTAGE"
@@ -38,12 +44,8 @@ export interface Goal {
   progress_status?: ProgressStatus
   quarter?: Partial<
     Record<
-      "1" | "2" | "3" | "4",
-      {
-        achievement_value: number
-        progress_status: ProgressStatus
-        manager_note?: string | null
-      }
+      QuarterKey,
+      QuarterlyCheckin
     >
   >
 
@@ -95,3 +97,24 @@ export interface ApproveGoalPayload {
 export interface ReturnGoalPayload {
   manager_note?: string
 }
+
+export interface QuarterlyCheckin {
+  achievement_value: number
+  progress_status: ProgressStatus
+  manager_note?: string | null
+  progress_percentage?: number | null
+}
+
+export interface QuarterlyCheckinPayload {
+  quarter: Partial<Record<QuarterKey, {
+    achievement_value: number
+    progress_status: ProgressStatus
+  }>>
+}
+
+export interface QuarterlyCommentPayload {
+  quarter: number
+  comment: string
+}
+
+export type ManagerGoalsResponse = Record<string, Goal[]>

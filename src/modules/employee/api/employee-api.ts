@@ -5,6 +5,7 @@ import type {
   ApiMessageResponse,
   CreateGoalPayload,
   Goal,
+  QuarterlyCheckinPayload,
   UpdateGoalPayload,
 } from "@/types/goal"
 
@@ -37,6 +38,21 @@ export async function updateGoal({
 }) {
   const response = await api.patch<ApiMessageResponse>(
     endpoints.employeeGoals.byId(goalId),
+    payload
+  )
+
+  return response.data
+}
+
+export async function updateQuarterlyCheckin({
+  goalId,
+  payload,
+}: {
+  goalId: string
+  payload: QuarterlyCheckinPayload
+}) {
+  const response = await api.patch<ApiMessageResponse>(
+    endpoints.employeeGoals.quarterlyCheckin(goalId),
     payload
   )
 

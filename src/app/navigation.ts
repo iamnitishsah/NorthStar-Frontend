@@ -4,6 +4,7 @@ import {
   ClipboardCheck,
   ShieldCheck,
   ScrollText,
+  TrendingUp,
 } from "lucide-react"
 import type { UserRole } from "@/types/auth"
 
@@ -42,6 +43,11 @@ export const navigation = {
       label: "Review Goals",
       path: "/manager/review",
       icon: ClipboardCheck,
+    },
+    {
+      label: "Progress",
+      path: "/manager/progress",
+      icon: TrendingUp,
     },
   ],
 

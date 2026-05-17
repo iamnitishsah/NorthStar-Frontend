@@ -1,24 +1,28 @@
-import { Pencil, Trash2 } from "lucide-react"
+import { ClipboardCheck, Pencil, Share2, Trash2 } from "lucide-react"
 
 import type { Goal } from "@/types/goal"
 
 import GoalStatusBadge from "./goal-status-badge"
 import { isEditableGoal } from "../utils/goal-form"
+import QuarterlyTimeline from "@/modules/quarterly/components/quarterly-timeline"
 
 type Props = {
   goal: Goal
   onDelete: (id: string) => void
   onEdit: (goal: Goal) => void
+  onCheckin: (goal: Goal) => void
 }
 
 function GoalCard({
   goal,
   onDelete,
   onEdit,
+  onCheckin,
 }: Props) {
   const description =
     goal.description || "No description provided."
   const canEdit = isEditableGoal(goal)
+  const canCheckin = goal.status === "LOCKED"
 
   return (
     <article className="bg-white rounded-lg border border-slate-200 shadow-sm p-5 space-y-4">
@@ -33,9 +37,17 @@ function GoalCard({
           </h3>
         </div>
 
-        <GoalStatusBadge
-          status={goal.status}
-        />
+        <div className="flex shrink-0 flex-col items-end gap-2">
+          <GoalStatusBadge
+            status={goal.status}
+          />
+          {goal.is_shared && (
+            <span className="inline-flex items-center gap-1 rounded bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-700">
+              <Share2 size={13} />
+              Shared
+            </span>
+          )}
+        </div>
       </div>
 
       <p className="text-slate-600 text-sm leading-6">
@@ -67,16 +79,36 @@ function GoalCard({
         </div>
       </div>
 
-      {canEdit && (
+      {canCheckin && (
+        <QuarterlyTimeline
+          goal={goal}
+          compact
+        />
+      )}
+
+      {(canEdit || canCheckin) && (
         <div className="flex items-center gap-4 border-t border-slate-100 pt-4">
-          <button
-            onClick={() => onEdit(goal)}
-            className="flex items-center gap-2 text-sm font-medium text-slate-700 hover:text-slate-950"
-            type="button"
-          >
-            <Pencil size={16} />
-            Edit
-          </button>
+          {canEdit && (
+            <button
+              onClick={() => onEdit(goal)}
+              className="flex items-center gap-2 text-sm font-medium text-slate-700 hover:text-slate-950"
+              type="button"
+            >
+              <Pencil size={16} />
+              Edit
+            </button>
+          )}
+
+          {canCheckin && (
+            <button
+              onClick={() => onCheckin(goal)}
+              className="flex items-center gap-2 text-sm font-medium text-slate-700 hover:text-slate-950"
+              type="button"
+            >
+              <ClipboardCheck size={16} />
+              Check-in
+            </button>
+          )}
 
           {goal.status === "DRAFT" && (
             <button

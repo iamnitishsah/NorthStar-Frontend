@@ -4,10 +4,12 @@ import axios from "axios"
 import { toast } from "sonner"
 
 import type { Goal } from "@/types/goal"
+import type { QuarterlyCheckinPayload } from "@/types/goal"
 
 import { useMyGoals } from "../hooks/use-my-goals"
 import {
   useDeleteGoal,
+  useQuarterlyCheckin,
   useSubmitGoals,
 } from "../hooks/use-goal-actions"
 import { isEditableGoal } from "../utils/goal-form"
@@ -15,10 +17,12 @@ import GoalCard from "./goal-card"
 import GoalModal from "./goal-modal"
 import GoalsEmptyState from "./goals-empty-state"
 import GoalsSummary from "./goals-summary"
+import QuarterlyCheckinModal from "./quarterly-checkin-modal"
 
 type ModalState =
   | { mode: "create"; goal?: undefined }
   | { mode: "edit"; goal: Goal }
+  | { mode: "checkin"; goal: Goal }
   | null
 
 function getErrorMessage(error: unknown, fallback: string) {
@@ -32,6 +36,7 @@ function MyGoalsWorkspace() {
   const { data = [], isLoading, isError, error } = useMyGoals()
   const deleteMutation = useDeleteGoal()
   const submitMutation = useSubmitGoals()
+  const checkinMutation = useQuarterlyCheckin()
 
   const editableGoals = useMemo(
     () => data.filter(isEditableGoal),
@@ -71,6 +76,27 @@ function MyGoalsWorkspace() {
         },
         onError: (mutationError) => {
           toast.error(getErrorMessage(mutationError, "Submission failed"))
+        },
+      }
+    )
+  }
+
+  function handleQuarterlyCheckin(
+    goalId: string,
+    payload: QuarterlyCheckinPayload
+  ) {
+    checkinMutation.mutate(
+      {
+        goalId,
+        payload,
+      },
+      {
+        onSuccess: () => {
+          toast.success("Quarterly check-in saved")
+          setModal(null)
+        },
+        onError: (mutationError) => {
+          toast.error(getErrorMessage(mutationError, "Check-in failed"))
         },
       }
     )
@@ -140,16 +166,32 @@ function MyGoalsWorkspace() {
                   goal: selectedGoal,
                 })
               }
+              onCheckin={(selectedGoal) =>
+                setModal({
+                  mode: "checkin",
+                  goal: selectedGoal,
+                })
+              }
             />
           ))}
         </div>
       )}
 
-      {modal && (
+      {(modal?.mode === "create" || modal?.mode === "edit") && (
         <GoalModal
           goal={modal.goal}
           mode={modal.mode}
           onClose={() => setModal(null)}
+        />
+      )}
+
+      {modal?.mode === "checkin" && (
+        <QuarterlyCheckinModal
+          goalId={modal.goal.goal_id}
+          goalTitle={modal.goal.title}
+          isSubmitting={checkinMutation.isPending}
+          onClose={() => setModal(null)}
+          onSubmit={handleQuarterlyCheckin}
         />
       )}
     </div>

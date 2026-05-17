@@ -9,6 +9,7 @@ import EmployeeDashboard from "@/pages/employee/EmployeeDashboard"
 import MyGoalsPage from "@/pages/employee/MyGoalsPage"
 
 import ManagerDashboard from "@/pages/manager/ManagerDashboard"
+import ManagerProgressPage from "@/pages/manager/ManagerProgressPage"
 import ReviewGoalsPage from "@/pages/manager/ReviewGoalsPage"
 
 import AdminDashboard from "@/pages/admin/AdminDashboard"
@@ -90,6 +91,10 @@ export const router = createBrowserRouter([
       {
         path: "review",
         element: <ReviewGoalsPage />,
+      },
+      {
+        path: "progress",
+        element: <ManagerProgressPage />,
       },
     ],
   },

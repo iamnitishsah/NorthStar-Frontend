@@ -4,6 +4,7 @@ import {
   createGoal,
   deleteGoal,
   submitGoals,
+  updateQuarterlyCheckin,
   updateGoal,
 } from "@/modules/employee/api/employee-api"
 
@@ -56,6 +57,20 @@ export function useSubmitGoals() {
 
   return useMutation({
     mutationFn: submitGoals,
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: myGoalsQueryKey,
+      })
+    },
+  })
+}
+
+export function useQuarterlyCheckin() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: updateQuarterlyCheckin,
 
     onSuccess: () => {
       queryClient.invalidateQueries({

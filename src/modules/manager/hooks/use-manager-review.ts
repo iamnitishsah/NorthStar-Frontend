@@ -2,11 +2,14 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 import {
   approveGoal,
+  addQuarterlyComment,
+  fetchManagerGoals,
   fetchReviewGoals,
   returnGoal,
 } from "../api/manager-api"
 
 export const managerReviewQueryKey = ["manager-review-goals"] as const
+export const managerGoalsQueryKey = ["manager-goals"] as const
 
 export function useReviewGoals() {
   return useQuery({
@@ -36,6 +39,26 @@ export function useReturnGoal() {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: managerReviewQueryKey,
+      })
+    },
+  })
+}
+
+export function useManagerGoals() {
+  return useQuery({
+    queryKey: managerGoalsQueryKey,
+    queryFn: fetchManagerGoals,
+  })
+}
+
+export function useQuarterlyComment() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: addQuarterlyComment,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: managerGoalsQueryKey,
       })
     },
   })
