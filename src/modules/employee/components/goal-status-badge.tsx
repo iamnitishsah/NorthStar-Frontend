@@ -1,11 +1,10 @@
+import type { GoalStatus } from "@/types/goal"
+
 type Props = {
-  status: string
+  status: GoalStatus
 }
 
-const colors: Record<
-  string,
-  string
-> = {
+const colors: Partial<Record<GoalStatus, string>> = {
   DRAFT:
     "bg-slate-200 text-slate-700",
 
@@ -17,6 +16,9 @@ const colors: Record<
 
   RETURNED:
     "bg-red-100 text-red-700",
+
+  ADMIN_UNLOCKED:
+    "bg-blue-100 text-blue-700",
 }
 
 function GoalStatusBadge({

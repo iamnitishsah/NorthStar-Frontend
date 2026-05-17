@@ -28,6 +28,12 @@ function EmployeeDashboard() {
 
   const lockedGoals = data.filter((goal) => goal.status === "LOCKED")
   const submittedGoals = data.filter((goal) => goal.status === "SUBMITTED")
+  const editableGoals = data.filter(
+    (goal) =>
+      goal.status === "DRAFT" ||
+      goal.status === "RETURNED" ||
+      goal.status === "ADMIN_UNLOCKED"
+  )
   const completedGoals = data.filter(
     (goal) => (goal.progress_percentage ?? 0) >= 100
   )
@@ -88,7 +94,7 @@ function EmployeeDashboard() {
             <div className="flex justify-between">
               <span className="text-slate-500">Draft / Returned</span>
               <span className="font-medium text-slate-950">
-                {data.filter((goal) => goal.status === "DRAFT" || goal.status === "RETURNED").length}
+                {editableGoals.length}
               </span>
             </div>
             <div className="flex justify-between">

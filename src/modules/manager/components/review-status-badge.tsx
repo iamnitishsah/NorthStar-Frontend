@@ -9,6 +9,7 @@ const statusClassName: Record<GoalStatus, string> = {
   SUBMITTED: "bg-amber-100 text-amber-800",
   LOCKED: "bg-emerald-100 text-emerald-800",
   RETURNED: "bg-red-100 text-red-800",
+  ADMIN_UNLOCKED: "bg-blue-100 text-blue-800",
 }
 
 function ReviewStatusBadge({ status }: Props) {

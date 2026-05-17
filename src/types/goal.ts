@@ -3,6 +3,7 @@ export type GoalStatus =
   | "SUBMITTED"
   | "LOCKED"
   | "RETURNED"
+  | "ADMIN_UNLOCKED"
 
 export type ProgressStatus =
   | "NOT_STARTED"

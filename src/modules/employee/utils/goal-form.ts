@@ -52,7 +52,11 @@ export const goalFormSchema = z
 export type GoalFormValues = z.input<typeof goalFormSchema>
 
 export function isEditableGoal(goal: Goal) {
-  return goal.status === "DRAFT" || goal.status === "RETURNED"
+  return (
+    goal.status === "DRAFT" ||
+    goal.status === "RETURNED" ||
+    goal.status === "ADMIN_UNLOCKED"
+  )
 }
 
 export function isSharedGoalFieldReadonly(goal?: Goal) {
