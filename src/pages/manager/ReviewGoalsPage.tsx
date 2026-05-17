@@ -1,5 +1,7 @@
+import ManagerReviewWorkspace from "@/modules/manager/components/manager-review-workspace"
+
 function ReviewGoalsPage() {
-  return <div>Review Goals Page</div>
+  return <ManagerReviewWorkspace />
 }
 
 export default ReviewGoalsPage

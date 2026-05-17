@@ -84,3 +84,14 @@ export interface GoalPayload {
 export type CreateGoalPayload = GoalPayload
 
 export type UpdateGoalPayload = Partial<GoalPayload>
+
+export type ManagerReviewGoalsResponse = Record<string, Goal[]>
+
+export interface ApproveGoalPayload {
+  target_value?: number
+  weightage?: number
+}
+
+export interface ReturnGoalPayload {
+  manager_note?: string
+}
