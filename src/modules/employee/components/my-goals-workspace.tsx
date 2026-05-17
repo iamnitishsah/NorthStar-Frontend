@@ -33,6 +33,7 @@ function getErrorMessage(error: unknown, fallback: string) {
 
 function MyGoalsWorkspace() {
   const [modal, setModal] = useState<ModalState>(null)
+  const [selectedGoalIds, setSelectedGoalIds] = useState<string[]>([])
   const { data = [], isLoading, isError, error } = useMyGoals()
   const deleteMutation = useDeleteGoal()
   const submitMutation = useSubmitGoals()
@@ -42,15 +43,52 @@ function MyGoalsWorkspace() {
     () => data.filter(isEditableGoal),
     [data]
   )
-  const totalWeightage = useMemo(
-    () => data.reduce((sum, goal) => sum + goal.weightage, 0),
-    [data]
+  const editableGoalIds = useMemo(
+    () => new Set(editableGoals.map((goal) => goal.goal_id)),
+    [editableGoals]
+  )
+  const activeSelectedGoalIds = useMemo(
+    () => selectedGoalIds.filter((goalId) => editableGoalIds.has(goalId)),
+    [editableGoalIds, selectedGoalIds]
+  )
+  const selectedGoals = useMemo(
+    () =>
+      editableGoals.filter((goal) =>
+        activeSelectedGoalIds.includes(goal.goal_id)
+      ),
+    [activeSelectedGoalIds, editableGoals]
+  )
+  const selectedWeightage = useMemo(
+    () =>
+      selectedGoals.reduce((sum, goal) => sum + goal.weightage, 0),
+    [selectedGoals]
   )
   const canSubmit =
-    editableGoals.length > 0 &&
-    data.length <= 8 &&
-    totalWeightage === 100 &&
+    selectedGoals.length > 0 &&
+    selectedGoals.length <= 8 &&
+    selectedWeightage === 100 &&
     !submitMutation.isPending
+
+  function handleSelectGoal(goal: Goal, isSelected: boolean) {
+    setSelectedGoalIds((prev) => {
+      const currentSelectedIds = prev.filter((goalId) =>
+        editableGoalIds.has(goalId)
+      )
+      const next = new Set(currentSelectedIds)
+
+      if (isSelected) {
+        if (next.size >= 8) {
+          toast.error("You can select up to 8 goals for submission.")
+          return prev
+        }
+        next.add(goal.goal_id)
+      } else {
+        next.delete(goal.goal_id)
+      }
+
+      return Array.from(next)
+    })
+  }
 
   function handleDelete(goalId: string) {
     if (!window.confirm("Delete this draft goal?")) return
@@ -69,7 +107,7 @@ function MyGoalsWorkspace() {
     if (!canSubmit) return
 
     submitMutation.mutate(
-      editableGoals.map((goal) => goal.goal_id),
+      selectedGoals.map((goal) => goal.goal_id),
       {
         onSuccess: () => {
           toast.success("Goals submitted successfully")
@@ -130,7 +168,6 @@ function MyGoalsWorkspace() {
         <div className="flex flex-wrap gap-3">
           <button
             className="flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
-            disabled={data.length >= 8}
             onClick={() => setModal({ mode: "create" })}
             type="button"
           >
@@ -149,7 +186,7 @@ function MyGoalsWorkspace() {
         </div>
       </div>
 
-      <GoalsSummary goals={data} />
+      <GoalsSummary goals={data} selectedGoals={selectedGoals} />
 
       {data.length === 0 ? (
         <GoalsEmptyState onCreate={() => setModal({ mode: "create" })} />
@@ -159,6 +196,7 @@ function MyGoalsWorkspace() {
             <GoalCard
               goal={goal}
               key={goal.goal_id}
+              isSelected={activeSelectedGoalIds.includes(goal.goal_id)}
               onDelete={handleDelete}
               onEdit={(selectedGoal) =>
                 setModal({
@@ -172,6 +210,7 @@ function MyGoalsWorkspace() {
                   goal: selectedGoal,
                 })
               }
+              onSelectChange={isEditableGoal(goal) ? handleSelectGoal : undefined}
             />
           ))}
         </div>
@@ -187,8 +226,7 @@ function MyGoalsWorkspace() {
 
       {modal?.mode === "checkin" && (
         <QuarterlyCheckinModal
-          goalId={modal.goal.goal_id}
-          goalTitle={modal.goal.title}
+          goal={modal.goal}
           isSubmitting={checkinMutation.isPending}
           onClose={() => setModal(null)}
           onSubmit={handleQuarterlyCheckin}

@@ -40,7 +40,7 @@ export interface Goal {
   weightage: number
   target_date?: string | null
 
-  achievement_value?: number | null
+  achievement_value?: number | string | null
   progress_percentage?: number | null
   progress_status?: ProgressStatus
   quarter?: Partial<
@@ -100,7 +100,7 @@ export interface ReturnGoalPayload {
 }
 
 export interface QuarterlyCheckin {
-  achievement_value: number
+  achievement_value: number | string
   progress_status: ProgressStatus
   manager_note?: string | null
   progress_percentage?: number | null
@@ -108,7 +108,7 @@ export interface QuarterlyCheckin {
 
 export interface QuarterlyCheckinPayload {
   quarter: Partial<Record<QuarterKey, {
-    achievement_value: number
+    achievement_value: number | string
     progress_status: ProgressStatus
   }>>
 }

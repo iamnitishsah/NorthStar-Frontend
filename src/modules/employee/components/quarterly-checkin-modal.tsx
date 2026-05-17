@@ -4,14 +4,14 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 
 import type {
+  Goal,
   ProgressStatus,
   QuarterKey,
   QuarterlyCheckinPayload,
 } from "@/types/goal"
 
 type Props = {
-  goalId: string
-  goalTitle: string
+  goal: Goal
   isSubmitting: boolean
   onClose: () => void
   onSubmit: (goalId: string, payload: QuarterlyCheckinPayload) => void
@@ -23,21 +23,32 @@ const progressStatusOptions: ProgressStatus[] = [
   "COMPLETED",
 ]
 
-const checkinSchema = z.object({
-  quarter: z.enum(["1", "2", "3", "4"]),
-  achievement_value: z.number().min(0),
-  progress_status: z.enum(progressStatusOptions),
-})
-
-type CheckinFormValues = z.infer<typeof checkinSchema>
+type CheckinFormValues = {
+  quarter: "1" | "2" | "3" | "4"
+  achievement_value: string | number
+  progress_status: ProgressStatus
+}
 
 function QuarterlyCheckinModal({
-  goalId,
-  goalTitle,
+  goal,
   isSubmitting,
   onClose,
   onSubmit,
 }: Props) {
+  const isTimeline = goal.uom_type === "TIMELINE"
+  const checkinSchema = z.object({
+    quarter: z.enum(["1", "2", "3", "4"]),
+    achievement_value: isTimeline
+      ? z
+          .string()
+          .min(1, "Achievement date is required")
+          .regex(
+            /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}(:\d{2})?)?$/,
+            "Use ISO date format (YYYY-MM-DD)"
+          )
+      : z.number().gt(0, "Achievement value must be positive"),
+    progress_status: z.enum(progressStatusOptions),
+  })
   const {
     register,
     handleSubmit,
@@ -46,7 +57,7 @@ function QuarterlyCheckinModal({
     resolver: zodResolver(checkinSchema),
     defaultValues: {
       quarter: "1",
-      achievement_value: 0,
+      achievement_value: isTimeline ? "" : 0,
       progress_status: "ON_TRACK",
     },
   })
@@ -54,7 +65,7 @@ function QuarterlyCheckinModal({
   function submit(values: CheckinFormValues) {
     const quarter = values.quarter as QuarterKey
 
-    onSubmit(goalId, {
+    onSubmit(goal.goal_id, {
       quarter: {
         [quarter]: {
           achievement_value: values.achievement_value,
@@ -73,7 +84,7 @@ function QuarterlyCheckinModal({
               Quarterly Check-in
             </h2>
             <p className="mt-1 text-sm text-slate-500">
-              {goalTitle}
+              {goal.title}
             </p>
           </div>
 
@@ -109,16 +120,16 @@ function QuarterlyCheckinModal({
 
             <label className="space-y-1.5">
               <span className="text-sm font-medium text-slate-700">
-                Achievement Value
+                {isTimeline ? "Achievement Date" : "Achievement Value"}
               </span>
               <input
-                {...register("achievement_value", {
+                {...register("achievement_value", isTimeline ? {} : {
                   valueAsNumber: true,
                 })}
                 className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
-                min={0}
-                step="any"
-                type="number"
+                min={isTimeline ? undefined : 0}
+                step={isTimeline ? undefined : "any"}
+                type={isTimeline ? "date" : "number"}
               />
               {errors.achievement_value && (
                 <p className="text-sm text-red-600">

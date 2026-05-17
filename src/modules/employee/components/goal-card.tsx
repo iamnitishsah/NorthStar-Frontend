@@ -11,6 +11,8 @@ type Props = {
   onDelete: (id: string) => void
   onEdit: (goal: Goal) => void
   onCheckin: (goal: Goal) => void
+  isSelected?: boolean
+  onSelectChange?: (goal: Goal, selected: boolean) => void
 }
 
 function GoalCard({
@@ -18,11 +20,15 @@ function GoalCard({
   onDelete,
   onEdit,
   onCheckin,
+  isSelected,
+  onSelectChange,
 }: Props) {
   const description =
     goal.description || "No description provided."
   const canEdit = isEditableGoal(goal)
   const canCheckin = goal.status === "LOCKED"
+  const showSelection = Boolean(onSelectChange)
+  const selectionId = `goal-select-${goal.goal_id}`
 
   return (
     <article className="bg-white rounded-lg border border-slate-200 shadow-sm p-5 space-y-4">
@@ -38,6 +44,23 @@ function GoalCard({
         </div>
 
         <div className="flex shrink-0 flex-col items-end gap-2">
+          {showSelection && (
+            <label
+              className="flex items-center gap-2 text-xs font-medium text-slate-600"
+              htmlFor={selectionId}
+            >
+              <input
+                checked={Boolean(isSelected)}
+                className="h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-400"
+                id={selectionId}
+                onChange={(event) =>
+                  onSelectChange?.(goal, event.target.checked)
+                }
+                type="checkbox"
+              />
+              Select
+            </label>
+          )}
           <GoalStatusBadge
             status={goal.status}
           />
