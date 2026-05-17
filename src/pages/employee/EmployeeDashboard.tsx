@@ -12,15 +12,15 @@ function EmployeeDashboard() {
       </div>
 
       <div className="grid grid-cols-3 gap-4">
-        <div className="bg-white p-6 rounded-xl shadow-sm">
+        <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
           Total Goals
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-sm">
+        <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
           Completed
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-sm">
+        <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
           Pending
         </div>
       </div>

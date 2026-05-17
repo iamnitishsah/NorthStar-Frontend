@@ -10,6 +10,7 @@ import type { UserRole } from "@/types/auth"
 export const roleHomePath: Record<UserRole, string> = {
   EMPLOYEE: "/employee/dashboard",
   MANAGER: "/manager/dashboard",
+  HR: "/login",
   ADMIN: "/admin/dashboard",
 }
 
@@ -55,9 +56,12 @@ export const navigation = {
       path: "/admin/logs",
       icon: ScrollText,
     },
+  ],
+
+  HR: [
     {
-      label: "Controls",
-      path: "/admin/control",
+      label: "Dashboard",
+      path: "/login",
       icon: ShieldCheck,
     },
   ],

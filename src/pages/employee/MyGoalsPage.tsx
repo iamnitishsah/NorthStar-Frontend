@@ -16,7 +16,7 @@ function MyGoalsPage() {
   const queryClient =
     useQueryClient()
 
-  const { data, isLoading } =
+  const { data = [], isLoading, isError, error } =
     useMyGoals()
 
   const deleteMutation =
@@ -35,6 +35,14 @@ function MyGoalsPage() {
             ],
           }
         )
+      },
+
+      onError: (error: unknown) => {
+        const message = axios.isAxiosError(error)
+          ? error.response?.data?.detail || "Delete failed"
+          : "Delete failed"
+
+        toast.error(message)
       },
     })
 
@@ -66,24 +74,43 @@ function MyGoalsPage() {
     })
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <div className="text-slate-600">Loading goals...</div>
+  }
+
+  if (isError) {
+    const message = axios.isAxiosError(error)
+      ? error.response?.data?.detail || "Unable to load goals"
+      : "Unable to load goals"
+
+    return (
+      <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">
+        {message}
+      </div>
+    )
   }
 
   const totalWeightage =
-    data?.reduce(
+    data.reduce(
       (acc, goal) =>
         acc + goal.weightage,
       0
-    ) || 0
+    )
 
   const draftGoals =
-    data?.filter(
+    data.filter(
       (goal) =>
         goal.status === "DRAFT" ||
         goal.status === "RETURNED"
-    ) || []
+    )
+
+  const canSubmit =
+    draftGoals.length > 0 &&
+    totalWeightage === 100 &&
+    !submitMutation.isPending
 
   function handleSubmitGoals() {
+    if (!canSubmit) return
+
     submitMutation.mutate(
       draftGoals.map(
         (goal) => goal.goal_id
@@ -93,7 +120,7 @@ function MyGoalsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-3xl font-bold">
             My Goals
@@ -106,17 +133,16 @@ function MyGoalsPage() {
 
         <button
           onClick={handleSubmitGoals}
-          disabled={
-            draftGoals.length === 0
-          }
-          className="bg-slate-900 text-white px-5 py-3 rounded-xl"
+          disabled={!canSubmit}
+          className="rounded-lg bg-slate-900 px-5 py-3 text-white disabled:cursor-not-allowed disabled:opacity-60"
+          type="button"
         >
-          Submit Goals
+          {submitMutation.isPending ? "Submitting..." : "Submit Goals"}
         </button>
       </div>
 
-      <div className="bg-white p-5 rounded-2xl shadow-sm">
-        <div className="flex justify-between">
+      <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="flex justify-between gap-4">
           <span>
             Total Weightage
           </span>
@@ -125,21 +151,34 @@ function MyGoalsPage() {
             {totalWeightage}%
           </span>
         </div>
+
+        {draftGoals.length > 0 && totalWeightage !== 100 && (
+          <p className="mt-2 text-sm text-amber-700">
+            Backend submission requires the combined active goal weightage to equal 100%.
+          </p>
+        )}
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        {data?.map((goal) => (
-          <GoalCard
-            key={goal.goal_id}
-            goal={goal}
-            onDelete={(id) =>
-              deleteMutation.mutate(
-                id
-              )
-            }
-          />
-        ))}
-      </div>
+      {data.length === 0 ? (
+        <div className="rounded-lg border border-dashed border-slate-300 bg-white p-8 text-center text-slate-500">
+          No goals found.
+        </div>
+      ) : (
+        <div className="grid gap-4 lg:grid-cols-2">
+          {data.map((goal) => (
+            <GoalCard
+              key={goal.goal_id}
+              goal={goal}
+              onDelete={(id) =>
+                window.confirm("Delete this draft goal?") &&
+                deleteMutation.mutate(
+                  id
+                )
+              }
+            />
+          ))}
+        </div>
+      )}
     </div>
   )
 }

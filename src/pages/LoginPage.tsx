@@ -52,10 +52,14 @@ function LoginPage() {
 
       const response = await loginUser(payload)
 
-      const user = response.response.user
+      const user = {
+        ...response.response.user,
+        user_id: response.response.user_id,
+      }
       const token = response.response.access
+      const refreshToken = response.response.refresh
 
-      setAuth(user, token)
+      setAuth(user, token, refreshToken)
 
       toast.success("Login successful")
 
@@ -70,10 +74,10 @@ function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-100">
+    <div className="min-h-screen flex items-center justify-center bg-slate-100 p-4">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white p-8 rounded-2xl shadow-lg w-[400px] space-y-5"
+        className="bg-white p-8 rounded-lg shadow-lg w-full max-w-[400px] space-y-5"
       >
         <div>
           <h1 className="text-3xl font-bold">
@@ -147,7 +151,7 @@ function LoginPage() {
 
         <button
           disabled={isSubmitting}
-          className="w-full bg-slate-900 hover:bg-slate-800 transition text-white p-3 rounded-lg font-medium"
+          className="w-full bg-slate-900 hover:bg-slate-800 transition text-white p-3 rounded-lg font-medium disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isSubmitting
             ? "Logging in..."

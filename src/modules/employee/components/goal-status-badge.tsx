@@ -25,10 +25,10 @@ function GoalStatusBadge({
   return (
     <span
       className={`
-        px-3 py-1 rounded-full text-xs font-medium
+        shrink-0 rounded px-2.5 py-1 text-xs font-medium
         ${
           colors[status] ||
-          "bg-slate-100"
+          "bg-slate-100 text-slate-700"
         }
       `}
     >

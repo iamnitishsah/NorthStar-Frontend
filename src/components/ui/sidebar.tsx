@@ -14,7 +14,7 @@ function Sidebar() {
     navigation[user.role] || []
 
   return (
-    <aside className="w-64 bg-slate-900 text-white flex flex-col">
+    <aside className="hidden w-64 shrink-0 flex-col bg-slate-900 text-white md:flex">
       <div className="p-6 border-b border-slate-800">
         <h1 className="text-2xl font-bold">
           NorthStar
@@ -35,7 +35,7 @@ function Sidebar() {
               to={item.path}
               className={({ isActive }) =>
                 `
-                flex items-center gap-3 px-4 py-3 rounded-lg transition
+                flex items-center gap-3 rounded-lg px-4 py-3 transition
                 ${
                   isActive
                     ? "bg-slate-800 text-white"

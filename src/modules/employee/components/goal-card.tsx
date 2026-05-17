@@ -13,15 +13,18 @@ function GoalCard({
   goal,
   onDelete,
 }: Props) {
+  const description =
+    goal.description || "No description provided."
+
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-5 space-y-4">
-      <div className="flex items-start justify-between">
-        <div>
+    <article className="bg-white rounded-lg border border-slate-200 shadow-sm p-5 space-y-4">
+      <div className="flex items-start justify-between gap-4">
+        <div className="min-w-0">
           <p className="text-sm text-slate-500">
             {goal.thrust_area}
           </p>
 
-          <h3 className="text-xl font-semibold">
+          <h3 className="text-lg font-semibold text-slate-950 break-words">
             {goal.title}
           </h3>
         </div>
@@ -31,8 +34,8 @@ function GoalCard({
         />
       </div>
 
-      <p className="text-slate-600 text-sm">
-        {goal.description}
+      <p className="text-slate-600 text-sm leading-6">
+        {description}
       </p>
 
       <div className="grid grid-cols-2 gap-4 text-sm">
@@ -42,7 +45,10 @@ function GoalCard({
           </p>
 
           <p className="font-medium">
-            {goal.target_value}
+            {goal.target_value}{" "}
+            <span className="text-slate-500">
+              {goal.uom_type}
+            </span>
           </p>
         </div>
 
@@ -62,14 +68,15 @@ function GoalCard({
           onClick={() =>
             onDelete(goal.goal_id)
           }
-          className="flex items-center gap-2 text-red-500 text-sm"
+          className="flex items-center gap-2 text-red-600 hover:text-red-700 text-sm font-medium"
+          type="button"
         >
           <Trash2 size={16} />
 
           Delete
         </button>
       )}
-    </div>
+    </article>
   )
 }
 
