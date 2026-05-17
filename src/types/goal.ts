@@ -68,3 +68,19 @@ export interface Goal {
 export interface ApiMessageResponse {
   message: string
 }
+
+export interface GoalPayload {
+  thrust_area: string
+  title: string
+  description?: string
+  uom_type: UOMType
+  measurement_type: MeasurementType
+  target_value: number
+  weightage: number
+  target_date?: string | null
+  progress_status?: ProgressStatus
+}
+
+export type CreateGoalPayload = GoalPayload
+
+export type UpdateGoalPayload = Partial<GoalPayload>

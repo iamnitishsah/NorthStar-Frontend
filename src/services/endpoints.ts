@@ -5,6 +5,7 @@ export const endpoints = {
   },
 
   employeeGoals: {
+    root: "/employee/goals/",
     my: "/employee/goals/my",
     submit: "/employee/goals/submit",
     byId: (goalId: string) => `/employee/goals/${goalId}`,

@@ -1,20 +1,24 @@
-import { Trash2 } from "lucide-react"
+import { Pencil, Trash2 } from "lucide-react"
 
 import type { Goal } from "@/types/goal"
 
 import GoalStatusBadge from "./goal-status-badge"
+import { isEditableGoal } from "../utils/goal-form"
 
 type Props = {
   goal: Goal
   onDelete: (id: string) => void
+  onEdit: (goal: Goal) => void
 }
 
 function GoalCard({
   goal,
   onDelete,
+  onEdit,
 }: Props) {
   const description =
     goal.description || "No description provided."
+  const canEdit = isEditableGoal(goal)
 
   return (
     <article className="bg-white rounded-lg border border-slate-200 shadow-sm p-5 space-y-4">
@@ -63,18 +67,30 @@ function GoalCard({
         </div>
       </div>
 
-      {goal.status === "DRAFT" && (
-        <button
-          onClick={() =>
-            onDelete(goal.goal_id)
-          }
-          className="flex items-center gap-2 text-red-600 hover:text-red-700 text-sm font-medium"
-          type="button"
-        >
-          <Trash2 size={16} />
+      {canEdit && (
+        <div className="flex items-center gap-4 border-t border-slate-100 pt-4">
+          <button
+            onClick={() => onEdit(goal)}
+            className="flex items-center gap-2 text-sm font-medium text-slate-700 hover:text-slate-950"
+            type="button"
+          >
+            <Pencil size={16} />
+            Edit
+          </button>
 
-          Delete
-        </button>
+          {goal.status === "DRAFT" && (
+            <button
+              onClick={() =>
+                onDelete(goal.goal_id)
+              }
+              className="flex items-center gap-2 text-sm font-medium text-red-600 hover:text-red-700"
+              type="button"
+            >
+              <Trash2 size={16} />
+              Delete
+            </button>
+          )}
+        </div>
       )}
     </article>
   )
