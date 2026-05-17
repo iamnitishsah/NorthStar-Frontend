@@ -77,6 +77,21 @@ export async function updateQuarterlyCheckin({
   return response.data
 }
 
+export async function requestGoalUnlock({
+  goalId,
+  reason,
+}: {
+  goalId: string
+  reason: string
+}) {
+  const response = await api.post<ApiMessageResponse>(
+    endpoints.employeeGoals.unlockRequest(goalId),
+    { reason }
+  )
+
+  return response.data
+}
+
 export async function deleteGoal(
   goalId: string
 ) {

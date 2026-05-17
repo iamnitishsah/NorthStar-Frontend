@@ -13,6 +13,8 @@ export const endpoints = {
       `/employee/goals/${goalId}/weightage`,
     quarterlyCheckin: (goalId: string) =>
       `/employee/goals/${goalId}/quarterly-checkin`,
+    unlockRequest: (goalId: string) =>
+      `/employee/goals/${goalId}/unlock-request`,
     mySharedGoals: "/employee/goals/my-shared-goals",
   },
 
@@ -26,6 +28,11 @@ export const endpoints = {
 
   adminGoals: {
     unlock: (goalId: string) => `/admin/goals/${goalId}/unlock`,
+    unlockRequests: "/admin/goals/unlock-requests",
+    approveUnlockRequest: (requestId: string) =>
+      `/admin/goals/unlock-requests/${requestId}/approve`,
+    rejectUnlockRequest: (requestId: string) =>
+      `/admin/goals/unlock-requests/${requestId}/reject`,
     logs: "/admin/goals/logs",
   },
 

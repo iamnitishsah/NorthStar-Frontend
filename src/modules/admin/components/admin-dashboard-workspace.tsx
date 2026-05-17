@@ -18,6 +18,7 @@ import AdminCharts from "./admin-charts"
 import MetricCard from "./metric-card"
 import OrganizationTree from "@/modules/organization/components/organization-tree"
 import UnlockGoalPanel from "./unlock-goal-panel"
+import UnlockRequestsPanel from "./unlock-requests-panel"
 
 function AdminDashboardWorkspace() {
   const hierarchyQuery = useOrganizationHierarchy()
@@ -73,7 +74,10 @@ function AdminDashboardWorkspace() {
         />
       </div>
 
-      <UnlockGoalPanel lockedGoalCandidates={getLockedGoalCandidates(logs)} />
+      <div className="grid gap-4 xl:grid-cols-2">
+        <UnlockRequestsPanel />
+        <UnlockGoalPanel lockedGoalCandidates={getLockedGoalCandidates(logs)} />
+      </div>
 
       <AdminCharts
         actionCounts={getActionCounts(logs)}

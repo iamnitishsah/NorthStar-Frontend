@@ -10,6 +10,7 @@ import { useMyGoals } from "../hooks/use-my-goals"
 import {
   useDeleteGoal,
   useQuarterlyCheckin,
+  useRequestGoalUnlock,
   useSubmitGoals,
 } from "../hooks/use-goal-actions"
 import { isEditableGoal } from "../utils/goal-form"
@@ -18,11 +19,13 @@ import GoalModal from "./goal-modal"
 import GoalsEmptyState from "./goals-empty-state"
 import GoalsSummary from "./goals-summary"
 import QuarterlyCheckinModal from "./quarterly-checkin-modal"
+import UnlockRequestModal from "./unlock-request-modal"
 
 type ModalState =
   | { mode: "create"; goal?: undefined }
   | { mode: "edit"; goal: Goal }
   | { mode: "checkin"; goal: Goal }
+  | { mode: "unlock-request"; goal: Goal }
   | null
 
 function getErrorMessage(error: unknown, fallback: string) {
@@ -38,6 +41,7 @@ function MyGoalsWorkspace() {
   const deleteMutation = useDeleteGoal()
   const submitMutation = useSubmitGoals()
   const checkinMutation = useQuarterlyCheckin()
+  const unlockRequestMutation = useRequestGoalUnlock()
 
   const editableGoals = useMemo(
     () => data.filter(isEditableGoal),
@@ -140,6 +144,24 @@ function MyGoalsWorkspace() {
     )
   }
 
+  function handleUnlockRequest(goalId: string, reason: string) {
+    unlockRequestMutation.mutate(
+      {
+        goalId,
+        reason,
+      },
+      {
+        onSuccess: () => {
+          toast.success("Unlock request submitted")
+          setModal(null)
+        },
+        onError: (mutationError) => {
+          toast.error(getErrorMessage(mutationError, "Unlock request failed"))
+        },
+      }
+    )
+  }
+
   if (isLoading) {
     return <div className="text-slate-600">Loading goals...</div>
   }
@@ -210,6 +232,12 @@ function MyGoalsWorkspace() {
                   goal: selectedGoal,
                 })
               }
+              onRequestUnlock={(selectedGoal) =>
+                setModal({
+                  mode: "unlock-request",
+                  goal: selectedGoal,
+                })
+              }
               onSelectChange={isEditableGoal(goal) ? handleSelectGoal : undefined}
             />
           ))}
@@ -230,6 +258,15 @@ function MyGoalsWorkspace() {
           isSubmitting={checkinMutation.isPending}
           onClose={() => setModal(null)}
           onSubmit={handleQuarterlyCheckin}
+        />
+      )}
+
+      {modal?.mode === "unlock-request" && (
+        <UnlockRequestModal
+          goal={modal.goal}
+          isSubmitting={unlockRequestMutation.isPending}
+          onClose={() => setModal(null)}
+          onSubmit={handleUnlockRequest}
         />
       )}
     </div>

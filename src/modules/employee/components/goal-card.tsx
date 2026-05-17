@@ -1,4 +1,4 @@
-import { ClipboardCheck, Pencil, Share2, Trash2 } from "lucide-react"
+import { ClipboardCheck, LockOpen, Pencil, Share2, Trash2 } from "lucide-react"
 
 import type { Goal } from "@/types/goal"
 
@@ -11,6 +11,7 @@ type Props = {
   onDelete: (id: string) => void
   onEdit: (goal: Goal) => void
   onCheckin: (goal: Goal) => void
+  onRequestUnlock: (goal: Goal) => void
   isSelected?: boolean
   onSelectChange?: (goal: Goal, selected: boolean) => void
 }
@@ -20,6 +21,7 @@ function GoalCard({
   onDelete,
   onEdit,
   onCheckin,
+  onRequestUnlock,
   isSelected,
   onSelectChange,
 }: Props) {
@@ -27,6 +29,7 @@ function GoalCard({
     goal.description || "No description provided."
   const canEdit = isEditableGoal(goal)
   const canCheckin = goal.status === "LOCKED"
+  const canRequestUnlock = goal.status === "LOCKED"
   const showSelection = Boolean(onSelectChange)
   const selectionId = `goal-select-${goal.goal_id}`
 
@@ -109,8 +112,8 @@ function GoalCard({
         />
       )}
 
-      {(canEdit || canCheckin) && (
-        <div className="flex items-center gap-4 border-t border-slate-100 pt-4">
+      {(canEdit || canCheckin || canRequestUnlock) && (
+        <div className="flex flex-wrap items-center gap-4 border-t border-slate-100 pt-4">
           {canEdit && (
             <button
               onClick={() => onEdit(goal)}
@@ -130,6 +133,17 @@ function GoalCard({
             >
               <ClipboardCheck size={16} />
               Check-in
+            </button>
+          )}
+
+          {canRequestUnlock && (
+            <button
+              onClick={() => onRequestUnlock(goal)}
+              className="flex items-center gap-2 text-sm font-medium text-slate-700 hover:text-slate-950"
+              type="button"
+            >
+              <LockOpen size={16} />
+              Request Unlock
             </button>
           )}
 

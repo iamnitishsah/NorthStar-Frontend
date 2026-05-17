@@ -72,6 +72,25 @@ export interface ApiMessageResponse {
   message: string
 }
 
+export type UnlockRequestStatus =
+  | "PENDING"
+  | "APPROVED"
+  | "REJECTED"
+
+export interface UnlockRequest {
+  request_id?: string
+  _id?: string
+  goal_id: string
+  requester_id?: string
+  employee_id?: string
+  requester_name?: string
+  employee_name?: string
+  reason?: string | null
+  status: UnlockRequestStatus
+  created_at?: string
+  updated_at?: string
+}
+
 export interface GoalPayload {
   thrust_area: string
   title: string

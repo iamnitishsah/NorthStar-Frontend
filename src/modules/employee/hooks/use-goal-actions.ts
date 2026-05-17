@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import {
   createGoal,
   deleteGoal,
+  requestGoalUnlock,
   submitGoals,
   updateQuarterlyCheckin,
   updateGoal,
@@ -71,6 +72,20 @@ export function useQuarterlyCheckin() {
 
   return useMutation({
     mutationFn: updateQuarterlyCheckin,
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: myGoalsQueryKey,
+      })
+    },
+  })
+}
+
+export function useRequestGoalUnlock() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: requestGoalUnlock,
 
     onSuccess: () => {
       queryClient.invalidateQueries({
