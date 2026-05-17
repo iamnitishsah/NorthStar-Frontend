@@ -3,20 +3,11 @@ import { endpoints } from "@/services/endpoints"
 import type {
   ApiMessageResponse,
   AuditLogEntry,
-  HierarchyNode,
 } from "@/types/goal"
 
 export type AuditLogFilters = {
   action?: string
   user_id?: string
-}
-
-export async function fetchOrganizationHierarchy() {
-  const response = await api.get<HierarchyNode[]>(
-    endpoints.organization.hierarchy
-  )
-
-  return response.data
 }
 
 export async function fetchAuditLogs(filters: AuditLogFilters = {}) {

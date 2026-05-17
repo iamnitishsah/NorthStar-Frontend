@@ -1,21 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
-import {
-  fetchAuditLogs,
-  fetchOrganizationHierarchy,
-  unlockGoal,
-} from "../api/admin-api"
+import { fetchAuditLogs, unlockGoal } from "../api/admin-api"
 import type { AuditLogFilters } from "../api/admin-api"
+export {
+  organizationHierarchyQueryKey,
+  useOrganizationHierarchy,
+} from "@/modules/organization/hooks/use-organization-hierarchy"
 
-export const organizationHierarchyQueryKey = ["organization-hierarchy"] as const
 export const auditLogsQueryKey = ["admin-audit-logs"] as const
-
-export function useOrganizationHierarchy() {
-  return useQuery({
-    queryKey: organizationHierarchyQueryKey,
-    queryFn: fetchOrganizationHierarchy,
-  })
-}
 
 export function useAuditLogs(filters: AuditLogFilters = {}) {
   return useQuery({

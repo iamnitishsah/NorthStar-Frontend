@@ -25,6 +25,9 @@ const ReviewGoalsPage = lazy(() => import("@/pages/manager/ReviewGoalsPage"))
 
 const AdminDashboard = lazy(() => import("@/pages/admin/AdminDashboard"))
 const AdminLogsPage = lazy(() => import("@/pages/admin/AdminLogsPage"))
+const OrganizationPage = lazy(
+  () => import("@/pages/organization/OrganizationPage")
+)
 
 function RouteFallback() {
   return (
@@ -149,6 +152,21 @@ export const router = createBrowserRouter([
       {
         path: "logs",
         element: withSuspense(<AdminLogsPage />),
+      },
+    ],
+  },
+
+  {
+    path: "/organization",
+    element: (
+      <ProtectedRoute>
+        <DashboardLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        index: true,
+        element: withSuspense(<OrganizationPage />),
       },
     ],
   },

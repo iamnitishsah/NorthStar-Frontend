@@ -16,7 +16,7 @@ import {
 } from "../utils/admin-analytics"
 import AdminCharts from "./admin-charts"
 import MetricCard from "./metric-card"
-import OrganizationTree from "./organization-tree"
+import OrganizationTree from "@/modules/organization/components/organization-tree"
 import UnlockGoalPanel from "./unlock-goal-panel"
 
 function AdminDashboardWorkspace() {

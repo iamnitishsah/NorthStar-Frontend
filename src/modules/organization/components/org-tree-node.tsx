@@ -48,7 +48,7 @@ function OrgTreeNode({
             {node.designation}
           </p>
           <p className="text-xs text-slate-500">
-            {node.department} · {node.employee_id}
+            {node.department}
           </p>
         </div>
       </div>

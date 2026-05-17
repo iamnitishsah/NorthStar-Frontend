@@ -5,6 +5,7 @@ import {
   ShieldCheck,
   ScrollText,
   TrendingUp,
+  Users,
 } from "lucide-react"
 import type { UserRole } from "@/types/auth"
 
@@ -27,6 +28,11 @@ export const navigation = {
       icon: LayoutDashboard,
     },
     {
+      label: "Organization",
+      path: "/organization",
+      icon: Users,
+    },
+    {
       label: "My Goals",
       path: "/employee/goals",
       icon: Target,
@@ -38,6 +44,11 @@ export const navigation = {
       label: "Dashboard",
       path: "/manager/dashboard",
       icon: LayoutDashboard,
+    },
+    {
+      label: "Organization",
+      path: "/organization",
+      icon: Users,
     },
     {
       label: "Review Goals",
@@ -56,6 +67,11 @@ export const navigation = {
       label: "Control Center",
       path: "/admin/dashboard",
       icon: LayoutDashboard,
+    },
+    {
+      label: "Organization",
+      path: "/organization",
+      icon: Users,
     },
     {
       label: "Audit Logs",
