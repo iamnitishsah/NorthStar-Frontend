@@ -21,7 +21,7 @@ type Props = {
   isSubmitting: boolean
   onCancel: () => void
   onSubmit: (payload: ReturnType<typeof toGoalPayload>) => void
-  onUpdate: (goalId: string, payload: ReturnType<typeof toUpdateGoalPayload>) => void
+  onUpdate: (goal: Goal, payload: ReturnType<typeof toUpdateGoalPayload>) => void
 }
 
 function fieldClassName(isReadonly = false) {
@@ -87,7 +87,7 @@ function GoalForm({
 
   function submit(values: GoalFormValues) {
     if (isEditMode && goal) {
-      onUpdate(goal.goal_id, toUpdateGoalPayload(values, goal))
+      onUpdate(goal, toUpdateGoalPayload(values, goal))
       return
     }
 
@@ -137,7 +137,8 @@ function GoalForm({
         </span>
         <textarea
           {...register("description")}
-          className={`${fieldClassName()} min-h-24 resize-y`}
+          className={`${fieldClassName(isEditMode && isShared)} min-h-24 resize-y`}
+          readOnly={isEditMode && isShared}
           rows={4}
         />
         <FieldError message={errors.description?.message} />
@@ -221,7 +222,8 @@ function GoalForm({
           </span>
           <input
             {...register("target_date")}
-            className={fieldClassName()}
+            className={fieldClassName(isEditMode && isShared)}
+            readOnly={isEditMode && isShared}
             type="date"
           />
           <FieldError message={errors.target_date?.message} />

@@ -112,8 +112,6 @@ export function toUpdateGoalPayload(
   }
 
   return {
-    description: payload.description,
     weightage: payload.weightage,
-    target_date: payload.target_date,
   }
 }

@@ -32,10 +32,27 @@ export async function createGoal(
 export async function updateGoal({
   goalId,
   payload,
+  isSharedGoal,
 }: {
   goalId: string
   payload: UpdateGoalPayload
+  isSharedGoal?: boolean
 }) {
+  if (isSharedGoal) {
+    if (typeof payload.weightage !== "number") {
+      throw new Error("Weightage is required to update shared goals.")
+    }
+
+    const response = await api.patch<ApiMessageResponse>(
+      endpoints.employeeGoals.updateWeightage(goalId),
+      {
+        weightage: payload.weightage,
+      }
+    )
+
+    return response.data
+  }
+
   const response = await api.patch<ApiMessageResponse>(
     endpoints.employeeGoals.byId(goalId),
     payload

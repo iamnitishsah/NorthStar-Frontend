@@ -44,11 +44,12 @@ function GoalModal({
     })
   }
 
-  function handleUpdate(goalId: string, payload: UpdateGoalPayload) {
+  function handleUpdate(goal: Goal, payload: UpdateGoalPayload) {
     updateMutation.mutate(
       {
-        goalId,
+        goalId: goal.goal_id,
         payload,
+        isSharedGoal: goal.is_shared,
       },
       {
         onSuccess: () => {
