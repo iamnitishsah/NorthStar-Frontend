@@ -1,5 +1,6 @@
 import { api } from "@/services/api"
 import { endpoints } from "@/services/endpoints"
+import { normalizeQuarterMap } from "@/modules/quarterly/utils/quarterly"
 
 import type {
   ApiMessageResponse,
@@ -15,7 +16,7 @@ export async function fetchMyGoals() {
       endpoints.employeeGoals.my
     )
 
-  return response.data
+  return response.data.map(normalizeQuarterMap)
 }
 
 export async function createGoal(

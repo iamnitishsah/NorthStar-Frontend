@@ -2,14 +2,24 @@ import axios from "axios"
 
 import { api } from "@/services/api"
 import { endpoints } from "@/services/endpoints"
+import { normalizeQuarterMap } from "@/modules/quarterly/utils/quarterly"
 import type {
   ApiMessageResponse,
   ApproveGoalPayload,
+  Goal,
   ManagerGoalsResponse,
   ManagerReviewGoalsResponse,
   QuarterlyCommentPayload,
   ReturnGoalPayload,
 } from "@/types/goal"
+
+const normalizeGoalGroup = (group: Record<string, Goal[]>) =>
+  Object.fromEntries(
+    Object.entries(group).map(([key, goals]) => [
+      key,
+      goals.map(normalizeQuarterMap),
+    ])
+  )
 
 export async function fetchReviewGoals() {
   try {
@@ -17,7 +27,7 @@ export async function fetchReviewGoals() {
       endpoints.managerGoals.review
     )
 
-    return response.data
+    return normalizeGoalGroup(response.data) as ManagerReviewGoalsResponse
   } catch (error) {
     if (axios.isAxiosError(error) && error.response?.status === 404) {
       return {}
@@ -33,7 +43,7 @@ export async function fetchManagerGoals() {
       endpoints.managerGoals.approved
     )
 
-    return response.data
+    return normalizeGoalGroup(response.data) as ManagerGoalsResponse
   } catch (error) {
     if (axios.isAxiosError(error) && error.response?.status === 404) {
       return {}
@@ -82,13 +92,7 @@ export async function addQuarterlyComment({
 }) {
   const response = await api.post<ApiMessageResponse>(
     endpoints.managerGoals.comment(goalId),
-    null,
-    {
-      params: {
-        quarter: payload.quarter,
-        comment: payload.comment,
-      },
-    }
+    payload
   )
 
   return response.data

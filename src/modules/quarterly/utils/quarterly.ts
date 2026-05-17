@@ -6,6 +6,63 @@ export function getQuarterLabel(quarter: QuarterKey) {
   return `Q${quarter}`
 }
 
+export function normalizeQuarterMap(goal: Goal): Goal {
+  const rawQuarter = goal.quarter as unknown
+
+  if (!rawQuarter) return goal
+
+  if (Array.isArray(rawQuarter)) {
+    const normalized: Goal["quarter"] = {}
+
+    rawQuarter.forEach((entry, index) => {
+      const quarterKey = String(index + 1) as QuarterKey
+
+      if (quarterKeys.includes(quarterKey) && entry) {
+        normalized[quarterKey] = entry
+      }
+    })
+
+    return {
+      ...goal,
+      quarter: normalized,
+    }
+  }
+
+  if (typeof rawQuarter === "object") {
+    const record = rawQuarter as Record<
+      string,
+      NonNullable<Goal["quarter"]>[QuarterKey]
+    >
+    const keys = Object.keys(record)
+    const hasZeroIndex = keys.includes("0")
+    const hasQuarterKeys = keys.some((key) => quarterKeys.includes(key as QuarterKey))
+
+    if (hasZeroIndex && !hasQuarterKeys) {
+      const normalized: Goal["quarter"] = {}
+
+      keys.forEach((key) => {
+        const index = Number(key)
+
+        if (!Number.isNaN(index)) {
+          const quarterKey = String(index + 1) as QuarterKey
+          const entry = record[key]
+
+          if (quarterKeys.includes(quarterKey) && entry) {
+            normalized[quarterKey] = entry
+          }
+        }
+      })
+
+      return {
+        ...goal,
+        quarter: normalized,
+      }
+    }
+  }
+
+  return goal
+}
+
 export function getProgressStatusClassName(status?: ProgressStatus) {
   switch (status) {
     case "COMPLETED":
