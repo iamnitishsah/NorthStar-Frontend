@@ -1,5 +1,7 @@
+import AdminLogsWorkspace from "@/modules/admin/components/admin-logs-workspace"
+
 function AdminLogsPage() {
-  return <div>Admin Logs Page</div>
+  return <AdminLogsWorkspace />
 }
 
 export default AdminLogsPage

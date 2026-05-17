@@ -118,3 +118,22 @@ export interface QuarterlyCommentPayload {
 }
 
 export type ManagerGoalsResponse = Record<string, Goal[]>
+
+export type AuditLogDetails = Record<string, unknown>
+
+export interface AuditLogEntry {
+  _id: string
+  user_id: string
+  action: string
+  details: AuditLogDetails
+  timestamp: string
+}
+
+export interface HierarchyNode {
+  employee_id: string
+  name: string
+  designation: string
+  department: string
+  role: string
+  children: HierarchyNode[]
+}

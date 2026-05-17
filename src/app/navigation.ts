@@ -53,7 +53,7 @@ export const navigation = {
 
   ADMIN: [
     {
-      label: "Dashboard",
+      label: "Control Center",
       path: "/admin/dashboard",
       icon: LayoutDashboard,
     },
