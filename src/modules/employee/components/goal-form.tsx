@@ -6,6 +6,7 @@ import type { Goal } from "@/types/goal"
 
 import {
   getGoalFormDefaultValues,
+  getTodayDateInputValue,
   goalFormSchema,
   isSharedGoalFieldReadonly,
   measurementOptions,
@@ -73,6 +74,7 @@ function GoalForm({
   })
   const isTimeline = uomType === "TIMELINE"
   const isZeroBased = uomType === "ZERO_BASED"
+  const minTargetDate = getTodayDateInputValue()
 
   useEffect(() => {
     reset(getGoalFormDefaultValues(goal))
@@ -232,6 +234,7 @@ function GoalForm({
           <input
             {...register("target_date")}
             className={fieldClassName(isEditMode && isShared)}
+            min={minTargetDate}
             readOnly={isEditMode && isShared}
             type="date"
           />

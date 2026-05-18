@@ -20,6 +20,15 @@ export const measurementOptions: MeasurementType[] = [
   "MAX",
 ]
 
+export function getTodayDateInputValue() {
+  const today = new Date()
+  const year = today.getFullYear()
+  const month = String(today.getMonth() + 1).padStart(2, "0")
+  const day = String(today.getDate()).padStart(2, "0")
+
+  return `${year}-${month}-${day}`
+}
+
 export const goalFormSchema = z
   .object({
     thrust_area: z.string().trim().min(3, "Minimum 3 characters").max(100),
@@ -36,6 +45,14 @@ export const goalFormSchema = z
       context.addIssue({
         code: "custom",
         message: "Target date is required for timeline goals",
+        path: ["target_date"],
+      })
+    }
+
+    if (value.target_date && value.target_date < getTodayDateInputValue()) {
+      context.addIssue({
+        code: "custom",
+        message: "Target date cannot be in the past",
         path: ["target_date"],
       })
     }
