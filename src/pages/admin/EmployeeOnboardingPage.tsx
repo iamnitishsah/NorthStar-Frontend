@@ -31,26 +31,29 @@ const schema = z.object({
 
 type FormValues = z.input<typeof schema>
 
-type ManagerOption = {
+type ReportingManagerOption = {
   employee_id: string
   name: string
   department: string
   designation: string
+  role: string
 }
 
-function collectManagers(nodes: HierarchyNode[]): ManagerOption[] {
+function collectReportingManagers(nodes: HierarchyNode[]): ReportingManagerOption[] {
   return nodes.flatMap((node) => {
+    const canReceiveReports = node.role === "MANAGER" || node.role === "ADMIN"
     const current =
-      node.role === "MANAGER"
+      canReceiveReports
         ? [{
             employee_id: node.employee_id,
             name: node.name,
             department: node.department,
             designation: node.designation,
+            role: node.role,
           }]
         : []
 
-    return [...current, ...collectManagers(node.children || [])]
+    return [...current, ...collectReportingManagers(node.children || [])]
   })
 }
 
@@ -66,8 +69,8 @@ function EmployeeOnboardingPage() {
   const [showPassword, setShowPassword] = useState(false)
   const { data: hierarchy = [], isLoading: isLoadingManagers } = useOrganizationHierarchy()
 
-  const managers = useMemo(
-    () => collectManagers(hierarchy).sort((a, b) => a.name.localeCompare(b.name)),
+  const reportingManagers = useMemo(
+    () => collectReportingManagers(hierarchy).sort((a, b) => a.name.localeCompare(b.name)),
     [hierarchy]
   )
 
@@ -261,9 +264,9 @@ function EmployeeOnboardingPage() {
                 <option value="">
                   {isLoadingManagers ? "Loading managers..." : "No manager assigned"}
                 </option>
-                {managers.map((manager) => (
+                {reportingManagers.map((manager) => (
                   <option key={manager.employee_id} value={manager.employee_id}>
-                    {manager.name} ({manager.employee_id}) - {manager.department}, {manager.designation}
+                    {manager.name} ({manager.employee_id}) - {manager.role}, {manager.department}, {manager.designation}
                   </option>
                 ))}
               </select>
