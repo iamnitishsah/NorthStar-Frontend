@@ -3,6 +3,7 @@ import { Sparkles, Star, X } from "lucide-react"
 
 import { navigation } from "@/app/navigation"
 import { useAuthStore } from "@/app/store/auth-store"
+import { cn } from "@/lib/utils"
 
 type Props = {
   isOpen?: boolean
@@ -24,7 +25,7 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
       <div className="border-b border-slate-200 p-6 dark:border-white/10">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
-            <div className="relative mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-[#0B1220] text-white shadow-sm dark:bg-white dark:text-[#0B1220]">
+            <div className="relative mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-slate-950 text-white shadow-sm dark:bg-white dark:text-slate-950">
               <Star className="fill-[#00897B] text-[#00897B]" size={25} />
               <Sparkles className="absolute right-1 top-1 text-[#0D47A1]" size={11} />
             </div>
@@ -60,14 +61,12 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
               onClick={onClose}
               to={item.path}
               className={({ isActive }) =>
-                `
-                flex items-center gap-3 rounded-md px-4 py-3 text-sm font-medium transition
-                ${
+                cn(
+                  "flex items-center gap-3 rounded-md px-4 py-3 text-sm font-medium transition",
                   isActive
                     ? "bg-[#0D47A1] text-white shadow-sm"
                     : "text-slate-600 hover:bg-slate-100 hover:text-[#0D47A1] dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white"
-                }
-              `
+                )
               }
             >
               <Icon size={18} />

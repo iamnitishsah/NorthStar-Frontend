@@ -16,7 +16,7 @@ function GoalsSummary({ goals, selectedGoals, lockedGoals = [] }: Props) {
   )
   const goalCount = activeGoals.length
   const totalGoals = goals.length
-  const progressWidth = Math.min(totalWeightage, 100)
+  const progressValue = Math.min(totalWeightage, 100)
   const isComplete = totalWeightage === 100 && goalCount <= 8 && goalCount > 0
 
   return (
@@ -36,16 +36,16 @@ function GoalsSummary({ goals, selectedGoals, lockedGoals = [] }: Props) {
         </div>
       </div>
 
-      <div className="mt-4 h-2.5 overflow-hidden rounded-full bg-slate-100">
-        <div
-          className={
-            isComplete
-              ? "h-full rounded-full bg-gradient-to-r from-[#00897B] to-[#2E7D32] transition-all duration-300"
-              : "h-full rounded-full bg-gradient-to-r from-[#EF6C00] to-[#00897B] transition-all duration-300"
-          }
-          style={{ width: `${progressWidth}%` }}
-        />
-      </div>
+      <progress
+        aria-label="Selected goal weightage"
+        className={
+          isComplete
+            ? "mt-4 h-2.5 w-full overflow-hidden rounded-full bg-slate-100 accent-[#00897B]"
+            : "mt-4 h-2.5 w-full overflow-hidden rounded-full bg-slate-100 accent-[#EF6C00]"
+        }
+        max={100}
+        value={progressValue}
+      />
 
       <p className="mt-2 text-sm text-slate-500">
         Submission is calculated from selected editable goals plus already locked goals. {totalGoals} total goals available.

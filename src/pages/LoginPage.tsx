@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import {
   AlertCircle,
   Building2,
@@ -16,6 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { loginUser } from "@/modules/auth/auth-service"
 import { getRoleHomePath } from "@/app/navigation"
 import { useAuthStore } from "@/app/store/auth-store"
+import { useTheme } from "@/app/providers/theme-provider"
 import { getApiErrorMessage } from "@/services/api-error"
 
 import { toast } from "sonner"
@@ -46,17 +47,7 @@ function LoginPage() {
     "email" | "employee_id"
   >("email")
   const [loginError, setLoginError] = useState<string | null>(null)
-  const [theme, setTheme] = useState<"light" | "dark">(() => {
-    const savedTheme = localStorage.getItem("northstar-theme")
-
-    if (savedTheme === "light" || savedTheme === "dark") {
-      return savedTheme
-    }
-
-    return window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "dark"
-      : "light"
-  })
+  const { theme, toggleTheme } = useTheme()
 
   const setAuth = useAuthStore(
     (state) => state.setAuth
@@ -114,20 +105,11 @@ function LoginPage() {
     }
   }
 
-  useEffect(() => {
-    document.documentElement.dataset.theme = theme
-    localStorage.setItem("northstar-theme", theme)
-  }, [theme])
-
-  function toggleTheme() {
-    setTheme((current) => (current === "dark" ? "light" : "dark"))
-  }
-
   return (
     <div className="flex min-h-screen items-center justify-center bg-[var(--ns-bg)] p-4">
       <button
         aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
-        className="absolute right-4 top-4 rounded-md border border-slate-200 bg-white p-2 text-slate-600 shadow-sm hover:bg-slate-50"
+        className="absolute right-4 top-4 rounded-md border border-slate-200 bg-white p-2 text-slate-600 shadow-sm hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
         onClick={toggleTheme}
         title={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
         type="button"

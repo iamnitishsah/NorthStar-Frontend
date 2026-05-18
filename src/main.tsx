@@ -5,18 +5,15 @@ import { RouterProvider } from "react-router-dom"
 import { router } from "./app/router"
 import { Toaster } from "sonner"
 import { QueryProvider } from "./app/providers/query-provider"
-
-const savedTheme = localStorage.getItem("northstar-theme")
-
-if (savedTheme === "light" || savedTheme === "dark") {
-  document.documentElement.dataset.theme = savedTheme
-}
+import { ThemeProvider } from "./app/providers/theme-provider"
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <QueryProvider>
-      <RouterProvider router={router} />
-      <Toaster richColors position="top-right" />
-    </QueryProvider>
+    <ThemeProvider>
+      <QueryProvider>
+        <RouterProvider router={router} />
+        <Toaster richColors position="top-right" />
+      </QueryProvider>
+    </ThemeProvider>
   </React.StrictMode>
 )

@@ -2,6 +2,8 @@
 
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   color-scheme: light;
   --ns-primary: #0d47a1;
@@ -19,7 +21,7 @@
   --ns-info: #1565c0;
 }
 
-:root[data-theme="light"] {
+.light {
   color-scheme: light;
   --ns-bg: #f5f7fa;
   --ns-surface: #ffffff;
@@ -29,19 +31,7 @@
   --ns-muted: #6b7280;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-    --ns-bg: #0b1220;
-    --ns-surface: #111827;
-    --ns-surface-elevated: #1f2937;
-    --ns-border: #374151;
-    --ns-text: #f9fafb;
-    --ns-muted: #9ca3af;
-  }
-}
-
-:root[data-theme="dark"] {
+.dark {
   color-scheme: dark;
   --ns-bg: #0b1220;
   --ns-surface: #111827;
@@ -119,60 +109,60 @@ table th.tabular-nums {
   color: var(--ns-muted);
 }
 
-:root[data-theme="dark"] .bg-white {
+.dark .bg-white {
   background-color: var(--ns-surface);
 }
 
-:root[data-theme="dark"] .bg-slate-50,
-:root[data-theme="dark"] .bg-slate-100 {
+.dark .bg-slate-50,
+.dark .bg-slate-100 {
   background-color: var(--ns-surface-elevated);
 }
 
-:root[data-theme="dark"] .border,
-:root[data-theme="dark"] .border-slate-100,
-:root[data-theme="dark"] .border-slate-200,
-:root[data-theme="dark"] .border-slate-300 {
+.dark .border,
+.dark .border-slate-100,
+.dark .border-slate-200,
+.dark .border-slate-300 {
   border-color: var(--ns-border);
 }
 
-:root[data-theme="dark"] .text-slate-950,
-:root[data-theme="dark"] .text-slate-900,
-:root[data-theme="dark"] .text-slate-800,
-:root[data-theme="dark"] .text-slate-700 {
+.dark .text-slate-950,
+.dark .text-slate-900,
+.dark .text-slate-800,
+.dark .text-slate-700 {
   color: var(--ns-text);
 }
 
-:root[data-theme="dark"] .text-slate-600,
-:root[data-theme="dark"] .text-slate-500 {
+.dark .text-slate-600,
+.dark .text-slate-500 {
   color: var(--ns-muted);
 }
 
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .bg-white {
+  :root:not(.light) .bg-white {
     background-color: var(--ns-surface);
   }
 
-  :root:not([data-theme="light"]) .bg-slate-50,
-  :root:not([data-theme="light"]) .bg-slate-100 {
+  :root:not(.light) .bg-slate-50,
+  :root:not(.light) .bg-slate-100 {
     background-color: var(--ns-surface-elevated);
   }
 
-  :root:not([data-theme="light"]) .border,
-  :root:not([data-theme="light"]) .border-slate-100,
-  :root:not([data-theme="light"]) .border-slate-200,
-  :root:not([data-theme="light"]) .border-slate-300 {
+  :root:not(.light) .border,
+  :root:not(.light) .border-slate-100,
+  :root:not(.light) .border-slate-200,
+  :root:not(.light) .border-slate-300 {
     border-color: var(--ns-border);
   }
 
-  :root:not([data-theme="light"]) .text-slate-950,
-  :root:not([data-theme="light"]) .text-slate-900,
-  :root:not([data-theme="light"]) .text-slate-800,
-  :root:not([data-theme="light"]) .text-slate-700 {
+  :root:not(.light) .text-slate-950,
+  :root:not(.light) .text-slate-900,
+  :root:not(.light) .text-slate-800,
+  :root:not(.light) .text-slate-700 {
     color: var(--ns-text);
   }
 
-  :root:not([data-theme="light"]) .text-slate-600,
-  :root:not([data-theme="light"]) .text-slate-500 {
+  :root:not(.light) .text-slate-600,
+  :root:not(.light) .text-slate-500 {
     color: var(--ns-muted);
   }
 }
