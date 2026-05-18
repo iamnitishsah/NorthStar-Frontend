@@ -1,8 +1,10 @@
-import { X } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 
+import Button from "@/components/ui/button"
+import { Field, FieldError, FieldLabel, Textarea } from "@/components/ui/form"
+import { ModalFooter, ModalShell, SectionCard } from "@/components/ui/surface"
 import type { Goal, ReturnGoalPayload } from "@/types/goal"
 
 type Props = {
@@ -42,76 +44,54 @@ function ReturnGoalModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 p-4">
-      <div className="w-full max-w-lg rounded-lg bg-white shadow-xl">
-        <div className="flex items-start justify-between gap-4 border-b border-slate-200 px-5 py-4">
-          <div>
-            <h2 className="text-lg font-semibold text-slate-950">
-              Return Goal
-            </h2>
-            <p className="mt-1 text-sm text-slate-500">
-              Add a clear note so the employee can revise and resubmit.
-            </p>
-          </div>
-
-          <button
-            aria-label="Close modal"
-            className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-800"
-            onClick={onClose}
-            type="button"
+    <ModalShell
+      title="Return Goal"
+      description="Add a clear note so the employee can revise and resubmit."
+      onClose={onClose}
+      footer={
+        <ModalFooter>
+          <Button onClick={onClose} variant="secondary">
+            Cancel
+          </Button>
+          <Button
+            disabled={isSubmitting}
+            form="return-goal-form"
+            type="submit"
+            variant="danger"
           >
-            <X size={18} />
-          </button>
-        </div>
-
+            {isSubmitting ? "Returning..." : "Return Goal"}
+          </Button>
+        </ModalFooter>
+      }
+    >
         <form
-          className="space-y-5 p-5"
+          className="space-y-5"
+          id="return-goal-form"
           onSubmit={handleSubmit(submit)}
         >
-          <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
-            <p className="text-sm text-slate-500">
+          <SectionCard>
+            <p className="text-sm text-muted-foreground">
               {goal.thrust_area}
             </p>
-            <h3 className="font-semibold text-slate-950">
+            <h3 className="font-semibold text-surface-foreground">
               {goal.title}
             </h3>
-          </div>
+          </SectionCard>
 
-          <label className="block space-y-1.5">
-            <span className="text-sm font-medium text-slate-700">
+          <Field>
+            <FieldLabel>
               Manager Note
-            </span>
-            <textarea
+            </FieldLabel>
+            <Textarea
               {...register("manager_note")}
-              className="min-h-32 w-full resize-y rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
+              className="min-h-32"
+              hasError={Boolean(errors.manager_note)}
               rows={5}
             />
-            {errors.manager_note && (
-              <p className="text-sm text-red-600">
-                {errors.manager_note.message}
-              </p>
-            )}
-          </label>
-
-          <div className="flex justify-end gap-3 border-t border-slate-200 pt-5">
-            <button
-              className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
-              onClick={onClose}
-              type="button"
-            >
-              Cancel
-            </button>
-            <button
-              className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
-              disabled={isSubmitting}
-              type="submit"
-            >
-              {isSubmitting ? "Returning..." : "Return Goal"}
-            </button>
-          </div>
+            <FieldError message={errors.manager_note?.message} />
+          </Field>
         </form>
-      </div>
-    </div>
+    </ModalShell>
   )
 }
 

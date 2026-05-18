@@ -9,13 +9,13 @@ type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
 
 const variants: Record<Variant, string> = {
   primary:
-    "bg-[#0D47A1] text-white shadow-sm hover:bg-[#0A3A85] disabled:bg-[#0D47A1]",
+    "bg-primary text-primary-foreground shadow-enterprise-sm hover:bg-primary/90 disabled:bg-primary",
   secondary:
-    "border border-slate-300 bg-white text-slate-700 hover:border-[#0D47A1]/30 hover:bg-[#0D47A1]/5 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-blue-400/40 dark:hover:bg-blue-400/10",
+    "border border-border bg-card text-card-foreground hover:border-primary/35 hover:bg-hover",
   danger:
-    "bg-[#C62828] text-white hover:bg-red-800 disabled:bg-[#C62828]",
+    "bg-destructive text-primary-foreground hover:bg-destructive/90 disabled:bg-destructive",
   ghost:
-    "text-slate-700 hover:bg-slate-100 hover:text-[#0D47A1] dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white",
+    "text-muted-foreground hover:bg-hover hover:text-foreground",
 }
 
 function Button({
@@ -28,7 +28,7 @@ function Button({
 }: Props) {
   return (
     <button
-      className={`inline-flex items-center justify-center gap-2 rounded-md px-6 py-3 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-60 ${variants[variant]} ${className}`}
+      className={`theme-transition inline-flex items-center justify-center gap-2 rounded-md px-6 py-3 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-60 ${variants[variant]} ${className}`}
       type={type}
       {...props}
     >

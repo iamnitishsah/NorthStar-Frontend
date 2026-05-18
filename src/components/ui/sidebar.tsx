@@ -22,18 +22,18 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
 
   return (
     <>
-      <div className="border-b border-slate-200 p-6 dark:border-white/10">
+      <div className="border-b border-border p-6">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
-            <div className="relative mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-slate-950 text-white shadow-sm dark:bg-white dark:text-slate-950">
-              <Star className="fill-[#00897B] text-[#00897B]" size={25} />
-              <Sparkles className="absolute right-1 top-1 text-[#0D47A1]" size={11} />
+            <div className="relative mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-enterprise-sm">
+              <Star className="fill-accent text-accent" size={25} />
+              <Sparkles className="absolute right-1 top-1 text-primary-foreground" size={11} />
             </div>
             <h1 className="text-2xl font-bold">
               NorthStar
             </h1>
 
-            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+            <p className="mt-1 text-sm text-muted-foreground">
               Performance Operations
             </p>
           </div>
@@ -41,7 +41,7 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
           {onClose && (
             <button
               aria-label="Close navigation"
-              className="rounded-md p-2 text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/10 md:hidden"
+              className="theme-transition rounded-md p-2 text-muted-foreground hover:bg-hover hover:text-foreground md:hidden"
               onClick={onClose}
               type="button"
             >
@@ -64,8 +64,8 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
                 cn(
                   "flex items-center gap-3 rounded-md px-4 py-3 text-sm font-medium transition",
                   isActive
-                    ? "bg-[#0D47A1] text-white shadow-sm"
-                    : "text-slate-600 hover:bg-slate-100 hover:text-[#0D47A1] dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white"
+                    ? "bg-primary text-primary-foreground shadow-enterprise-sm"
+                    : "text-muted-foreground hover:bg-hover hover:text-foreground"
                 )
               }
             >
@@ -77,13 +77,13 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
         })}
       </nav>
 
-      <div className="border-t border-slate-200 p-4 dark:border-white/10">
-        <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm dark:border-white/10 dark:bg-white/[0.03]">
+      <div className="border-t border-border p-4">
+        <div className="inset-panel rounded-lg p-3 text-sm">
           <p className="font-semibold">
             {user.name}
           </p>
 
-          <p className="mt-1 text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
+          <p className="mt-1 text-xs uppercase tracking-wide text-muted-foreground">
             {user.role} · {user.department}
           </p>
         </div>
@@ -98,7 +98,7 @@ function Sidebar({
 }: Props) {
   return (
     <>
-      <aside className="hidden w-72 shrink-0 flex-col border-r border-slate-200 bg-white text-slate-950 dark:border-white/10 dark:bg-[#0B1220] dark:text-white md:flex">
+      <aside className="hidden w-72 shrink-0 flex-col border-r border-border bg-card text-card-foreground md:flex">
         <SidebarContent />
       </aside>
 
@@ -106,11 +106,11 @@ function Sidebar({
         <div className="fixed inset-0 z-50 md:hidden">
           <button
             aria-label="Close navigation overlay"
-            className="absolute inset-0 bg-slate-950/50"
+            className="absolute inset-0 bg-foreground/50"
             onClick={onClose}
             type="button"
           />
-          <aside className="relative flex h-full w-72 max-w-[85vw] flex-col bg-white text-slate-950 shadow-xl dark:bg-[#0B1220] dark:text-white">
+          <aside className="relative flex h-full w-72 max-w-[85vw] flex-col bg-card text-card-foreground shadow-enterprise-md">
             <SidebarContent onClose={onClose} />
           </aside>
         </div>

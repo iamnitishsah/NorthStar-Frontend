@@ -5,7 +5,7 @@ import EmptyState from "@/components/ui/empty-state"
 
 function NotFoundPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-100 p-4">
+    <div className="flex min-h-dvh items-center justify-center bg-background p-4 text-foreground">
       <div className="w-full max-w-xl">
         <EmptyState
           icon={Compass}
@@ -13,7 +13,7 @@ function NotFoundPage() {
           description="The route you opened does not exist in NorthStar."
           action={
             <Link
-              className="inline-flex items-center justify-center rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
+              className="theme-transition inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
               to="/login"
             >
               Go to login

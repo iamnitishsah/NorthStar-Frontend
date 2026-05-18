@@ -4,58 +4,139 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-surface: var(--surface);
+  --color-surface-foreground: var(--surface-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-destructive: var(--destructive);
+  --color-info: var(--info);
+  --color-hover: var(--hover);
+  --color-active: var(--active);
+
+  --shadow-enterprise-sm: 0 1px 2px rgb(15 23 42 / 0.06);
+  --shadow-enterprise-md:
+    0 1px 2px rgb(15 23 42 / 0.08), 0 8px 24px rgb(15 23 42 / 0.08);
+}
+
 :root {
   color-scheme: light;
-  --ns-primary: #0d47a1;
-  --ns-primary-700: #0a3a85;
-  --ns-accent: #00897b;
-  --ns-bg: #f5f7fa;
-  --ns-surface: #ffffff;
-  --ns-surface-elevated: #ffffff;
-  --ns-border: #e5e7eb;
-  --ns-text: #111827;
-  --ns-muted: #6b7280;
-  --ns-success: #2e7d32;
-  --ns-warning: #ef6c00;
-  --ns-danger: #c62828;
-  --ns-info: #1565c0;
+
+  --background: #f6f8fb;
+  --foreground: #111827;
+  --card: #ffffff;
+  --card-foreground: #111827;
+  --surface: #f9fafb;
+  --surface-foreground: #1f2937;
+  --muted: #eef2f6;
+  --muted-foreground: #667085;
+
+  --border: #d8dee8;
+  --input: #d1d9e6;
+  --ring: #315f9f;
+
+  --primary: #1f5f99;
+  --primary-foreground: #ffffff;
+  --secondary: #eef3f8;
+  --secondary-foreground: #213547;
+  --accent: #237c74;
+  --accent-foreground: #ffffff;
+
+  --success: #2f7d4f;
+  --warning: #b76e00;
+  --destructive: #b42318;
+  --info: #2563a7;
+
+  --hover: #eef3f8;
+  --active: #e3ebf5;
+
+  --shadow-color: 15 23 42;
+
+  /* Backward-compatible aliases for existing feature screens. */
+  --ns-primary: var(--primary);
+  --ns-primary-700: #174d7f;
+  --ns-accent: var(--accent);
+  --ns-bg: var(--background);
+  --ns-surface: var(--card);
+  --ns-surface-elevated: var(--surface);
+  --ns-border: var(--border);
+  --ns-text: var(--foreground);
+  --ns-muted: var(--muted-foreground);
+  --ns-success: var(--success);
+  --ns-warning: var(--warning);
+  --ns-danger: var(--destructive);
+  --ns-info: var(--info);
 }
 
 .light {
   color-scheme: light;
-  --ns-bg: #f5f7fa;
-  --ns-surface: #ffffff;
-  --ns-surface-elevated: #ffffff;
-  --ns-border: #e5e7eb;
-  --ns-text: #111827;
-  --ns-muted: #6b7280;
 }
 
 .dark {
   color-scheme: dark;
-  --ns-bg: #0b1220;
-  --ns-surface: #111827;
-  --ns-surface-elevated: #1f2937;
-  --ns-border: #374151;
-  --ns-text: #f9fafb;
-  --ns-muted: #9ca3af;
+
+  --background: #0f1724;
+  --foreground: #e7ebf2;
+  --card: #151f2d;
+  --card-foreground: #eef2f7;
+  --surface: #1b2636;
+  --surface-foreground: #e3e8ef;
+  --muted: #223044;
+  --muted-foreground: #a8b3c5;
+
+  --border: #2d3a4e;
+  --input: #36465d;
+  --ring: #7fa7d8;
+
+  --primary: #7fa7d8;
+  --primary-foreground: #0d1624;
+  --secondary: #223044;
+  --secondary-foreground: #e5ebf3;
+  --accent: #66b8ae;
+  --accent-foreground: #081c1a;
+
+  --success: #70c08e;
+  --warning: #e6a94e;
+  --destructive: #f07d73;
+  --info: #8cb8ea;
+
+  --hover: #223044;
+  --active: #2a3950;
+
+  --shadow-color: 0 0 0;
 }
 
 html {
-  background: var(--ns-bg);
+  background: var(--background);
 }
 
 body {
   margin: 0;
   min-width: 320px;
-  background:
-    linear-gradient(180deg, rgba(13, 71, 161, 0.04), transparent 280px),
-    var(--ns-bg);
-  color: var(--ns-text);
+  background: var(--background);
+  color: var(--foreground);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease;
 }
 
 h1,
@@ -78,16 +159,59 @@ a,
 input,
 select,
 textarea {
-  outline-color: var(--ns-primary);
+  outline-color: var(--ring);
 }
 
 :focus-visible {
-  outline: 2px solid var(--ns-primary);
+  outline: 2px solid var(--ring);
   outline-offset: 2px;
 }
 
 ::selection {
-  background: rgba(0, 137, 123, 0.2);
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+  color: var(--foreground);
+}
+
+* {
+  border-color: var(--border);
+}
+
+input,
+select,
+textarea {
+  background-color: var(--card);
+  color: var(--foreground);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--muted-foreground);
+}
+
+table {
+  color: var(--foreground);
+}
+
+::-webkit-scrollbar {
+  height: 10px;
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--muted-foreground) 35%, transparent);
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--muted-foreground) 52%, transparent);
+  border: 2px solid transparent;
+  background-clip: content-box;
 }
 
 .font-mono,
@@ -100,71 +224,44 @@ table th.tabular-nums {
 }
 
 .ns-surface {
-  background: var(--ns-surface);
-  border-color: var(--ns-border);
-  color: var(--ns-text);
+  background: var(--card);
+  border-color: var(--border);
+  color: var(--card-foreground);
 }
 
 .ns-muted {
-  color: var(--ns-muted);
+  color: var(--muted-foreground);
 }
 
-.dark .bg-white {
-  background-color: var(--ns-surface);
+.dashboard-surface {
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--card-foreground);
+  box-shadow: 0 1px 2px rgb(var(--shadow-color) / 0.06);
 }
 
-.dark .bg-slate-50,
-.dark .bg-slate-100 {
-  background-color: var(--ns-surface-elevated);
+.inset-panel {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--surface-foreground);
 }
 
-.dark .border,
-.dark .border-slate-100,
-.dark .border-slate-200,
-.dark .border-slate-300 {
-  border-color: var(--ns-border);
+.subtle-divider {
+  border-color: var(--border);
 }
 
-.dark .text-slate-950,
-.dark .text-slate-900,
-.dark .text-slate-800,
-.dark .text-slate-700 {
-  color: var(--ns-text);
+.enterprise-shadow {
+  box-shadow:
+    0 1px 2px rgb(var(--shadow-color) / 0.08),
+    0 8px 24px rgb(var(--shadow-color) / 0.08);
 }
 
-.dark .text-slate-600,
-.dark .text-slate-500 {
-  color: var(--ns-muted);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not(.light) .bg-white {
-    background-color: var(--ns-surface);
-  }
-
-  :root:not(.light) .bg-slate-50,
-  :root:not(.light) .bg-slate-100 {
-    background-color: var(--ns-surface-elevated);
-  }
-
-  :root:not(.light) .border,
-  :root:not(.light) .border-slate-100,
-  :root:not(.light) .border-slate-200,
-  :root:not(.light) .border-slate-300 {
-    border-color: var(--ns-border);
-  }
-
-  :root:not(.light) .text-slate-950,
-  :root:not(.light) .text-slate-900,
-  :root:not(.light) .text-slate-800,
-  :root:not(.light) .text-slate-700 {
-    color: var(--ns-text);
-  }
-
-  :root:not(.light) .text-slate-600,
-  :root:not(.light) .text-slate-500 {
-    color: var(--ns-muted);
-  }
+.theme-transition {
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease;
 }
 
 @media (prefers-reduced-motion: reduce) {

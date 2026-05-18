@@ -20,18 +20,18 @@ function GoalsSummary({ goals, selectedGoals, lockedGoals = [] }: Props) {
   const isComplete = totalWeightage === 100 && goalCount <= 8 && goalCount > 0
 
   return (
-    <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm shadow-slate-900/5">
+    <section className="rounded-lg border border-border bg-card p-5 shadow-sm shadow-enterprise-sm">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             Submission Summary
           </p>
-          <p className="mt-1 font-mono text-2xl font-semibold text-slate-950">
+          <p className="mt-1 font-mono text-2xl font-semibold text-card-foreground">
             {totalWeightage}% weightage
           </p>
         </div>
 
-        <div className="rounded-md border border-slate-200 bg-slate-50 px-4 py-2 font-mono text-sm font-semibold text-slate-700">
+        <div className="rounded-md border border-border bg-surface px-4 py-2 font-mono text-sm font-semibold text-surface-foreground">
           {goalCount} / 8 goals
         </div>
       </div>
@@ -40,14 +40,14 @@ function GoalsSummary({ goals, selectedGoals, lockedGoals = [] }: Props) {
         aria-label="Selected goal weightage"
         className={
           isComplete
-            ? "mt-4 h-2.5 w-full overflow-hidden rounded-full bg-slate-100 accent-[#00897B]"
-            : "mt-4 h-2.5 w-full overflow-hidden rounded-full bg-slate-100 accent-[#EF6C00]"
+            ? "mt-4 h-2.5 w-full overflow-hidden rounded-full bg-muted accent-accent"
+            : "mt-4 h-2.5 w-full overflow-hidden rounded-full bg-muted accent-warning"
         }
         max={100}
         value={progressValue}
       />
 
-      <p className="mt-2 text-sm text-slate-500">
+      <p className="mt-2 text-sm text-muted-foreground">
         Submission is calculated from selected editable goals plus already locked goals. {totalGoals} total goals available.
       </p>
     </section>

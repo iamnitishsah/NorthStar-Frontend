@@ -2,7 +2,7 @@ import { LogOut, Menu, Moon, Search, Sun } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 
 import { useAuthStore } from "@/app/store/auth-store"
-import { useTheme } from "@/app/providers/theme-provider"
+import { useTheme } from "@/app/providers/use-theme"
 import Button from "./button"
 
 type Props = {
@@ -25,11 +25,11 @@ function Header({ onMenuClick }: Props) {
   }
 
   return (
-    <header className="flex h-16 items-center justify-between border-b border-slate-200 bg-white px-4 shadow-sm shadow-slate-900/5 dark:border-slate-700 dark:bg-slate-900 sm:px-6">
+    <header className="dashboard-surface theme-transition flex h-16 items-center justify-between rounded-none border-x-0 border-t-0 px-4 sm:px-6">
       <div className="flex min-w-0 items-center gap-3">
         <button
           aria-label="Open navigation"
-          className="rounded-md border border-slate-200 p-2 text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800 md:hidden"
+          className="theme-transition rounded-md border border-border p-2 text-muted-foreground hover:bg-hover hover:text-foreground md:hidden"
           onClick={onMenuClick}
           type="button"
         >
@@ -41,7 +41,7 @@ function Header({ onMenuClick }: Props) {
             Operations Console
           </h2>
           {user && (
-            <p className="truncate text-xs text-slate-500">
+            <p className="truncate text-xs text-muted-foreground">
               {user.name} · {user.designation} · {user.department}
             </p>
           )}
@@ -49,14 +49,14 @@ function Header({ onMenuClick }: Props) {
       </div>
 
       <div className="flex items-center gap-2 sm:gap-3">
-        <div className="hidden items-center gap-2 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 lg:flex">
+        <div className="hidden items-center gap-2 rounded-md border border-border bg-surface px-3 py-2 text-sm text-muted-foreground lg:flex">
           <Search size={16} />
           Search goals, people, audits
         </div>
 
         <button
           aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
-          className="rounded-md border border-slate-200 p-2 text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+          className="theme-transition rounded-md border border-border p-2 text-muted-foreground hover:bg-hover hover:text-foreground"
           onClick={toggleTheme}
           title={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
           type="button"

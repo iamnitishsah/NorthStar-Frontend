@@ -14,7 +14,7 @@ function ErrorState({
   onRetry,
 }: Props) {
   return (
-    <div className="rounded-lg border border-red-200 bg-red-50 p-5 text-red-800">
+    <div className="rounded-lg border border-destructive/25 bg-destructive/10 p-5 text-destructive">
       <div className="flex gap-3">
         <AlertCircle className="mt-0.5 shrink-0" size={20} />
         <div>

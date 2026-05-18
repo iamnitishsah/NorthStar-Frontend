@@ -1,6 +1,11 @@
 import { useMemo, useState } from "react"
 
+import EmptyState from "@/components/ui/empty-state"
+import { Input, Select } from "@/components/ui/form"
+import { Panel } from "@/components/ui/surface"
+import { StatusBadge } from "@/components/ui/status-badge"
 import type { AuditLogEntry } from "@/types/goal"
+import { FileSearch } from "lucide-react"
 
 type Props = {
   logs: AuditLogEntry[]
@@ -48,30 +53,30 @@ function AuditLogTable({
   }, [logs, search])
 
   return (
-    <section className="min-w-0 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm shadow-slate-900/5 dark:border-slate-700 dark:bg-slate-900">
-      <div className="border-b border-slate-200 p-5 dark:border-slate-700">
+    <Panel className="min-w-0 overflow-hidden p-0">
+      <div className="border-b border-border p-5">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-[#EF6C00]">
+          <p className="text-xs font-semibold uppercase tracking-wide text-warning">
             Operational Audit
           </p>
-          <h1 className="mt-1 text-2xl font-bold text-slate-950 dark:text-white sm:text-3xl">
+          <h1 className="mt-1 text-2xl font-bold text-card-foreground sm:text-3xl">
             Audit Logs
           </h1>
-          <p className="mt-1 text-slate-500">
+          <p className="mt-1 text-muted-foreground">
             Search and filter governance events across goal workflows.
           </p>
         </div>
 
         <div className="mt-5 grid gap-3 lg:grid-cols-3">
-          <input
-            className="min-w-0 rounded-md border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-950 outline-none placeholder:text-slate-400 focus:border-[#0D47A1] focus:ring-2 focus:ring-[#0D47A1]/15 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500"
+          <Input
+            className="min-w-0"
             onChange={(event) => setSearch(event.target.value)}
             placeholder="Search logs"
             value={search}
           />
 
-          <select
-            className="min-w-0 rounded-md border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-950 outline-none focus:border-[#0D47A1] focus:ring-2 focus:ring-[#0D47A1]/15 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+          <Select
+            className="min-w-0"
             onChange={(event) => onActionFilterChange(event.target.value)}
             value={actionFilter}
           >
@@ -81,10 +86,10 @@ function AuditLogTable({
                 {action}
               </option>
             ))}
-          </select>
+          </Select>
 
-          <input
-            className="min-w-0 rounded-md border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-950 outline-none placeholder:text-slate-400 focus:border-[#0D47A1] focus:ring-2 focus:ring-[#0D47A1]/15 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500"
+          <Input
+            className="min-w-0"
             onChange={(event) => onUserFilterChange(event.target.value)}
             placeholder="Filter user ID"
             value={userFilter}
@@ -93,13 +98,17 @@ function AuditLogTable({
       </div>
 
       {visibleLogs.length === 0 ? (
-        <div className="p-8 text-center text-sm text-slate-500">
-          No audit logs found.
+        <div className="p-5">
+          <EmptyState
+            icon={FileSearch}
+            title="No audit logs found"
+            description="Try adjusting the action, user, or search filters."
+          />
         </div>
       ) : (
         <div className="overflow-x-auto">
-          <table className="min-w-[980px] divide-y divide-slate-200 text-sm dark:divide-slate-800">
-            <thead className="sticky top-0 bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500 dark:bg-slate-800 dark:text-slate-300">
+          <table className="min-w-[980px] divide-y divide-border text-sm">
+            <thead className="sticky top-0 bg-surface text-left text-xs uppercase tracking-wide text-muted-foreground">
               <tr>
                 <th className="px-5 py-3">Action</th>
                 <th className="px-5 py-3">User</th>
@@ -107,22 +116,22 @@ function AuditLogTable({
                 <th className="px-5 py-3">Details</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+            <tbody className="divide-y divide-border">
               {visibleLogs.map((log) => (
-                <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/70" key={log._id}>
+                <tr className="theme-transition hover:bg-hover" key={log._id}>
                   <td className="whitespace-nowrap px-5 py-4">
-                    <span className="rounded-md bg-[#0D47A1]/10 px-2 py-1 font-mono text-xs font-semibold text-[#0D47A1]">
+                    <StatusBadge className="font-mono" tone="info">
                       {log.action}
-                    </span>
+                    </StatusBadge>
                   </td>
-                  <td className="whitespace-nowrap px-5 py-4 font-mono font-medium text-slate-900 dark:text-slate-100">
+                  <td className="whitespace-nowrap px-5 py-4 font-mono font-medium text-card-foreground">
                     {log.user_id}
                   </td>
-                  <td className="whitespace-nowrap px-5 py-4 text-slate-600 dark:text-slate-300">
+                  <td className="whitespace-nowrap px-5 py-4 text-muted-foreground">
                     {new Date(log.timestamp).toLocaleString()}
                   </td>
                   <td className="max-w-xl px-5 py-4">
-                    <pre className="max-h-32 overflow-auto whitespace-pre-wrap break-words rounded-md border border-slate-200 bg-slate-50 p-3 text-xs text-slate-700 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
+                    <pre className="max-h-32 overflow-auto whitespace-pre-wrap break-words rounded-md border border-border bg-surface p-3 text-xs text-surface-foreground">
                       {formatDetails(log.details)}
                     </pre>
                   </td>
@@ -132,7 +141,7 @@ function AuditLogTable({
           </table>
         </div>
       )}
-    </section>
+    </Panel>
   )
 }
 

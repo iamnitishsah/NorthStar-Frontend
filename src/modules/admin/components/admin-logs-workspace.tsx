@@ -1,5 +1,8 @@
 import { useMemo, useState } from "react"
 
+import ErrorState from "@/components/ui/error-state"
+import LoadingSkeleton from "@/components/ui/loading-skeleton"
+
 import { useAuditLogs } from "../hooks/use-admin"
 import AuditLogTable from "./audit-log-table"
 
@@ -16,14 +19,12 @@ function AdminLogsWorkspace() {
   const { data = [], isLoading, isError } = useAuditLogs(filters)
 
   if (isLoading) {
-    return <div className="text-slate-600">Loading audit logs...</div>
+    return <LoadingSkeleton rows={4} />
   }
 
   if (isError) {
     return (
-      <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">
-        Unable to load audit logs.
-      </div>
+      <ErrorState message="Unable to load audit logs." />
     )
   }
 

@@ -21,7 +21,7 @@ function ProgressBar({ value }: Props) {
   return (
     <progress
       aria-label="Goal progress"
-      className={`h-2 w-full overflow-hidden rounded-full bg-slate-100 ${accentClassName}`}
+      className={`h-2 w-full overflow-hidden rounded-full bg-muted ${accentClassName}`}
       max={100}
       value={width}
     />

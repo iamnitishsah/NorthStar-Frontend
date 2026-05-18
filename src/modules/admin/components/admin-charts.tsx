@@ -1,3 +1,4 @@
+import { BarChart3 } from "lucide-react"
 import {
   Bar,
   BarChart,
@@ -13,6 +14,8 @@ import {
   YAxis,
 } from "recharts"
 
+import EmptyState from "@/components/ui/empty-state"
+import { Panel } from "@/components/ui/surface"
 import type { ChartDatum } from "../utils/admin-analytics"
 
 type Props = {
@@ -25,13 +28,13 @@ type Props = {
 }
 
 const chartColors = [
-  "#2563eb",
-  "#059669",
-  "#d97706",
-  "#dc2626",
-  "#7c3aed",
-  "#0891b2",
-  "#475569",
+  "var(--primary)",
+  "var(--accent)",
+  "var(--warning)",
+  "var(--destructive)",
+  "var(--info)",
+  "var(--success)",
+  "var(--muted-foreground)",
 ]
 
 const chartAxisColor = "var(--ns-muted)"
@@ -43,9 +46,11 @@ function compactLabel(label: string) {
 
 function EmptyChart({ label }: { label: string }) {
   return (
-    <div className="flex h-64 items-center justify-center rounded-lg border border-dashed border-slate-300 bg-slate-50 px-4 text-center text-sm text-slate-500 dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-400">
-      {label}
-    </div>
+    <EmptyState
+      icon={BarChart3}
+      title="No chart data"
+      description={label}
+    />
   )
 }
 
@@ -64,11 +69,11 @@ function ChartTooltip({
   const name = label || item.payload?.name || item.name || "Value"
 
   return (
-    <div className="rounded-md border border-slate-200 bg-white px-3 py-2 text-sm shadow-lg shadow-slate-900/10 dark:border-slate-700 dark:bg-slate-900">
-      <p className="max-w-56 break-words font-medium text-slate-950 dark:text-white">
+    <div className="rounded-md border border-border bg-card px-3 py-2 text-sm shadow-enterprise-md">
+      <p className="max-w-56 break-words font-medium text-card-foreground">
         {name}
       </p>
-      <p className="mt-1 font-mono text-slate-600 dark:text-slate-300">
+      <p className="mt-1 font-mono text-muted-foreground">
         {item.value ?? 0}
       </p>
     </div>
@@ -83,12 +88,12 @@ function ChartCard({
   children: React.ReactNode
 }) {
   return (
-    <section className="min-w-0 rounded-lg border border-slate-200 bg-white p-4 shadow-sm shadow-slate-900/5 dark:border-slate-700 dark:bg-slate-900 sm:p-5">
-      <h2 className="mb-4 text-base font-semibold text-slate-950 dark:text-white sm:text-lg">
+    <Panel className="min-w-0 p-4 sm:p-5">
+      <h2 className="mb-4 text-base font-semibold text-card-foreground sm:text-lg">
         {title}
       </h2>
       {children}
-    </section>
+    </Panel>
   )
 }
 
@@ -113,7 +118,7 @@ function AdminCharts({
                 <XAxis dataKey="name" interval={0} tick={{ fill: chartAxisColor, fontSize: 12 }} tickFormatter={compactLabel} tickLine={false} />
                 <YAxis allowDecimals={false} tick={{ fill: chartAxisColor, fontSize: 12 }} tickLine={false} />
                 <Tooltip content={<ChartTooltip />} cursor={{ fill: "rgba(148, 163, 184, 0.12)" }} />
-                <Bar dataKey="value" fill="#2563eb" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="value" fill="var(--primary)" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -161,9 +166,9 @@ function AdminCharts({
                 <YAxis allowDecimals={false} tick={{ fill: chartAxisColor, fontSize: 12 }} tickLine={false} />
                 <Tooltip content={<ChartTooltip />} />
                 <Line
-                  dot={{ fill: "#059669", r: 4, strokeWidth: 0 }}
+                  dot={{ fill: "var(--accent)", r: 4, strokeWidth: 0 }}
                   dataKey="value"
-                  stroke="#059669"
+                  stroke="var(--accent)"
                   strokeWidth={3}
                   type="monotone"
                 />
@@ -184,7 +189,7 @@ function AdminCharts({
                 <XAxis dataKey="name" interval={0} tick={{ fill: chartAxisColor, fontSize: 12 }} tickFormatter={compactLabel} tickLine={false} />
                 <YAxis allowDecimals={false} tick={{ fill: chartAxisColor, fontSize: 12 }} tickLine={false} />
                 <Tooltip content={<ChartTooltip />} cursor={{ fill: "rgba(148, 163, 184, 0.12)" }} />
-                <Bar dataKey="value" fill="#7c3aed" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="value" fill="var(--info)" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -231,7 +236,7 @@ function AdminCharts({
                 <XAxis dataKey="name" hide />
                 <YAxis allowDecimals={false} tick={{ fill: chartAxisColor, fontSize: 12 }} tickLine={false} />
                 <Tooltip content={<ChartTooltip />} cursor={{ fill: "rgba(148, 163, 184, 0.12)" }} />
-                <Bar dataKey="value" fill="#0891b2" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="value" fill="var(--accent)" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

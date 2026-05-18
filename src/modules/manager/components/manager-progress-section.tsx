@@ -12,18 +12,18 @@ function ManagerProgressSection({
   onComment,
 }: Props) {
   return (
-    <section className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
-      <div className="flex flex-col gap-3 border-b border-slate-200 bg-slate-50 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+    <section className="overflow-hidden rounded-lg border border-border bg-card shadow-sm">
+      <div className="flex flex-col gap-3 border-b border-border bg-surface px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-lg font-semibold text-slate-950">
+          <h2 className="text-lg font-semibold text-card-foreground">
             {group.employeeName}
           </h2>
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-muted-foreground">
             {group.goalCount} locked {group.goalCount === 1 ? "goal" : "goals"}
           </p>
         </div>
 
-        <div className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700">
+        <div className="rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-surface-foreground">
           Total weightage: {group.totalWeightage}%
         </div>
       </div>

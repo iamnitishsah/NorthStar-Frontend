@@ -16,7 +16,9 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { loginUser } from "@/modules/auth/auth-service"
 import { getRoleHomePath } from "@/app/navigation"
 import { useAuthStore } from "@/app/store/auth-store"
-import { useTheme } from "@/app/providers/theme-provider"
+import { useTheme } from "@/app/providers/use-theme"
+import Button from "@/components/ui/button"
+import { Field, FieldError, FieldLabel, Input } from "@/components/ui/form"
 import { getApiErrorMessage } from "@/services/api-error"
 
 import { toast } from "sonner"
@@ -31,11 +33,11 @@ type FormData = z.infer<typeof schema>
 
 function NorthStarMark() {
   return (
-    <div className="relative flex h-14 w-14 items-center justify-center rounded-xl bg-[#0B1220] text-white shadow-lg shadow-[#0D47A1]/25">
-      <div className="absolute inset-1 rounded-lg border border-white/10" />
-      <Star className="relative fill-[#00897B] text-[#00897B]" size={30} />
-      <Sparkles className="absolute right-1.5 top-1.5 text-white" size={13} />
-      <span className="absolute -bottom-1 h-1.5 w-8 rounded-full bg-[#00897B]/40 blur-sm" />
+    <div className="relative flex h-14 w-14 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-enterprise-md">
+      <div className="absolute inset-1 rounded-lg border border-primary-foreground/15" />
+      <Star className="relative fill-accent text-accent" size={30} />
+      <Sparkles className="absolute right-1.5 top-1.5 text-primary-foreground" size={13} />
+      <span className="absolute -bottom-1 h-1.5 w-8 rounded-full bg-accent/40 blur-sm" />
     </div>
   )
 }
@@ -106,10 +108,10 @@ function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[var(--ns-bg)] p-4">
+    <div className="flex min-h-dvh items-center justify-center bg-background p-4 text-foreground">
       <button
         aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
-        className="absolute right-4 top-4 rounded-md border border-slate-200 bg-white p-2 text-slate-600 shadow-sm hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
+        className="theme-transition absolute right-4 top-4 rounded-md border border-border bg-card p-2 text-muted-foreground shadow-enterprise-sm hover:bg-hover hover:text-foreground"
         onClick={toggleTheme}
         title={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
         type="button"
@@ -119,16 +121,16 @@ function LoginPage() {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full max-w-[440px] space-y-6 rounded-lg border border-slate-200 bg-white p-8 shadow-xl shadow-slate-900/10"
+        className="dashboard-surface w-full max-w-[440px] space-y-6 rounded-lg p-8 shadow-enterprise-md"
       >
         <div className="space-y-4">
           <NorthStarMark />
           <div>
-          <h1 className="text-3xl font-bold text-slate-950">
+          <h1 className="text-3xl font-bold text-card-foreground">
             NorthStar
           </h1>
 
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 text-sm text-muted-foreground">
             Enterprise goal lifecycle and performance operations
           </p>
           </div>
@@ -136,7 +138,7 @@ function LoginPage() {
 
         {loginError && (
           <div
-            className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-[#C62828]"
+            className="flex items-start gap-3 rounded-lg border border-destructive/25 bg-destructive/10 px-4 py-3 text-sm text-destructive"
             role="alert"
           >
             <AlertCircle className="mt-0.5 shrink-0" size={18} />
@@ -147,8 +149,8 @@ function LoginPage() {
           </div>
         )}
 
-        <div className="grid grid-cols-2 gap-2 rounded-lg border border-slate-200 bg-slate-50 p-1">
-          <label className={`flex cursor-pointer items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition ${loginType === "email" ? "bg-white text-[#0D47A1] shadow-sm" : "text-slate-600 hover:text-slate-950"}`}>
+        <div className="grid grid-cols-2 gap-2 rounded-lg border border-border bg-surface p-1">
+          <label className={`theme-transition flex cursor-pointer items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium ${loginType === "email" ? "bg-card text-primary shadow-enterprise-sm" : "text-muted-foreground hover:text-foreground"}`}>
             <input
               className="sr-only"
               type="radio"
@@ -161,7 +163,7 @@ function LoginPage() {
             Email
           </label>
 
-          <label className={`flex cursor-pointer items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition ${loginType === "employee_id" ? "bg-white text-[#0D47A1] shadow-sm" : "text-slate-600 hover:text-slate-950"}`}>
+          <label className={`theme-transition flex cursor-pointer items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium ${loginType === "employee_id" ? "bg-card text-primary shadow-enterprise-sm" : "text-muted-foreground hover:text-foreground"}`}>
             <input
               className="sr-only"
               type="radio"
@@ -177,11 +179,11 @@ function LoginPage() {
           </label>
         </div>
 
-        <div>
-          <label className="mb-1.5 block text-sm font-semibold text-slate-700">
+        <Field>
+          <FieldLabel>
             {loginType === "email" ? "Work email" : "Employee ID"}
-          </label>
-          <input
+          </FieldLabel>
+          <Input
             type="text"
             placeholder={
               loginType === "email"
@@ -189,45 +191,38 @@ function LoginPage() {
                 : "EMP-0000"
             }
             {...register("identifier")}
-            className="w-full rounded-md border border-slate-300 bg-white px-3 py-3 text-sm outline-none transition focus:border-[#0D47A1] focus:ring-2 focus:ring-[#0D47A1]/15"
+            className="py-3"
+            hasError={Boolean(errors.identifier)}
           />
+          <FieldError message={errors.identifier?.message} />
+        </Field>
 
-          {errors.identifier && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.identifier.message}
-            </p>
-          )}
-        </div>
-
-        <div>
-          <label className="mb-1.5 block text-sm font-semibold text-slate-700">
+        <Field>
+          <FieldLabel>
             Password
-          </label>
-          <input
+          </FieldLabel>
+          <Input
             type="password"
             placeholder="Enter password"
             {...register("password")}
-            className="w-full rounded-md border border-slate-300 bg-white px-3 py-3 text-sm outline-none transition focus:border-[#0D47A1] focus:ring-2 focus:ring-[#0D47A1]/15"
+            className="py-3"
+            hasError={Boolean(errors.password)}
           />
+          <FieldError message={errors.password?.message} />
+        </Field>
 
-          {errors.password && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.password.message}
-            </p>
-          )}
-        </div>
-
-        <button
+        <Button
           disabled={isSubmitting}
-          className="flex w-full items-center justify-center gap-2 rounded-md bg-[#0D47A1] p-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#0A3A85] disabled:cursor-not-allowed disabled:opacity-60"
+          className="w-full p-3"
+          type="submit"
         >
           <KeyRound size={16} />
           {isSubmitting
             ? "Logging in..."
             : "Login"}
-        </button>
+        </Button>
 
-        <p className="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-center text-xs text-slate-600">
+        <p className="rounded-md border border-border bg-surface px-3 py-2 text-center text-xs text-muted-foreground">
           Accounts are provisioned internally by Admin operations.
         </p>
       </form>

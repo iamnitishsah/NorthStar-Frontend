@@ -160,60 +160,60 @@ function SharedGoalsWorkspace() {
         <form className="space-y-5" onSubmit={handleSubmit(submit)}>
           <div className="grid gap-4 lg:grid-cols-2">
             <label className="space-y-1.5">
-              <span className="text-sm font-medium text-slate-700">
+              <span className="text-sm font-medium text-surface-foreground">
                 Recipient employee IDs
               </span>
               <input
                 {...register("recipient_employee_ids")}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
+                className="w-full rounded-lg border border-input px-3 py-2 text-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
                 placeholder="EMP001, EMP002"
               />
               {errors.recipient_employee_ids && (
-                <p className="text-sm text-red-600">
+                <p className="text-sm text-destructive">
                   {errors.recipient_employee_ids.message}
                 </p>
               )}
             </label>
 
             <label className="space-y-1.5">
-              <span className="text-sm font-medium text-slate-700">
+              <span className="text-sm font-medium text-surface-foreground">
                 Thrust area
               </span>
               <input
                 {...register("thrust_area")}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
+                className="w-full rounded-lg border border-input px-3 py-2 text-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
               />
             </label>
           </div>
 
           <div className="grid gap-4 lg:grid-cols-2">
             <label className="space-y-1.5">
-              <span className="text-sm font-medium text-slate-700">Title</span>
+              <span className="text-sm font-medium text-surface-foreground">Title</span>
               <input
                 {...register("title")}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
+                className="w-full rounded-lg border border-input px-3 py-2 text-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
               />
             </label>
 
             <label className="space-y-1.5">
-              <span className="text-sm font-medium text-slate-700">
+              <span className="text-sm font-medium text-surface-foreground">
                 Description
               </span>
               <input
                 {...register("description")}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
+                className="w-full rounded-lg border border-input px-3 py-2 text-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
               />
             </label>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
             <label className="space-y-1.5">
-              <span className="text-sm font-medium text-slate-700">
+              <span className="text-sm font-medium text-surface-foreground">
                 UoM type
               </span>
               <select
                 {...register("uom_type")}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
+                className="w-full rounded-lg border border-input px-3 py-2 text-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
               >
                 {uomOptions.map((option) => (
                   <option key={option} value={option}>
@@ -224,12 +224,12 @@ function SharedGoalsWorkspace() {
             </label>
 
             <label className="space-y-1.5">
-              <span className="text-sm font-medium text-slate-700">
+              <span className="text-sm font-medium text-surface-foreground">
                 Measurement
               </span>
               <select
                 {...register("measurement_type")}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
+                className="w-full rounded-lg border border-input px-3 py-2 text-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
               >
                 {measurementOptions.map((option) => (
                   <option key={option} value={option}>
@@ -240,10 +240,10 @@ function SharedGoalsWorkspace() {
             </label>
 
             <label className="space-y-1.5">
-              <span className="text-sm font-medium text-slate-700">Target</span>
+              <span className="text-sm font-medium text-surface-foreground">Target</span>
               <input
                 {...register("target_value")}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
+                className="w-full rounded-lg border border-input px-3 py-2 text-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
                 min={1}
                 step="any"
                 type="number"
@@ -251,12 +251,12 @@ function SharedGoalsWorkspace() {
             </label>
 
             <label className="space-y-1.5">
-              <span className="text-sm font-medium text-slate-700">
+              <span className="text-sm font-medium text-surface-foreground">
                 Default weightage
               </span>
               <input
                 {...register("default_weightage")}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
+                className="w-full rounded-lg border border-input px-3 py-2 text-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
                 max={100}
                 min={10}
                 type="number"
@@ -264,24 +264,24 @@ function SharedGoalsWorkspace() {
             </label>
 
             <label className="space-y-1.5">
-              <span className="text-sm font-medium text-slate-700">
+              <span className="text-sm font-medium text-surface-foreground">
                 Target date{isTimeline ? " *" : ""}
               </span>
               <input
                 {...register("target_date")}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
+                className="w-full rounded-lg border border-input px-3 py-2 text-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
                 min={minTargetDate}
                 type="date"
               />
               {errors.target_date && (
-                <p className="text-sm text-red-600">
+                <p className="text-sm text-destructive">
                   {errors.target_date.message}
                 </p>
               )}
             </label>
           </div>
 
-          <div className="flex justify-end border-t border-slate-200 pt-5">
+          <div className="flex justify-end border-t border-border pt-5">
             <Button
               disabled={pushMutation.isPending}
               icon={<Send size={16} />}
@@ -295,33 +295,33 @@ function SharedGoalsWorkspace() {
 
       <Card className="p-5">
         <div className="flex items-center justify-between gap-4">
-          <h2 className="text-lg font-semibold text-slate-950">
+          <h2 className="text-lg font-semibold text-card-foreground">
             Pushed Shared Goals
           </h2>
-          <span className="rounded bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700">
+          <span className="rounded bg-muted px-2.5 py-1 text-xs font-medium text-surface-foreground">
             {pushedGoals.length}
           </span>
         </div>
 
         {pushedGoals.length === 0 ? (
-          <p className="mt-4 text-sm text-slate-500">
+          <p className="mt-4 text-sm text-muted-foreground">
             No shared goals have been pushed yet.
           </p>
         ) : (
-          <div className="mt-4 divide-y divide-slate-100">
+          <div className="mt-4 divide-y divide-border">
             {pushedGoals.map((goal) => (
               <div className="py-4 first:pt-0 last:pb-0" key={goal.goal_id}>
                 <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
                   <div>
-                    <p className="text-sm text-slate-500">{goal.thrust_area}</p>
-                    <h3 className="font-semibold text-slate-950">
+                    <p className="text-sm text-muted-foreground">{goal.thrust_area}</p>
+                    <h3 className="font-semibold text-card-foreground">
                       {goal.title}
                     </h3>
-                    <p className="mt-1 text-sm text-slate-600">
+                    <p className="mt-1 text-sm text-muted-foreground">
                       {goal.employee_name}
                     </p>
                   </div>
-                  <div className="text-sm text-slate-600">
+                  <div className="text-sm text-muted-foreground">
                     {goal.weightage}% · {goal.status}
                   </div>
                 </div>

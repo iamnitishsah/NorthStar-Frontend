@@ -3,6 +3,10 @@ import { useState } from "react"
 import axios from "axios"
 import { toast } from "sonner"
 
+import Button from "@/components/ui/button"
+import { Input } from "@/components/ui/form"
+import { Panel } from "@/components/ui/surface"
+import { StatusBadge } from "@/components/ui/status-badge"
 import { useUnlockGoal } from "../hooks/use-admin"
 
 type Props = {
@@ -37,58 +41,61 @@ function UnlockGoalPanel({ lockedGoalCandidates }: Props) {
   }
 
   return (
-    <section className="min-w-0 rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+    <Panel className="min-w-0">
       <div className="flex items-start gap-3">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-50 text-red-700 dark:bg-red-500/15 dark:text-red-200">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-destructive/10 text-destructive">
           <LockOpen size={18} />
         </div>
         <div className="min-w-0">
-          <h2 className="text-lg font-semibold text-slate-950 dark:text-white">
+          <h2 className="text-lg font-semibold text-card-foreground">
             Goal Unlock Control
           </h2>
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-muted-foreground">
             Unlock a locked goal by goal ID. Candidate IDs are inferred from audit logs when available.
           </p>
         </div>
       </div>
 
       <div className="mt-5 flex flex-col gap-3 sm:flex-row">
-        <input
-          className="min-w-0 flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-950 outline-none placeholder:text-slate-400 focus:border-slate-500 focus:ring-2 focus:ring-slate-200 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500 dark:focus:border-slate-500 dark:focus:ring-slate-700"
+        <Input
+          className="min-w-0 flex-1"
           onChange={(event) => setGoalId(event.target.value)}
           placeholder="Enter locked goal ID"
           value={goalId}
         />
-        <button
-          className="shrink-0 rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
+        <Button
+          className="shrink-0"
           disabled={!canSubmit}
           onClick={() => handleUnlock()}
           type="button"
+          variant="danger"
         >
           {unlockMutation.isPending ? "Unlocking..." : "Unlock Goal"}
-        </button>
+        </Button>
       </div>
 
       {lockedGoalCandidates.length > 0 && (
         <div className="mt-5">
-          <p className="mb-2 text-sm font-medium text-slate-700 dark:text-slate-200">
+          <p className="mb-2 text-sm font-medium text-surface-foreground">
             Locked goal candidates
           </p>
           <div className="flex flex-wrap gap-2">
             {lockedGoalCandidates.slice(0, 8).map((candidate) => (
               <button
-                className="max-w-full truncate rounded border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+                className="max-w-full"
                 key={candidate}
                 onClick={() => handleUnlock(candidate)}
                 type="button"
               >
-                {candidate}
+                <StatusBadge className="max-w-full" tone="default">
+                  {candidate}
+                </StatusBadge>
               </button>
             ))}
           </div>
         </div>
       )}
-    </section>
+    </Panel>
   )
 }
 

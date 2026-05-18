@@ -60,12 +60,12 @@ function ManagerProgressWorkspace() {
   }
 
   if (isLoading) {
-    return <div className="text-slate-600">Loading quarterly progress...</div>
+    return <div className="text-muted-foreground">Loading quarterly progress...</div>
   }
 
   if (isError) {
     return (
-      <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">
+      <div className="rounded-lg border border-destructive/25 bg-destructive/10 p-4 text-destructive">
         {getErrorMessage(error, "Unable to load manager goals")}
       </div>
     )
@@ -79,12 +79,12 @@ function ManagerProgressWorkspace() {
             Quarterly Progress
           </h1>
 
-          <p className="mt-1 text-slate-500">
+          <p className="mt-1 text-muted-foreground">
             Track employee check-ins, progress trends, and manager comments
           </p>
         </div>
 
-        <div className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700">
+        <div className="rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-surface-foreground">
           {totalGoals} tracked {totalGoals === 1 ? "goal" : "goals"}
         </div>
       </div>

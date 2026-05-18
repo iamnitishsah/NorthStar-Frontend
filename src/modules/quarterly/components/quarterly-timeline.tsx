@@ -1,13 +1,14 @@
 import { MessageSquare, Share2 } from "lucide-react"
 import { memo } from "react"
 
+import { MetricTile } from "@/components/ui/surface"
+import { ProgressBadge, StatusBadge } from "@/components/ui/status-badge"
 import type { Goal } from "@/types/goal"
 
 import ProgressBar from "./progress-bar"
 import {
   getQuarterAchievement,
   getQuarterProgress,
-  getProgressStatusClassName,
   getQuarterLabel,
   quarterKeys,
 } from "../utils/quarterly"
@@ -18,6 +19,13 @@ type Props = {
   onComment?: (goal: Goal, quarter: number) => void
 }
 
+function getProgressTone(status?: string) {
+  if (status === "COMPLETED") return "success"
+  if (status === "ON_TRACK") return "info"
+  if (status === "AT_RISK" || status === "DELAYED") return "warning"
+  return "default"
+}
+
 function QuarterlyTimeline({
   goal,
   compact = false,
@@ -26,15 +34,14 @@ function QuarterlyTimeline({
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h4 className="text-sm font-semibold text-slate-900">
+        <h4 className="text-sm font-semibold text-card-foreground">
           Quarterly Progress
         </h4>
 
         {goal.is_shared && (
-          <span className="inline-flex items-center gap-1 rounded bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-700">
-            <Share2 size={13} />
+          <StatusBadge tone="info" icon={<Share2 size={13} />}>
             Synced shared goal
-          </span>
+          </StatusBadge>
         )}
       </div>
 
@@ -46,25 +53,20 @@ function QuarterlyTimeline({
           const quarterNumber = Number(quarter)
 
           return (
-            <div
-              className="rounded-lg border border-slate-200 bg-slate-50 p-3"
-              key={quarter}
-            >
+            <MetricTile key={quarter}>
               <div className="flex items-center justify-between gap-2">
-                <span className="font-medium text-slate-950">
+                <span className="font-medium text-surface-foreground">
                   {getQuarterLabel(quarter)}
                 </span>
-                <span
-                  className={`rounded px-2 py-1 text-xs font-medium ${getProgressStatusClassName(checkin?.progress_status)}`}
-                >
+                <ProgressBadge tone={getProgressTone(checkin?.progress_status)}>
                   {checkin?.progress_status ?? "PENDING"}
-                </span>
+                </ProgressBadge>
               </div>
 
               <div className="mt-3 space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-500">Achievement</span>
-                  <span className="font-medium text-slate-900">
+                  <span className="text-muted-foreground">Achievement</span>
+                  <span className="font-medium text-surface-foreground">
                     {achievement === null || achievement === undefined
                       ? "-"
                       : achievement}
@@ -72,8 +74,8 @@ function QuarterlyTimeline({
                 </div>
 
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-500">Progress</span>
-                  <span className="font-medium text-slate-900">
+                  <span className="text-muted-foreground">Progress</span>
+                  <span className="font-medium text-surface-foreground">
                     {progress === null || progress === undefined
                       ? "-"
                       : `${Math.round(progress)}%`}
@@ -84,14 +86,14 @@ function QuarterlyTimeline({
               </div>
 
               {checkin?.manager_note && (
-                <p className="mt-3 rounded border border-slate-200 bg-white p-2 text-xs leading-5 text-slate-600">
+                <p className="mt-3 rounded-md border border-border bg-card p-2 text-xs leading-5 text-muted-foreground">
                   {checkin.manager_note}
                 </p>
               )}
 
               {onComment && checkin && (
                 <button
-                  className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 hover:text-slate-950"
+                  className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground"
                   onClick={() => onComment(goal, quarterNumber)}
                   type="button"
                 >
@@ -99,7 +101,7 @@ function QuarterlyTimeline({
                   Comment
                 </button>
               )}
-            </div>
+            </MetricTile>
           )
         })}
       </div>

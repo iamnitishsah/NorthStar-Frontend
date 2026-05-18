@@ -6,11 +6,11 @@ type Props = {
 
 function GoalsEmptyState({ onCreate }: Props) {
   return (
-    <div className="rounded-lg border border-dashed border-slate-300 bg-white p-8 text-center">
-      <h2 className="text-lg font-semibold text-slate-950">
+    <div className="rounded-lg border border-dashed border-input bg-card p-8 text-center">
+      <h2 className="text-lg font-semibold text-card-foreground">
         No goals found
       </h2>
-      <p className="mx-auto mt-2 max-w-md text-sm text-slate-500">
+      <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
         Create your first draft goal, assign weightage, then submit your goal sheet when the total reaches 100%.
       </p>
       <button

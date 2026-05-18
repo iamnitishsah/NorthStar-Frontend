@@ -1,7 +1,12 @@
-import { Check, X } from "lucide-react"
+import { Check, Inbox, X } from "lucide-react"
 import { toast } from "sonner"
 
 import Button from "@/components/ui/button"
+import EmptyState from "@/components/ui/empty-state"
+import ErrorState from "@/components/ui/error-state"
+import LoadingSkeleton from "@/components/ui/loading-skeleton"
+import { Panel } from "@/components/ui/surface"
+import { StatusBadge } from "@/components/ui/status-badge"
 import { getApiErrorMessage } from "@/services/api-error"
 import type { UnlockRequest } from "@/types/goal"
 
@@ -67,41 +72,45 @@ function UnlockRequestsPanel() {
   }
 
   return (
-    <section className="min-w-0 rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+    <Panel className="min-w-0">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
-          <h2 className="text-lg font-semibold text-slate-950 dark:text-white">
+          <h2 className="text-lg font-semibold text-card-foreground">
             Pending Unlock Requests
           </h2>
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 text-sm text-muted-foreground">
             Review employee requests before locked goals move to admin unlocked.
           </p>
         </div>
-        <span className="shrink-0 rounded bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-200">
+        <StatusBadge className="shrink-0" tone="warning">
           {data.length} pending
-        </span>
+        </StatusBadge>
       </div>
 
       {isLoading && (
-        <div className="mt-5 text-sm text-slate-600">
-          Loading unlock requests...
+        <div className="mt-5">
+          <LoadingSkeleton rows={2} />
         </div>
       )}
 
       {isError && (
-        <div className="mt-5 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
-          Unable to load unlock requests.
+        <div className="mt-5">
+          <ErrorState message="Unable to load unlock requests." />
         </div>
       )}
 
       {!isLoading && !isError && data.length === 0 && (
-        <div className="mt-5 rounded-lg border border-dashed border-slate-300 p-4 text-sm text-slate-500">
-          No pending unlock requests.
+        <div className="mt-5">
+          <EmptyState
+            icon={Inbox}
+            title="No pending unlock requests"
+            description="Employee unlock requests will appear here when they need review."
+          />
         </div>
       )}
 
       {!isLoading && !isError && data.length > 0 && (
-        <div className="mt-5 divide-y divide-slate-100 dark:divide-slate-800">
+        <div className="mt-5 divide-y divide-border">
           {data.map((request) => {
             const requestId = getRequestId(request)
             const isActing =
@@ -114,18 +123,18 @@ function UnlockRequestsPanel() {
               >
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
-                    <p className="font-medium text-slate-950 dark:text-white">
+                    <p className="font-medium text-card-foreground">
                       {getRequester(request)}
                     </p>
-                    <span className="rounded bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-400/15 dark:text-yellow-200">
+                    <StatusBadge tone="warning">
                       {request.status}
-                    </span>
+                    </StatusBadge>
                   </div>
-                  <p className="mt-1 break-all text-sm text-slate-500">
+                  <p className="mt-1 break-all text-sm text-muted-foreground">
                     Goal ID: {request.goal_id}
                   </p>
                   {request.reason && (
-                    <p className="mt-2 text-sm leading-6 text-slate-700 dark:text-slate-200">
+                    <p className="mt-2 text-sm leading-6 text-surface-foreground">
                       {request.reason}
                     </p>
                   )}
@@ -153,7 +162,7 @@ function UnlockRequestsPanel() {
           })}
         </div>
       )}
-    </section>
+    </Panel>
   )
 }
 

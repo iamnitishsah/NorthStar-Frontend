@@ -1,6 +1,7 @@
 import { Building2, Network, Users } from "lucide-react"
 
 import EmptyState from "@/components/ui/empty-state"
+import { MetricTile, Panel } from "@/components/ui/surface"
 import type { HierarchyNode } from "@/types/goal"
 
 import OrgTreeNode from "./org-tree-node"
@@ -56,53 +57,53 @@ function OrganizationTree({
   const stats = getHierarchyStats(hierarchy)
 
   return (
-    <section className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm shadow-slate-900/5 dark:border-slate-700 dark:bg-slate-900">
+    <Panel className="overflow-hidden p-0">
       {showHeader && (
-        <div className="border-b border-slate-200 p-5 dark:border-slate-700">
+        <div className="border-b border-border p-5">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-[#0D47A1] dark:text-blue-300">
+              <p className="text-xs font-semibold uppercase tracking-wide text-primary">
                 Reporting Structure
               </p>
-              <h2 className="mt-1 text-xl font-semibold text-slate-950 dark:text-white">
+              <h2 className="mt-1 text-xl font-semibold text-card-foreground">
                 {title}
               </h2>
-              <p className="mt-1 max-w-3xl text-sm text-slate-500 dark:text-slate-400">
+              <p className="mt-1 max-w-3xl text-sm text-muted-foreground">
                 {description}
               </p>
             </div>
 
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-              <div className="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 dark:border-slate-700 dark:bg-slate-800">
-                <p className="text-xs text-slate-500 dark:text-slate-400">People</p>
-                <p className="font-mono text-lg font-semibold text-slate-950 dark:text-white">
+              <MetricTile>
+                <p className="text-xs text-muted-foreground">People</p>
+                <p className="font-mono text-lg font-semibold text-surface-foreground">
                   {stats.people}
                 </p>
-              </div>
-              <div className="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 dark:border-slate-700 dark:bg-slate-800">
-                <p className="text-xs text-slate-500 dark:text-slate-400">Departments</p>
-                <p className="font-mono text-lg font-semibold text-slate-950 dark:text-white">
+              </MetricTile>
+              <MetricTile>
+                <p className="text-xs text-muted-foreground">Departments</p>
+                <p className="font-mono text-lg font-semibold text-surface-foreground">
                   {stats.departments}
                 </p>
-              </div>
-              <div className="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 dark:border-slate-700 dark:bg-slate-800">
-                <p className="text-xs text-slate-500 dark:text-slate-400">Levels</p>
-                <p className="font-mono text-lg font-semibold text-slate-950 dark:text-white">
+              </MetricTile>
+              <MetricTile>
+                <p className="text-xs text-muted-foreground">Levels</p>
+                <p className="font-mono text-lg font-semibold text-surface-foreground">
                   {stats.levels}
                 </p>
-              </div>
-              <div className="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 dark:border-slate-700 dark:bg-slate-800">
-                <p className="text-xs text-slate-500 dark:text-slate-400">Roots</p>
-                <p className="font-mono text-lg font-semibold text-slate-950 dark:text-white">
+              </MetricTile>
+              <MetricTile>
+                <p className="text-xs text-muted-foreground">Roots</p>
+                <p className="font-mono text-lg font-semibold text-surface-foreground">
                   {stats.roots}
                 </p>
-              </div>
+              </MetricTile>
             </div>
           </div>
         </div>
       )}
 
-      <div className="border-b border-slate-200 bg-slate-50 px-5 py-3 text-sm text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+      <div className="sticky top-0 z-10 border-b border-border bg-surface px-5 py-3 text-sm text-muted-foreground">
         <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
           <span className="inline-flex items-center gap-2">
             <Network size={16} />
@@ -115,8 +116,8 @@ function OrganizationTree({
         </div>
       </div>
 
-      <div className="overflow-x-auto bg-slate-50 p-4 dark:bg-slate-950 sm:p-6">
-        <div className="inline-flex min-w-full justify-center gap-12 py-4">
+      <div className="overflow-x-auto bg-background p-4 [scrollbar-gutter:stable] sm:p-6">
+        <div className="inline-flex min-w-full justify-start gap-12 py-4 xl:justify-center">
           {hierarchy.map((node) => (
             <OrgTreeNode
               key={node.employee_id}
@@ -125,7 +126,7 @@ function OrganizationTree({
           ))}
         </div>
       </div>
-    </section>
+    </Panel>
   )
 }
 

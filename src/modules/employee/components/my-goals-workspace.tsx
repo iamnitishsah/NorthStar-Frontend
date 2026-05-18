@@ -3,6 +3,9 @@ import { Plus } from "lucide-react"
 import axios from "axios"
 import { toast } from "sonner"
 
+import Button from "@/components/ui/button"
+import ErrorState from "@/components/ui/error-state"
+import LoadingSkeleton from "@/components/ui/loading-skeleton"
 import type { Goal } from "@/types/goal"
 import type { QuarterlyCheckinPayload } from "@/types/goal"
 
@@ -174,14 +177,12 @@ function MyGoalsWorkspace() {
   }
 
   if (isLoading) {
-    return <div className="text-slate-600">Loading goals...</div>
+    return <LoadingSkeleton rows={4} />
   }
 
   if (isError) {
     return (
-      <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">
-        {getErrorMessage(error, "Unable to load goals")}
-      </div>
+      <ErrorState message={getErrorMessage(error, "Unable to load goals")} />
     )
   }
 
@@ -189,36 +190,35 @@ function MyGoalsWorkspace() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-[#00897B]">
+          <p className="text-xs font-semibold uppercase tracking-wide text-accent">
             Employee Workspace
           </p>
-          <h1 className="mt-1 text-3xl font-bold text-slate-950">
+          <h1 className="mt-1 text-3xl font-bold text-card-foreground">
             My Goals
           </h1>
 
-          <p className="mt-1 text-slate-500">
+          <p className="mt-1 text-muted-foreground">
             Build, submit, and track quarterly commitments with clear ownership.
           </p>
         </div>
 
         <div className="flex flex-wrap gap-3">
-          <button
-            className="flex items-center gap-2 rounded-md border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 hover:border-[#00897B]/40 hover:bg-[#00897B]/5 disabled:cursor-not-allowed disabled:opacity-60"
+          <Button
             onClick={() => setModal({ mode: "create" })}
             type="button"
+            variant="secondary"
           >
             <Plus size={16} />
             Create Goal
-          </button>
+          </Button>
 
-          <button
+          <Button
             onClick={handleSubmitGoals}
             disabled={!canSubmit}
-            className="rounded-md bg-[#0D47A1] px-6 py-3 text-sm font-semibold text-white hover:bg-[#0A3A85] disabled:cursor-not-allowed disabled:opacity-60"
             type="button"
           >
             {submitMutation.isPending ? "Submitting..." : "Submit Goals"}
-          </button>
+          </Button>
         </div>
       </div>
 

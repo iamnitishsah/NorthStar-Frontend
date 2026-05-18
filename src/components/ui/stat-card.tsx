@@ -1,5 +1,7 @@
 import type { LucideIcon } from "lucide-react"
 
+import { Panel } from "./surface"
+
 type Props = {
   label: string
   value: string | number
@@ -14,27 +16,27 @@ function StatCard({
   helper,
 }: Props) {
   return (
-    <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm shadow-slate-900/5 transition hover:-translate-y-0.5 hover:shadow-md">
+    <Panel className="hover:shadow-enterprise-md">
       <div className="flex items-start justify-between gap-4">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+        <div className="min-w-0">
+          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             {label}
           </p>
-          <p className="mt-2 font-mono text-3xl font-semibold text-slate-950">
+          <p className="mt-2 truncate font-mono text-3xl font-semibold text-card-foreground">
             {value}
           </p>
           {helper && (
-            <p className="mt-2 text-sm text-slate-500">
+            <p className="mt-2 text-sm text-muted-foreground">
               {helper}
             </p>
           )}
         </div>
 
-        <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#0D47A1]/10 text-[#0D47A1]">
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
           <Icon size={20} />
         </div>
       </div>
-    </div>
+    </Panel>
   )
 }
 

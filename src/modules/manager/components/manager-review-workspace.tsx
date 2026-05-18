@@ -85,12 +85,12 @@ function ManagerReviewWorkspace() {
   }
 
   if (isLoading) {
-    return <div className="text-slate-600">Loading review queue...</div>
+    return <div className="text-muted-foreground">Loading review queue...</div>
   }
 
   if (isError) {
     return (
-      <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">
+      <div className="rounded-lg border border-destructive/25 bg-destructive/10 p-4 text-destructive">
         {getErrorMessage(error, "Unable to load review goals")}
       </div>
     )
@@ -100,19 +100,19 @@ function ManagerReviewWorkspace() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-[#0D47A1]">
+          <p className="text-xs font-semibold uppercase tracking-wide text-primary">
             Manager Review Queue
           </p>
-          <h1 className="mt-1 text-3xl font-bold text-slate-950">
+          <h1 className="mt-1 text-3xl font-bold text-card-foreground">
             Review Goals
           </h1>
 
-          <p className="mt-1 text-slate-500">
+          <p className="mt-1 text-muted-foreground">
             Approve, tweak, or return submitted employee goals
           </p>
         </div>
 
-        <div className="rounded-lg border border-slate-200 bg-white px-4 py-3 font-mono text-sm font-semibold text-slate-700 shadow-sm">
+        <div className="rounded-lg border border-border bg-card px-4 py-3 font-mono text-sm font-semibold text-surface-foreground shadow-sm">
           {totalReviewGoals} pending {totalReviewGoals === 1 ? "goal" : "goals"}
         </div>
       </div>

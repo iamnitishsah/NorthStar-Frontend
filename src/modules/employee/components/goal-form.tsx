@@ -2,6 +2,17 @@ import { useEffect } from "react"
 import { useForm, useWatch } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 
+import Button from "@/components/ui/button"
+import {
+  Field,
+  FieldError,
+  FieldHint,
+  FieldLabel,
+  Input,
+  Select,
+  Textarea,
+} from "@/components/ui/form"
+import { SectionCard } from "@/components/ui/surface"
 import type { Goal } from "@/types/goal"
 
 import {
@@ -23,26 +34,6 @@ type Props = {
   onCancel: () => void
   onSubmit: (payload: ReturnType<typeof toGoalPayload>) => void
   onUpdate: (goal: Goal, payload: ReturnType<typeof toUpdateGoalPayload>) => void
-}
-
-function fieldClassName(isReadonly = false) {
-  return [
-    "w-full rounded-md border border-slate-300 bg-white px-3 py-2.5 text-sm outline-none transition",
-    "focus:border-[#0D47A1] focus:ring-2 focus:ring-[#0D47A1]/15",
-    isReadonly
-      ? "pointer-events-none cursor-not-allowed bg-slate-100 text-slate-500"
-      : "",
-  ].join(" ")
-}
-
-function FieldError({ message }: { message?: string }) {
-  if (!message) return null
-
-  return (
-    <p className="mt-1 text-sm text-red-600">
-      {message}
-    </p>
-  )
 }
 
 function GoalForm({
@@ -102,68 +93,72 @@ function GoalForm({
       onSubmit={handleSubmit(submit)}
     >
       {isShared && (
-        <div className="rounded-lg border border-orange-200 bg-orange-50 px-4 py-3 text-sm font-medium text-[#EF6C00]">
+        <div className="rounded-md border border-warning/25 bg-warning/10 px-4 py-3 text-sm font-medium text-warning">
           Shared goal details are managed by the owner. Only editable fields can be changed here.
         </div>
       )}
 
-      <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
-        <p className="text-sm font-semibold text-slate-950">
+      <SectionCard>
+        <p className="text-sm font-semibold text-surface-foreground">
           Goal Definition
         </p>
-        <p className="mt-1 text-sm text-slate-500">
+        <FieldHint className="mt-1 text-sm">
           Capture the business outcome, measurement basis, and governance weightage.
-        </p>
-      </div>
+        </FieldHint>
+      </SectionCard>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <label className="space-y-1.5">
-          <span className="text-sm font-semibold text-slate-700">
+        <Field>
+          <FieldLabel>
             Thrust Area
-          </span>
-          <input
+          </FieldLabel>
+          <Input
             {...register("thrust_area")}
-            className={fieldClassName(isEditMode && isShared)}
+            className={isEditMode && isShared ? "pointer-events-none bg-muted text-muted-foreground" : undefined}
+            hasError={Boolean(errors.thrust_area)}
             readOnly={isEditMode && isShared}
           />
           <FieldError message={errors.thrust_area?.message} />
-        </label>
+        </Field>
 
-        <label className="space-y-1.5">
-          <span className="text-sm font-semibold text-slate-700">
+        <Field>
+          <FieldLabel>
             Title
-          </span>
-          <input
+          </FieldLabel>
+          <Input
             {...register("title")}
-            className={fieldClassName(isEditMode && isShared)}
+            className={isEditMode && isShared ? "pointer-events-none bg-muted text-muted-foreground" : undefined}
+            hasError={Boolean(errors.title)}
             readOnly={isEditMode && isShared}
           />
           <FieldError message={errors.title?.message} />
-        </label>
+        </Field>
       </div>
 
-      <label className="block space-y-1.5">
-        <span className="text-sm font-semibold text-slate-700">
+      <Field>
+        <FieldLabel>
           Description
-        </span>
-        <textarea
+        </FieldLabel>
+        <Textarea
           {...register("description")}
-          className={`${fieldClassName(isEditMode && isShared)} min-h-24 resize-y`}
+          className={isEditMode && isShared ? "pointer-events-none bg-muted text-muted-foreground" : undefined}
+          hasError={Boolean(errors.description)}
           readOnly={isEditMode && isShared}
           rows={4}
         />
         <FieldError message={errors.description?.message} />
-      </label>
+      </Field>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <label className="space-y-1.5">
-          <span className="text-sm font-semibold text-slate-700">
+        <Field>
+          <FieldLabel>
             UOM Type
-          </span>
-          <select
+          </FieldLabel>
+          <Select
             {...register("uom_type")}
-            className={fieldClassName(isEditMode && isShared)}
             aria-disabled={isEditMode && isShared}
+            className={isEditMode && isShared ? "pointer-events-none bg-muted text-muted-foreground" : undefined}
+            hasError={Boolean(errors.uom_type)}
             tabIndex={isEditMode && isShared ? -1 : undefined}
           >
             {uomOptions.map((option) => (
@@ -171,19 +166,20 @@ function GoalForm({
                 {option}
               </option>
             ))}
-          </select>
+          </Select>
           <FieldError message={errors.uom_type?.message} />
-        </label>
+        </Field>
 
         {!isZeroBased && (
-          <label className="space-y-1.5">
-            <span className="text-sm font-semibold text-slate-700">
+          <Field>
+            <FieldLabel>
               Measurement Type
-            </span>
-            <select
+            </FieldLabel>
+            <Select
               {...register("measurement_type")}
-              className={fieldClassName(isEditMode && isShared)}
               aria-disabled={isEditMode && isShared}
+              className={isEditMode && isShared ? "pointer-events-none bg-muted text-muted-foreground" : undefined}
+              hasError={Boolean(errors.measurement_type)}
               tabIndex={isEditMode && isShared ? -1 : undefined}
             >
               {measurementOptions.map((option) => (
@@ -191,72 +187,73 @@ function GoalForm({
                   {option}
                 </option>
               ))}
-            </select>
+            </Select>
             <FieldError message={errors.measurement_type?.message} />
-          </label>
+          </Field>
         )}
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
-        <label className="space-y-1.5">
-          <span className="text-sm font-semibold text-slate-700">
+        <Field>
+          <FieldLabel>
             Target Value
-          </span>
-          <input
+          </FieldLabel>
+          <Input
             {...register("target_value")}
-            className={fieldClassName(isZeroBased || (isEditMode && isShared))}
+            className={isZeroBased || (isEditMode && isShared) ? "pointer-events-none bg-muted text-muted-foreground" : undefined}
+            hasError={Boolean(errors.target_value)}
             readOnly={isZeroBased || (isEditMode && isShared)}
             step="any"
             type="number"
           />
           <FieldError message={errors.target_value?.message} />
-        </label>
+        </Field>
 
-        <label className="space-y-1.5">
-          <span className="text-sm font-semibold text-slate-700">
+        <Field>
+          <FieldLabel>
             Weightage
-          </span>
-          <input
+          </FieldLabel>
+          <Input
             {...register("weightage")}
-            className={fieldClassName()}
+            hasError={Boolean(errors.weightage)}
             max={100}
             min={10}
             type="number"
           />
           <FieldError message={errors.weightage?.message} />
-        </label>
+        </Field>
 
-        <label className="space-y-1.5">
-          <span className="text-sm font-semibold text-slate-700">
+        <Field>
+          <FieldLabel>
             Target Date
             {isTimeline ? " *" : ""}
-          </span>
-          <input
+          </FieldLabel>
+          <Input
             {...register("target_date")}
-            className={fieldClassName(isEditMode && isShared)}
+            className={isEditMode && isShared ? "pointer-events-none bg-muted text-muted-foreground" : undefined}
+            hasError={Boolean(errors.target_date)}
             min={minTargetDate}
             readOnly={isEditMode && isShared}
             type="date"
           />
           <FieldError message={errors.target_date?.message} />
-        </label>
+        </Field>
       </div>
 
-      <div className="flex justify-end gap-3 border-t border-slate-200 pt-5">
-        <button
-          className="rounded-md border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+      <div className="flex flex-col-reverse gap-3 border-t border-border pt-5 sm:flex-row sm:justify-end">
+        <Button
           onClick={onCancel}
           type="button"
+          variant="secondary"
         >
           Cancel
-        </button>
-        <button
-          className="rounded-md bg-[#0D47A1] px-6 py-3 text-sm font-semibold text-white hover:bg-[#0A3A85] disabled:cursor-not-allowed disabled:opacity-60"
+        </Button>
+        <Button
           disabled={isSubmitting}
           type="submit"
         >
           {isSubmitting ? "Saving..." : isEditMode ? "Update Goal" : "Create Goal"}
-        </button>
+        </Button>
       </div>
     </form>
   )

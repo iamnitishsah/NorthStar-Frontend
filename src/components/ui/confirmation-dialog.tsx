@@ -1,4 +1,5 @@
 import Button from "./button"
+import { ModalFooter, ModalShell } from "./surface"
 
 type Props = {
   title: string
@@ -18,16 +19,13 @@ function ConfirmationDialog({
   onConfirm,
 }: Props) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 p-4">
-      <div className="w-full max-w-md rounded-lg bg-white p-5 shadow-xl">
-        <h2 className="text-lg font-semibold text-slate-950">
-          {title}
-        </h2>
-        <p className="mt-2 text-sm leading-6 text-slate-600">
-          {description}
-        </p>
-
-        <div className="mt-5 flex justify-end gap-3">
+    <ModalShell
+      title={title}
+      description={description}
+      maxWidth="md"
+      onClose={onCancel}
+      footer={
+        <ModalFooter>
           <Button
             onClick={onCancel}
             variant="secondary"
@@ -41,9 +39,11 @@ function ConfirmationDialog({
           >
             {isPending ? "Working..." : confirmLabel}
           </Button>
-        </div>
-      </div>
-    </div>
+        </ModalFooter>
+      }
+    >
+      <span className="sr-only">{description}</span>
+    </ModalShell>
   )
 }
 

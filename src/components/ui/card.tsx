@@ -8,7 +8,7 @@ function Card({
 }: Props) {
   return (
     <div
-      className={`rounded-lg border border-slate-200 bg-white shadow-sm shadow-slate-900/5 transition hover:shadow-md hover:shadow-slate-900/10 ${className}`}
+      className={`dashboard-surface theme-transition rounded-lg hover:shadow-enterprise-md ${className}`}
       {...props}
     />
   )

@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom"
 import { CheckCircle2, Clock, Target, TrendingUp } from "lucide-react"
 
-import Button from "@/components/ui/button"
 import Card from "@/components/ui/card"
 import ErrorState from "@/components/ui/error-state"
 import LoadingSkeleton from "@/components/ui/loading-skeleton"
 import PageHeader from "@/components/ui/page-header"
 import StatCard from "@/components/ui/stat-card"
+import { MetricTile } from "@/components/ui/surface"
 import { useMyGoals } from "@/modules/employee/hooks/use-my-goals"
 import ProgressBar from "@/modules/quarterly/components/progress-bar"
 
@@ -53,9 +53,12 @@ function EmployeeDashboard() {
         title="Employee Dashboard"
         description="Track goal readiness, approval state, and quarterly progress."
         actions={
-          <Button>
-            <Link to="/employee/goals">Manage Goals</Link>
-          </Button>
+          <Link
+            className="theme-transition inline-flex items-center justify-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-enterprise-sm hover:bg-primary/90"
+            to="/employee/goals"
+          >
+            Manage Goals
+          </Link>
         }
       />
 
@@ -70,14 +73,14 @@ function EmployeeDashboard() {
         <Card className="p-5 xl:col-span-2">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <h2 className="text-lg font-semibold text-slate-950">
+              <h2 className="text-lg font-semibold text-card-foreground">
                 Goal Sheet Readiness
               </h2>
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-muted-foreground">
                 Submission requires exactly 100% total weightage.
               </p>
             </div>
-            <span className="text-2xl font-semibold text-slate-950">
+            <span className="shrink-0 font-mono text-2xl font-semibold text-card-foreground">
               {totalWeightage}%
             </span>
           </div>
@@ -87,28 +90,28 @@ function EmployeeDashboard() {
         </Card>
 
         <Card className="p-5">
-          <h2 className="text-lg font-semibold text-slate-950">
+          <h2 className="text-lg font-semibold text-card-foreground">
             Workflow Summary
           </h2>
-          <div className="mt-4 space-y-3 text-sm">
-            <div className="flex justify-between">
-              <span className="text-slate-500">Draft / Returned</span>
-              <span className="font-medium text-slate-950">
+          <div className="mt-4 grid gap-3 text-sm">
+            <MetricTile className="flex justify-between">
+              <span className="text-muted-foreground">Draft / Returned</span>
+              <span className="font-medium text-surface-foreground">
                 {editableGoals.length}
               </span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-slate-500">Completed</span>
-              <span className="font-medium text-slate-950">
+            </MetricTile>
+            <MetricTile className="flex justify-between">
+              <span className="text-muted-foreground">Completed</span>
+              <span className="font-medium text-surface-foreground">
                 {completedGoals.length}
               </span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-slate-500">Shared Goals</span>
-              <span className="font-medium text-slate-950">
+            </MetricTile>
+            <MetricTile className="flex justify-between">
+              <span className="text-muted-foreground">Shared Goals</span>
+              <span className="font-medium text-surface-foreground">
                 {data.filter((goal) => goal.is_shared).length}
               </span>
-            </div>
+            </MetricTile>
           </div>
         </Card>
       </div>

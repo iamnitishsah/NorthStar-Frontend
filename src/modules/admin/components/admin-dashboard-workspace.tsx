@@ -8,6 +8,8 @@ import {
 import { toast } from "sonner"
 
 import Button from "@/components/ui/button"
+import ErrorState from "@/components/ui/error-state"
+import LoadingSkeleton from "@/components/ui/loading-skeleton"
 import { getApiErrorMessage } from "@/services/api-error"
 import {
   useAuditLogs,
@@ -48,7 +50,7 @@ function AdminDashboardWorkspace() {
     qoqQuery.isLoading ||
     distributionQuery.isLoading
   ) {
-    return <div className="text-slate-600">Loading admin dashboard...</div>
+    return <LoadingSkeleton rows={4} />
   }
 
   if (
@@ -59,9 +61,7 @@ function AdminDashboardWorkspace() {
     distributionQuery.isError
   ) {
     return (
-      <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">
-        Unable to load admin dashboard.
-      </div>
+      <ErrorState message="Unable to load admin dashboard." />
     )
   }
 
@@ -83,13 +83,13 @@ function AdminDashboardWorkspace() {
     <div className="min-w-0 space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
-          <p className="text-xs font-semibold uppercase tracking-wide text-[#EF6C00]">
+          <p className="text-xs font-semibold uppercase tracking-wide text-warning">
             Admin Governance
           </p>
-          <h1 className="mt-1 text-2xl font-bold text-slate-950 dark:text-white sm:text-3xl">
+          <h1 className="mt-1 text-2xl font-bold text-foreground sm:text-3xl">
             Admin Control Center
           </h1>
-          <p className="mt-1 text-slate-500">
+          <p className="mt-1 text-muted-foreground">
             Organization visibility, governance controls, and performance analytics.
           </p>
         </div>

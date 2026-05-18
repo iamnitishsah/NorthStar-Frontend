@@ -1,6 +1,8 @@
 import { useState } from "react"
 
 import Button from "@/components/ui/button"
+import { Field, FieldHint, FieldLabel, Textarea } from "@/components/ui/form"
+import { ModalFooter, ModalShell } from "@/components/ui/surface"
 import type { Goal } from "@/types/goal"
 
 type Props = {
@@ -24,33 +26,12 @@ function UnlockRequestModal({
     !isSubmitting
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 p-4">
-      <div className="w-full max-w-lg rounded-lg bg-white p-5 shadow-xl">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            Unlock request
-          </p>
-          <h2 className="mt-1 text-lg font-semibold text-slate-950">
-            {goal.title}
-          </h2>
-        </div>
-
-        <label className="mt-5 block">
-          <span className="text-sm font-medium text-slate-700">
-            Reason
-          </span>
-          <textarea
-            className="mt-2 min-h-28 w-full resize-y rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
-            onChange={(event) => setReason(event.target.value)}
-            placeholder="Explain what needs to change in this locked goal."
-            value={reason}
-          />
-          <p className="mt-1 text-xs text-slate-500">
-            {trimmedReason.length}/500 characters. Minimum 5 required.
-          </p>
-        </label>
-
-        <div className="mt-5 flex justify-end gap-3">
+    <ModalShell
+      title="Unlock request"
+      description={goal.title}
+      onClose={onClose}
+      footer={
+        <ModalFooter>
           <Button
             disabled={isSubmitting}
             onClick={onClose}
@@ -64,9 +45,24 @@ function UnlockRequestModal({
           >
             {isSubmitting ? "Requesting..." : "Request Unlock"}
           </Button>
-        </div>
-      </div>
-    </div>
+        </ModalFooter>
+      }
+    >
+        <Field>
+          <FieldLabel>
+            Reason
+          </FieldLabel>
+          <Textarea
+            className="min-h-28"
+            onChange={(event) => setReason(event.target.value)}
+            placeholder="Explain what needs to change in this locked goal."
+            value={reason}
+          />
+          <FieldHint>
+            {trimmedReason.length}/500 characters. Minimum 5 required.
+          </FieldHint>
+        </Field>
+    </ModalShell>
   )
 }
 
