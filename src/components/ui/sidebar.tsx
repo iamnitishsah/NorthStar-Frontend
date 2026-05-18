@@ -21,10 +21,10 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
 
   return (
     <>
-      <div className="border-b border-white/10 p-6">
+      <div className="border-b border-slate-200 p-6 dark:border-white/10">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
-            <div className="relative mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-white text-[#0B1220] shadow-sm">
+            <div className="relative mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-[#0B1220] text-white shadow-sm dark:bg-white dark:text-[#0B1220]">
               <Star className="fill-[#00897B] text-[#00897B]" size={25} />
               <Sparkles className="absolute right-1 top-1 text-[#0D47A1]" size={11} />
             </div>
@@ -32,7 +32,7 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
               NorthStar
             </h1>
 
-            <p className="mt-1 text-sm text-slate-400">
+            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
               Performance Operations
             </p>
           </div>
@@ -40,7 +40,7 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
           {onClose && (
             <button
               aria-label="Close navigation"
-              className="rounded-md p-2 text-slate-300 hover:bg-white/10 md:hidden"
+              className="rounded-md p-2 text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/10 md:hidden"
               onClick={onClose}
               type="button"
             >
@@ -65,7 +65,7 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
                 ${
                   isActive
                     ? "bg-[#0D47A1] text-white shadow-sm"
-                    : "text-slate-300 hover:bg-white/10 hover:text-white"
+                    : "text-slate-600 hover:bg-slate-100 hover:text-[#0D47A1] dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white"
                 }
               `
               }
@@ -78,13 +78,13 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
         })}
       </nav>
 
-      <div className="border-t border-white/10 p-4">
-        <div className="rounded-lg border border-white/10 bg-white/[0.03] p-3 text-sm">
+      <div className="border-t border-slate-200 p-4 dark:border-white/10">
+        <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm dark:border-white/10 dark:bg-white/[0.03]">
           <p className="font-semibold">
             {user.name}
           </p>
 
-          <p className="mt-1 text-xs uppercase tracking-wide text-slate-400">
+          <p className="mt-1 text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
             {user.role} · {user.department}
           </p>
         </div>
@@ -99,7 +99,7 @@ function Sidebar({
 }: Props) {
   return (
     <>
-      <aside className="hidden w-72 shrink-0 flex-col bg-[#0B1220] text-white md:flex">
+      <aside className="hidden w-72 shrink-0 flex-col border-r border-slate-200 bg-white text-slate-950 dark:border-white/10 dark:bg-[#0B1220] dark:text-white md:flex">
         <SidebarContent />
       </aside>
 
@@ -111,7 +111,7 @@ function Sidebar({
             onClick={onClose}
             type="button"
           />
-          <aside className="relative flex h-full w-72 max-w-[85vw] flex-col bg-[#0B1220] text-white shadow-xl">
+          <aside className="relative flex h-full w-72 max-w-[85vw] flex-col bg-white text-slate-950 shadow-xl dark:bg-[#0B1220] dark:text-white">
             <SidebarContent onClose={onClose} />
           </aside>
         </div>

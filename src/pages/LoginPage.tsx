@@ -1,5 +1,14 @@
-import { useState } from "react"
-import { AlertCircle, Building2, KeyRound, Mail, Sparkles, Star } from "lucide-react"
+import { useEffect, useState } from "react"
+import {
+  AlertCircle,
+  Building2,
+  KeyRound,
+  Mail,
+  Moon,
+  Sparkles,
+  Star,
+  Sun,
+} from "lucide-react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -37,6 +46,17 @@ function LoginPage() {
     "email" | "employee_id"
   >("email")
   const [loginError, setLoginError] = useState<string | null>(null)
+  const [theme, setTheme] = useState<"light" | "dark">(() => {
+    const savedTheme = localStorage.getItem("northstar-theme")
+
+    if (savedTheme === "light" || savedTheme === "dark") {
+      return savedTheme
+    }
+
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light"
+  })
 
   const setAuth = useAuthStore(
     (state) => state.setAuth
@@ -94,8 +114,27 @@ function LoginPage() {
     }
   }
 
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme
+    localStorage.setItem("northstar-theme", theme)
+  }, [theme])
+
+  function toggleTheme() {
+    setTheme((current) => (current === "dark" ? "light" : "dark"))
+  }
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-[var(--ns-bg)] p-4">
+      <button
+        aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
+        className="absolute right-4 top-4 rounded-md border border-slate-200 bg-white p-2 text-slate-600 shadow-sm hover:bg-slate-50"
+        onClick={toggleTheme}
+        title={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
+        type="button"
+      >
+        {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+      </button>
+
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="w-full max-w-[440px] space-y-6 rounded-lg border border-slate-200 bg-white p-8 shadow-xl shadow-slate-900/10"

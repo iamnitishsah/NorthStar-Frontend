@@ -6,6 +6,12 @@ import { router } from "./app/router"
 import { Toaster } from "sonner"
 import { QueryProvider } from "./app/providers/query-provider"
 
+const savedTheme = localStorage.getItem("northstar-theme")
+
+if (savedTheme === "light" || savedTheme === "dark") {
+  document.documentElement.dataset.theme = savedTheme
+}
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <QueryProvider>
