@@ -13,7 +13,6 @@ import { roleHomePath } from "@/app/navigation"
 import RoleProtectedRoute from "@/components/auth/RoleProtectedRoute"
 
 const LoginPage = lazy(() => import("@/pages/LoginPage"))
-const RegisterPage = lazy(() => import("@/pages/RegisterPage"))
 const NotFoundPage = lazy(() => import("@/pages/NotFoundPage"))
 const UnauthorizedPage = lazy(() => import("@/pages/UnauthorizedPage"))
 
@@ -26,6 +25,9 @@ const ReviewGoalsPage = lazy(() => import("@/pages/manager/ReviewGoalsPage"))
 
 const AdminDashboard = lazy(() => import("@/pages/admin/AdminDashboard"))
 const AdminLogsPage = lazy(() => import("@/pages/admin/AdminLogsPage"))
+const EmployeeOnboardingPage = lazy(
+  () => import("@/pages/admin/EmployeeOnboardingPage")
+)
 const OrganizationPage = lazy(
   () => import("@/pages/organization/OrganizationPage")
 )
@@ -60,7 +62,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "/register",
-    element: withSuspense(<RegisterPage />),
+    element: <Navigate to="/login" replace />,
   },
   {
     path: "/unauthorized",
@@ -156,6 +158,10 @@ export const router = createBrowserRouter([
       {
         path: "dashboard",
         element: withSuspense(<AdminDashboard />),
+      },
+      {
+        path: "employee-onboarding",
+        element: withSuspense(<EmployeeOnboardingPage />),
       },
       {
         path: "logs",

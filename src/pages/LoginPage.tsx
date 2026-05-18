@@ -8,7 +8,7 @@ import { getRoleHomePath } from "@/app/navigation"
 import { useAuthStore } from "@/app/store/auth-store"
 
 import { toast } from "sonner"
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import axios from "axios"
 
 const schema = z.object({
@@ -159,13 +159,7 @@ function LoginPage() {
         </button>
 
         <p className="text-center text-sm text-slate-600">
-          Need an account?{" "}
-          <Link
-            className="font-medium text-slate-900 hover:underline"
-            to="/register"
-          >
-            Register
-          </Link>
+          Accounts are provisioned internally by Admin operations.
         </p>
       </form>
     </div>
