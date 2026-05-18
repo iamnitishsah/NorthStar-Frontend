@@ -5,8 +5,6 @@ import {
   KeyRound,
   Mail,
   Moon,
-  Sparkles,
-  Star,
   Sun,
 } from "lucide-react"
 import { useForm } from "react-hook-form"
@@ -33,11 +31,12 @@ type FormData = z.infer<typeof schema>
 
 function NorthStarMark() {
   return (
-    <div className="relative flex h-14 w-14 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-enterprise-md">
-      <div className="absolute inset-1 rounded-lg border border-primary-foreground/15" />
-      <Star className="relative fill-accent text-accent" size={30} />
-      <Sparkles className="absolute right-1.5 top-1.5 text-primary-foreground" size={13} />
-      <span className="absolute -bottom-1 h-1.5 w-8 rounded-full bg-accent/40 blur-sm" />
+    <div className="northstar-mark flex h-14 w-14 items-center justify-center overflow-hidden rounded-xl">
+      <img
+        alt=""
+        className="h-full w-full"
+        src="/favicon.svg"
+      />
     </div>
   )
 }

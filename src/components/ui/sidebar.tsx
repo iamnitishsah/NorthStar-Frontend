@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom"
-import { Sparkles, Star, X } from "lucide-react"
+import { X } from "lucide-react"
 
 import { navigation } from "@/app/navigation"
 import { useAuthStore } from "@/app/store/auth-store"
@@ -25,9 +25,12 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
       <div className="border-b border-border p-6">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
-            <div className="relative mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-enterprise-sm">
-              <Star className="fill-accent text-accent" size={25} />
-              <Sparkles className="absolute right-1 top-1 text-primary-foreground" size={11} />
+            <div className="northstar-mark mb-4 flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl">
+              <img
+                alt=""
+                className="h-full w-full"
+                src="/favicon.svg"
+              />
             </div>
             <h1 className="text-2xl font-bold">
               NorthStar

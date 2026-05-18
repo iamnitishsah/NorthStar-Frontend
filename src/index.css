@@ -90,24 +90,24 @@
 .dark {
   color-scheme: dark;
 
-  --background: #0f1724;
-  --foreground: #e7ebf2;
-  --card: #151f2d;
+  --background: #0b1220;
+  --foreground: #e8edf5;
+  --card: #111b2b;
   --card-foreground: #eef2f7;
-  --surface: #1b2636;
-  --surface-foreground: #e3e8ef;
-  --muted: #223044;
-  --muted-foreground: #a8b3c5;
+  --surface: #172234;
+  --surface-foreground: #e2e8f0;
+  --muted: #1d2a3d;
+  --muted-foreground: #a9b6c8;
 
-  --border: #2d3a4e;
-  --input: #36465d;
-  --ring: #7fa7d8;
+  --border: #2b3a50;
+  --input: #33445c;
+  --ring: #82a7d2;
 
   --primary: #7fa7d8;
   --primary-foreground: #0d1624;
-  --secondary: #223044;
+  --secondary: #1d2a3d;
   --secondary-foreground: #e5ebf3;
-  --accent: #66b8ae;
+  --accent: #62b8ad;
   --accent-foreground: #081c1a;
 
   --success: #70c08e;
@@ -115,8 +115,8 @@
   --destructive: #f07d73;
   --info: #8cb8ea;
 
-  --hover: #223044;
-  --active: #2a3950;
+  --hover: #1d2a3d;
+  --active: #26364d;
 
   --shadow-color: 0 0 0;
 }
@@ -254,6 +254,19 @@ table th.tabular-nums {
   box-shadow:
     0 1px 2px rgb(var(--shadow-color) / 0.08),
     0 8px 24px rgb(var(--shadow-color) / 0.08);
+}
+
+.northstar-mark {
+  background: #0b1220;
+  box-shadow:
+    0 1px 2px rgb(var(--shadow-color) / 0.08),
+    0 0 0 1px color-mix(in srgb, var(--border) 70%, transparent);
+}
+
+.dark .northstar-mark {
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--border) 88%, transparent),
+    0 8px 18px rgb(0 0 0 / 0.22);
 }
 
 .theme-transition {
