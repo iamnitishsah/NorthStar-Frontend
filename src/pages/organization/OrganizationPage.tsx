@@ -44,7 +44,6 @@ function OrganizationPage() {
       />
       <OrganizationTree
         hierarchy={hierarchy}
-        showHeader={false}
       />
     </div>
   )
