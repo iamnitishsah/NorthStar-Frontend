@@ -34,3 +34,22 @@ export interface LoginResponse {
     user: User
   }
 }
+
+export interface RegisterRequest {
+  email: string
+  employee_id: string
+  name: string
+  age: number
+  gender: "MALE" | "FEMALE" | "OTHER"
+  phone: string
+  department: string
+  designation: string
+  role: UserRole
+  manager_id?: string | null
+  password: string
+}
+
+export interface RegisterResponse {
+  message: string
+  user_id: string
+}

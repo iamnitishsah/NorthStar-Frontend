@@ -1,18 +1,31 @@
 import {
   CheckCircle2,
+  Download,
   Lock,
   Target,
   Users,
 } from "lucide-react"
+import { toast } from "sonner"
 
-import { useAuditLogs, useOrganizationHierarchy } from "../hooks/use-admin"
+import Button from "@/components/ui/button"
+import { getApiErrorMessage } from "@/services/api-error"
+import {
+  useAuditLogs,
+  useCompletionDashboard,
+  useExportAchievementReport,
+  useGoalDistributionAnalytics,
+  useOrganizationHierarchy,
+  useQoqAnalytics,
+} from "../hooks/use-admin"
 import {
   getActionCounts,
   getAdminMetrics,
   getDepartmentCounts,
+  getDistributionChartData,
   getGoalLifecycleCounts,
   getLockedGoalCandidates,
-  getQuarterlyTrend,
+  getQoqTeamTrend,
+  getUomDistributionChartData,
 } from "../utils/admin-analytics"
 import AdminCharts from "./admin-charts"
 import MetricCard from "./metric-card"
@@ -23,12 +36,28 @@ import UnlockRequestsPanel from "./unlock-requests-panel"
 function AdminDashboardWorkspace() {
   const hierarchyQuery = useOrganizationHierarchy()
   const logsQuery = useAuditLogs()
+  const completionQuery = useCompletionDashboard()
+  const qoqQuery = useQoqAnalytics()
+  const distributionQuery = useGoalDistributionAnalytics()
+  const exportMutation = useExportAchievementReport()
 
-  if (hierarchyQuery.isLoading || logsQuery.isLoading) {
+  if (
+    hierarchyQuery.isLoading ||
+    logsQuery.isLoading ||
+    completionQuery.isLoading ||
+    qoqQuery.isLoading ||
+    distributionQuery.isLoading
+  ) {
     return <div className="text-slate-600">Loading admin dashboard...</div>
   }
 
-  if (hierarchyQuery.isError || logsQuery.isError) {
+  if (
+    hierarchyQuery.isError ||
+    logsQuery.isError ||
+    completionQuery.isError ||
+    qoqQuery.isError ||
+    distributionQuery.isError
+  ) {
     return (
       <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">
         Unable to load admin dashboard.
@@ -38,17 +67,37 @@ function AdminDashboardWorkspace() {
 
   const hierarchy = hierarchyQuery.data ?? []
   const logs = logsQuery.data ?? []
-  const metrics = getAdminMetrics(hierarchy, logs)
+  const completionRows = completionQuery.data ?? []
+  const distribution = distributionQuery.data
+  const metrics = getAdminMetrics(hierarchy, logs, completionRows)
+
+  function handleExport() {
+    exportMutation.mutate(undefined, {
+      onSuccess: () => toast.success("Achievement report exported"),
+      onError: (error) =>
+        toast.error(getApiErrorMessage(error, "Export failed")),
+    })
+  }
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-slate-950">
-          Admin Control Center
-        </h1>
-        <p className="mt-1 text-slate-500">
-          Organization visibility, governance controls, and performance analytics.
-        </p>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-slate-950">
+            Admin Control Center
+          </h1>
+          <p className="mt-1 text-slate-500">
+            Organization visibility, governance controls, and performance analytics.
+          </p>
+        </div>
+
+        <Button
+          disabled={exportMutation.isPending}
+          icon={<Download size={16} />}
+          onClick={handleExport}
+        >
+          {exportMutation.isPending ? "Exporting..." : "Export CSV"}
+        </Button>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -82,8 +131,10 @@ function AdminDashboardWorkspace() {
       <AdminCharts
         actionCounts={getActionCounts(logs)}
         departmentCounts={getDepartmentCounts(hierarchy)}
+        distributionCounts={getDistributionChartData(distribution)}
         lifecycleCounts={getGoalLifecycleCounts(logs)}
-        quarterlyTrend={getQuarterlyTrend(logs)}
+        quarterlyTrend={getQoqTeamTrend(qoqQuery.data)}
+        uomCounts={getUomDistributionChartData(distribution)}
       />
 
       <OrganizationTree hierarchy={hierarchy} />

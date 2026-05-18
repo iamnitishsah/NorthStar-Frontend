@@ -82,7 +82,7 @@ function GoalForm({
     if (!isZeroBased) return
 
     setValue("measurement_type", "MIN")
-    setValue("target_value", 0)
+    setValue("target_value", 1)
   }, [isZeroBased, setValue])
 
   function submit(values: GoalFormValues) {

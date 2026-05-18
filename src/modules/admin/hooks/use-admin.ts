@@ -2,7 +2,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 import {
   approveUnlockRequest,
+  exportAchievementReport,
   fetchAuditLogs,
+  fetchCompletionDashboard,
+  fetchGoalDistributionAnalytics,
+  fetchQoqAnalytics,
   fetchUnlockRequests,
   rejectUnlockRequest,
   unlockGoal,
@@ -15,6 +19,9 @@ export {
 
 export const auditLogsQueryKey = ["admin-audit-logs"] as const
 export const unlockRequestsQueryKey = ["admin-unlock-requests"] as const
+export const completionDashboardQueryKey = ["admin-completion-dashboard"] as const
+export const qoqAnalyticsQueryKey = ["admin-qoq-analytics"] as const
+export const goalDistributionQueryKey = ["admin-goal-distribution"] as const
 
 export function useAuditLogs(filters: AuditLogFilters = {}) {
   return useQuery({
@@ -30,6 +37,33 @@ export function useUnlockRequests(filters: UnlockRequestFilters = {}) {
   })
 }
 
+export function useCompletionDashboard() {
+  return useQuery({
+    queryKey: completionDashboardQueryKey,
+    queryFn: fetchCompletionDashboard,
+  })
+}
+
+export function useQoqAnalytics() {
+  return useQuery({
+    queryKey: qoqAnalyticsQueryKey,
+    queryFn: fetchQoqAnalytics,
+  })
+}
+
+export function useGoalDistributionAnalytics() {
+  return useQuery({
+    queryKey: goalDistributionQueryKey,
+    queryFn: fetchGoalDistributionAnalytics,
+  })
+}
+
+export function useExportAchievementReport() {
+  return useMutation({
+    mutationFn: exportAchievementReport,
+  })
+}
+
 export function useUnlockGoal() {
   const queryClient = useQueryClient()
 
@@ -41,6 +75,9 @@ export function useUnlockGoal() {
       })
       queryClient.invalidateQueries({
         queryKey: unlockRequestsQueryKey,
+      })
+      queryClient.invalidateQueries({
+        queryKey: completionDashboardQueryKey,
       })
     },
   })
@@ -58,6 +95,9 @@ export function useApproveUnlockRequest() {
       queryClient.invalidateQueries({
         queryKey: unlockRequestsQueryKey,
       })
+      queryClient.invalidateQueries({
+        queryKey: completionDashboardQueryKey,
+      })
     },
   })
 }
@@ -73,6 +113,9 @@ export function useRejectUnlockRequest() {
       })
       queryClient.invalidateQueries({
         queryKey: unlockRequestsQueryKey,
+      })
+      queryClient.invalidateQueries({
+        queryKey: completionDashboardQueryKey,
       })
     },
   })

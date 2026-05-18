@@ -47,6 +47,14 @@ function MyGoalsWorkspace() {
     () => data.filter(isEditableGoal),
     [data]
   )
+  const lockedGoals = useMemo(
+    () => data.filter((goal) => goal.status === "LOCKED"),
+    [data]
+  )
+  const lockedWeightage = useMemo(
+    () => lockedGoals.reduce((sum, goal) => sum + goal.weightage, 0),
+    [lockedGoals]
+  )
   const editableGoalIds = useMemo(
     () => new Set(editableGoals.map((goal) => goal.goal_id)),
     [editableGoals]
@@ -67,10 +75,13 @@ function MyGoalsWorkspace() {
       selectedGoals.reduce((sum, goal) => sum + goal.weightage, 0),
     [selectedGoals]
   )
+  const totalSubmissionWeightage = selectedWeightage + lockedWeightage
+  const totalSubmissionGoals = selectedGoals.length + lockedGoals.length
   const canSubmit =
     selectedGoals.length > 0 &&
-    selectedGoals.length <= 8 &&
-    selectedWeightage === 100 &&
+    totalSubmissionGoals <= 8 &&
+    totalSubmissionWeightage === 100 &&
+    selectedGoals.every((goal) => goal.weightage >= 10) &&
     !submitMutation.isPending
 
   function handleSelectGoal(goal: Goal, isSelected: boolean) {
@@ -81,8 +92,8 @@ function MyGoalsWorkspace() {
       const next = new Set(currentSelectedIds)
 
       if (isSelected) {
-        if (next.size >= 8) {
-          toast.error("You can select up to 8 goals for submission.")
+        if (next.size + lockedGoals.length >= 8) {
+          toast.error("Submitted goals plus locked goals cannot exceed 8.")
           return prev
         }
         next.add(goal.goal_id)
@@ -208,7 +219,11 @@ function MyGoalsWorkspace() {
         </div>
       </div>
 
-      <GoalsSummary goals={data} selectedGoals={selectedGoals} />
+      <GoalsSummary
+        goals={data}
+        lockedGoals={lockedGoals}
+        selectedGoals={selectedGoals}
+      />
 
       {data.length === 0 ? (
         <GoalsEmptyState onCreate={() => setModal({ mode: "create" })} />

@@ -3,10 +3,13 @@ import type { Goal } from "@/types/goal"
 type Props = {
   goals: Goal[]
   selectedGoals?: Goal[]
+  lockedGoals?: Goal[]
 }
 
-function GoalsSummary({ goals, selectedGoals }: Props) {
-  const activeGoals = selectedGoals ?? goals
+function GoalsSummary({ goals, selectedGoals, lockedGoals = [] }: Props) {
+  const activeGoals = selectedGoals
+    ? [...selectedGoals, ...lockedGoals]
+    : goals
   const totalWeightage = activeGoals.reduce(
     (sum, goal) => sum + goal.weightage,
     0
@@ -45,7 +48,7 @@ function GoalsSummary({ goals, selectedGoals }: Props) {
       </div>
 
       <p className="mt-2 text-sm text-slate-500">
-        Select up to 8 goals totaling exactly 100% to submit. {totalGoals} total goals available.
+        Submission is calculated from selected editable goals plus already locked goals. {totalGoals} total goals available.
       </p>
     </section>
   )

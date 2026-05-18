@@ -12,22 +12,16 @@ type Props = {
   onApprove: (goalId: string, payload: ApproveGoalPayload) => void
 }
 
-function getApproveSchema(allowsZeroTarget: boolean) {
+function getApproveSchema() {
   return z.object({
     target_value: z.number(),
     weightage: z.number().min(10).max(100),
   })
   .superRefine((value, context) => {
-    const hasInvalidTarget = allowsZeroTarget
-      ? value.target_value < 0
-      : value.target_value <= 0
-
-    if (hasInvalidTarget) {
+    if (value.target_value <= 0) {
       context.addIssue({
         code: "custom",
-        message: allowsZeroTarget
-          ? "Target value cannot be negative"
-          : "Target value must be greater than 0",
+        message: "Target value must be greater than 0",
         path: ["target_value"],
       })
     }
@@ -47,7 +41,7 @@ function ApproveGoalModal({
     handleSubmit,
     formState: { errors },
   } = useForm<ApproveFormValues>({
-    resolver: zodResolver(getApproveSchema(goal.uom_type === "ZERO_BASED")),
+    resolver: zodResolver(getApproveSchema()),
     defaultValues: {
       target_value: goal.target_value,
       weightage: goal.weightage,

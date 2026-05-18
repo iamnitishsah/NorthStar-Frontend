@@ -40,7 +40,7 @@ export const goalFormSchema = z
       })
     }
 
-    if (value.uom_type !== "ZERO_BASED" && value.target_value <= 0) {
+    if (value.target_value <= 0) {
       context.addIssue({
         code: "custom",
         message: "Target value must be greater than 0",
@@ -74,7 +74,7 @@ export function getGoalFormDefaultValues(goal?: Goal): GoalFormValues {
     description: goal?.description ?? "",
     uom_type: goal?.uom_type ?? "NUMERIC",
     measurement_type: goal?.measurement_type ?? "MIN",
-    target_value: goal?.uom_type === "ZERO_BASED" ? 0 : goal?.target_value ?? 1,
+    target_value: goal?.target_value ?? 1,
     weightage: goal?.weightage ?? 10,
     target_date: toDateInputValue(goal?.target_date),
   }
@@ -94,7 +94,7 @@ export function toGoalPayload(
     description: values.description?.trim() || undefined,
     uom_type: values.uom_type,
     measurement_type: isZeroBased ? "MIN" : values.measurement_type,
-    target_value: isZeroBased ? 0 : Number(values.target_value),
+    target_value: isZeroBased ? 1 : Number(values.target_value),
     weightage: Number(values.weightage),
     target_date: targetDate,
     progress_status: "NOT_STARTED",

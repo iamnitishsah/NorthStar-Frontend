@@ -68,6 +68,25 @@ export interface Goal {
   updated_at?: string
 }
 
+export interface SharedGoalPushPayload {
+  recipient_employee_ids: string[]
+  thrust_area: string
+  title: string
+  description?: string
+  uom_type: UOMType
+  measurement_type: MeasurementType
+  target_value: number
+  default_weightage: number
+  target_date?: string | null
+}
+
+export interface SharedGoalPushResponse {
+  message: string
+  source_goal_id: string
+  recipient_count: number
+  recipients: string[]
+}
+
 export interface ApiMessageResponse {
   message: string
 }
@@ -139,6 +158,39 @@ export interface QuarterlyCommentPayload {
 
 export type ManagerGoalsResponse = Record<string, Goal[]>
 
+export interface ManagerCheckinQuarter {
+  achievement_value?: number | string | null
+  progress_percentage?: number | null
+  progress_status?: ProgressStatus | null
+  manager_note?: string | null
+  completed?: boolean
+}
+
+export interface ManagerCheckinGoalResponse {
+  goal_id: string
+  employee_id?: string
+  employee_name: string
+  title: string
+  thrust_area: string
+  description?: string | null
+  uom_type?: UOMType
+  measurement_type?: MeasurementType
+  planned_target_value: number
+  latest_achievement_value?: number | string | null
+  latest_progress_percentage?: number | null
+  latest_progress_status?: ProgressStatus | null
+  weightage: number
+  target_date?: string | null
+  quarters: Partial<Record<"q1" | "q2" | "q3" | "q4", ManagerCheckinQuarter>>
+  is_shared?: boolean
+  primary_owner_id?: string | null
+}
+
+export type ManagerCheckinReviewResponse = Record<
+  string,
+  ManagerCheckinGoalResponse[]
+>
+
 export type AuditLogDetails = Record<string, unknown>
 
 export interface AuditLogEntry {
@@ -156,4 +208,77 @@ export interface HierarchyNode {
   department: string
   role: string
   children: HierarchyNode[]
+}
+
+export interface CompletionQuarterStatus {
+  employee_completed: boolean
+  employee_completed_goals: number
+  manager_completed: boolean
+  manager_completed_goals: number
+  required_goals: number
+}
+
+export interface CompletionDashboardRow {
+  employee_id: string
+  employee_name: string
+  manager_id?: string | null
+  manager_name?: string | null
+  total_goals: number
+  checkin_required_goals: number
+  latest_completed_quarter?: number | null
+  quarters: Partial<
+    Record<"q1" | "q2" | "q3" | "q4", CompletionQuarterStatus>
+  >
+}
+
+export interface QoqQuarterMetric {
+  average_progress_percentage: number | null
+  completed_goals: number
+  qoq_delta: number | null
+}
+
+export interface QoqEmployeeMetric {
+  employee_id: string
+  employee_name: string
+  manager_id?: string | null
+  manager_name?: string | null
+  goal_count: number
+  quarters: Partial<Record<"q1" | "q2" | "q3" | "q4", QoqQuarterMetric>>
+}
+
+export interface QoqTeamMetric {
+  manager_id: string
+  manager_name: string
+  employee_count: number
+  goal_count: number
+  quarters: Partial<Record<"q1" | "q2" | "q3" | "q4", QoqQuarterMetric>>
+}
+
+export interface QoqAnalyticsResponse {
+  employees: QoqEmployeeMetric[]
+  teams: QoqTeamMetric[]
+}
+
+export interface DistributionBucket {
+  label: string
+  goal_count: number
+  total_weightage: number
+  average_progress_percentage?: number | null
+  status_breakdown: Partial<Record<GoalStatus, number>>
+}
+
+export interface ThrustAreaUomDistributionBucket {
+  thrust_area: string
+  uom_type: UOMType
+  goal_count: number
+  total_weightage: number
+  average_progress_percentage?: number | null
+  status_breakdown: Partial<Record<GoalStatus, number>>
+}
+
+export interface GoalDistributionAnalyticsResponse {
+  total_goals: number
+  by_thrust_area: DistributionBucket[]
+  by_uom_type: DistributionBucket[]
+  by_thrust_area_and_uom_type: ThrustAreaUomDistributionBucket[]
 }

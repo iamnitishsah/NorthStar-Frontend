@@ -13,6 +13,7 @@ import { roleHomePath } from "@/app/navigation"
 import RoleProtectedRoute from "@/components/auth/RoleProtectedRoute"
 
 const LoginPage = lazy(() => import("@/pages/LoginPage"))
+const RegisterPage = lazy(() => import("@/pages/RegisterPage"))
 const NotFoundPage = lazy(() => import("@/pages/NotFoundPage"))
 const UnauthorizedPage = lazy(() => import("@/pages/UnauthorizedPage"))
 
@@ -27,6 +28,9 @@ const AdminDashboard = lazy(() => import("@/pages/admin/AdminDashboard"))
 const AdminLogsPage = lazy(() => import("@/pages/admin/AdminLogsPage"))
 const OrganizationPage = lazy(
   () => import("@/pages/organization/OrganizationPage")
+)
+const SharedGoalsPage = lazy(
+  () => import("@/pages/shared-goals/SharedGoalsPage")
 )
 
 function RouteFallback() {
@@ -53,6 +57,10 @@ export const router = createBrowserRouter([
   {
     path: "/login",
     element: withSuspense(<LoginPage />),
+  },
+  {
+    path: "/register",
+    element: withSuspense(<RegisterPage />),
   },
   {
     path: "/unauthorized",
@@ -167,6 +175,23 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: withSuspense(<OrganizationPage />),
+      },
+    ],
+  },
+
+  {
+    path: "/shared-goals",
+    element: (
+      <ProtectedRoute>
+        <RoleProtectedRoute allowedRoles={["MANAGER", "ADMIN"]}>
+          <DashboardLayout />
+        </RoleProtectedRoute>
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        index: true,
+        element: withSuspense(<SharedGoalsPage />),
       },
     ],
   },

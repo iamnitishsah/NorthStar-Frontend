@@ -19,5 +19,11 @@ export function getApiErrorMessage(
       .join(", ") || fallback
   }
 
+  if (detail && typeof detail === "object") {
+    const message = (detail as { message?: unknown }).message
+
+    if (typeof message === "string") return message
+  }
+
   return fallback
 }

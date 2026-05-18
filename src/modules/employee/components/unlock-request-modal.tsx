@@ -18,7 +18,10 @@ function UnlockRequestModal({
 }: Props) {
   const [reason, setReason] = useState("")
   const trimmedReason = reason.trim()
-  const canSubmit = trimmedReason.length >= 3 && !isSubmitting
+  const canSubmit =
+    trimmedReason.length >= 5 &&
+    trimmedReason.length <= 500 &&
+    !isSubmitting
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 p-4">
@@ -42,6 +45,9 @@ function UnlockRequestModal({
             placeholder="Explain what needs to change in this locked goal."
             value={reason}
           />
+          <p className="mt-1 text-xs text-slate-500">
+            {trimmedReason.length}/500 characters. Minimum 5 required.
+          </p>
         </label>
 
         <div className="mt-5 flex justify-end gap-3">

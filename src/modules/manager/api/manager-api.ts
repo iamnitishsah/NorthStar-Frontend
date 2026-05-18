@@ -7,6 +7,8 @@ import type {
   ApiMessageResponse,
   ApproveGoalPayload,
   Goal,
+  ManagerCheckinGoalResponse,
+  ManagerCheckinReviewResponse,
   ManagerGoalsResponse,
   ManagerReviewGoalsResponse,
   QuarterlyCommentPayload,
@@ -18,6 +20,44 @@ const normalizeGoalGroup = (group: Record<string, Goal[]>) =>
     Object.entries(group).map(([key, goals]) => [
       key,
       goals.map(normalizeQuarterMap),
+    ])
+  )
+
+function normalizeCheckinGoal(goal: ManagerCheckinGoalResponse): Goal {
+  const quarters = goal.quarters ?? {}
+
+  return normalizeQuarterMap({
+    goal_id: goal.goal_id,
+    employee_id: goal.employee_id,
+    employee_name: goal.employee_name,
+    title: goal.title,
+    thrust_area: goal.thrust_area,
+    description: goal.description,
+    uom_type: goal.uom_type ?? "NUMERIC",
+    measurement_type: goal.measurement_type ?? "MIN",
+    target_value: goal.planned_target_value,
+    achievement_value: goal.latest_achievement_value,
+    progress_percentage: goal.latest_progress_percentage,
+    progress_status: goal.latest_progress_status ?? undefined,
+    weightage: goal.weightage,
+    target_date: goal.target_date,
+    quarter: {
+      "1": quarters.q1?.completed ? quarters.q1 : undefined,
+      "2": quarters.q2?.completed ? quarters.q2 : undefined,
+      "3": quarters.q3?.completed ? quarters.q3 : undefined,
+      "4": quarters.q4?.completed ? quarters.q4 : undefined,
+    },
+    status: "LOCKED",
+    is_shared: goal.is_shared,
+    primary_owner_id: goal.primary_owner_id,
+  } as Goal)
+}
+
+const normalizeCheckinGroup = (group: ManagerCheckinReviewResponse) =>
+  Object.fromEntries(
+    Object.entries(group).map(([key, goals]) => [
+      key,
+      goals.map(normalizeCheckinGoal),
     ])
   )
 
@@ -39,11 +79,11 @@ export async function fetchReviewGoals() {
 
 export async function fetchManagerGoals() {
   try {
-    const response = await api.get<ManagerGoalsResponse>(
-      endpoints.managerGoals.approved
+    const response = await api.get<ManagerCheckinReviewResponse>(
+      endpoints.managerGoals.checkinReview
     )
 
-    return normalizeGoalGroup(response.data) as ManagerGoalsResponse
+    return normalizeCheckinGroup(response.data) as ManagerGoalsResponse
   } catch (error) {
     if (axios.isAxiosError(error) && error.response?.status === 404) {
       return {}

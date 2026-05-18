@@ -17,9 +17,11 @@ import type { ChartDatum } from "../utils/admin-analytics"
 
 type Props = {
   departmentCounts: ChartDatum[]
+  distributionCounts: ChartDatum[]
   actionCounts: ChartDatum[]
   lifecycleCounts: ChartDatum[]
   quarterlyTrend: ChartDatum[]
+  uomCounts: ChartDatum[]
 }
 
 const chartColors = [
@@ -58,9 +60,11 @@ function ChartCard({
 
 function AdminCharts({
   departmentCounts,
+  distributionCounts,
   actionCounts,
   lifecycleCounts,
   quarterlyTrend,
+  uomCounts,
 }: Props) {
   return (
     <div className="grid gap-5 xl:grid-cols-2">
@@ -76,6 +80,76 @@ function AdminCharts({
                 <YAxis allowDecimals={false} />
                 <Tooltip />
                 <Bar dataKey="value" fill="#2563eb" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+      </ChartCard>
+
+      <ChartCard title="Goal Distribution by Thrust Area">
+        {distributionCounts.length === 0 ? (
+          <EmptyChart label="No goal distribution data available." />
+        ) : (
+          <div className="h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={distributionCounts}
+                  dataKey="value"
+                  innerRadius={56}
+                  nameKey="name"
+                  outerRadius={90}
+                  paddingAngle={2}
+                >
+                  {distributionCounts.map((entry, index) => (
+                    <Cell
+                      fill={chartColors[index % chartColors.length]}
+                      key={entry.name}
+                    />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+      </ChartCard>
+
+      <ChartCard title="Team QoQ Average Progress">
+        {quarterlyTrend.every((item) => item.value === 0) ? (
+          <EmptyChart label="No QoQ analytics available." />
+        ) : (
+          <div className="h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={quarterlyTrend}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                <XAxis dataKey="name" />
+                <YAxis allowDecimals={false} />
+                <Tooltip />
+                <Line
+                  dataKey="value"
+                  stroke="#059669"
+                  strokeWidth={3}
+                  type="monotone"
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+      </ChartCard>
+
+      <ChartCard title="Goal Distribution by UoM">
+        {uomCounts.length === 0 ? (
+          <EmptyChart label="No UoM distribution data available." />
+        ) : (
+          <div className="h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={uomCounts}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                <XAxis dataKey="name" />
+                <YAxis allowDecimals={false} />
+                <Tooltip />
+                <Bar dataKey="value" fill="#7c3aed" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -106,29 +180,6 @@ function AdminCharts({
                 </Pie>
                 <Tooltip />
               </PieChart>
-            </ResponsiveContainer>
-          </div>
-        )}
-      </ChartCard>
-
-      <ChartCard title="Quarterly Check-in Trend">
-        {quarterlyTrend.every((item) => item.value === 0) ? (
-          <EmptyChart label="No quarterly check-ins logged yet." />
-        ) : (
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={quarterlyTrend}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="name" />
-                <YAxis allowDecimals={false} />
-                <Tooltip />
-                <Line
-                  dataKey="value"
-                  stroke="#059669"
-                  strokeWidth={3}
-                  type="monotone"
-                />
-              </LineChart>
             </ResponsiveContainer>
           </div>
         )}

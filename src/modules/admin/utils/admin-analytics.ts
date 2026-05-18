@@ -1,4 +1,10 @@
-import type { AuditLogEntry, HierarchyNode } from "@/types/goal"
+import type {
+  AuditLogEntry,
+  CompletionDashboardRow,
+  GoalDistributionAnalyticsResponse,
+  HierarchyNode,
+  QoqAnalyticsResponse,
+} from "@/types/goal"
 
 export type ChartDatum = {
   name: string
@@ -109,22 +115,69 @@ export function getLockedGoalCandidates(logs: AuditLogEntry[]) {
 
 export function getAdminMetrics(
   hierarchy: HierarchyNode[],
-  logs: AuditLogEntry[]
+  logs: AuditLogEntry[],
+  completionRows: CompletionDashboardRow[] = []
 ) {
   const employees = flattenHierarchy(hierarchy)
-  const totalGoals = logs.filter((log) => log.action === "CREATE_GOAL").length
-  const lockedGoals = logs.filter((log) => log.action === "APPROVE_GOAL").length
-  const quarterlyCheckins = logs.filter(
-    (log) => log.action === "QUARTERLY_CHECKIN"
+  const totalGoals = completionRows.length
+    ? completionRows.reduce((sum, row) => sum + row.total_goals, 0)
+    : logs.filter((log) => log.action === "CREATE_GOAL").length
+  const lockedGoals = completionRows.length
+    ? completionRows.reduce((sum, row) => sum + row.checkin_required_goals, 0)
+    : logs.filter((log) => log.action === "APPROVE_GOAL").length
+  const completionSlots = completionRows.flatMap((row) =>
+    Object.values(row.quarters)
+      .filter((quarter) => quarter && quarter.required_goals > 0)
+      .map((quarter) => quarter!)
+  )
+  const completedSlots = completionSlots.filter(
+    (quarter) => quarter.employee_completed && quarter.manager_completed
   ).length
-  const quarterlyCompletion = totalGoals
-    ? Math.round((quarterlyCheckins / totalGoals) * 100)
+  const quarterlyCompletion = completionSlots.length
+    ? Math.round((completedSlots / completionSlots.length) * 100)
     : 0
 
   return {
-    totalEmployees: employees.length,
+    totalEmployees: completionRows.length || employees.length,
     totalGoals,
     lockedGoals,
     quarterlyCompletion,
   }
+}
+
+export function getDistributionChartData(
+  distribution?: GoalDistributionAnalyticsResponse
+): ChartDatum[] {
+  return (distribution?.by_thrust_area ?? []).map((bucket) => ({
+    name: bucket.label,
+    value: bucket.goal_count,
+  }))
+}
+
+export function getUomDistributionChartData(
+  distribution?: GoalDistributionAnalyticsResponse
+): ChartDatum[] {
+  return (distribution?.by_uom_type ?? []).map((bucket) => ({
+    name: bucket.label,
+    value: bucket.goal_count,
+  }))
+}
+
+export function getQoqTeamTrend(
+  analytics?: QoqAnalyticsResponse
+): ChartDatum[] {
+  const quarters = ["q1", "q2", "q3", "q4"] as const
+
+  return quarters.map((quarter) => {
+    const values = (analytics?.teams ?? [])
+      .map((team) => team.quarters[quarter]?.average_progress_percentage)
+      .filter((value): value is number => typeof value === "number")
+
+    return {
+      name: quarter.toUpperCase(),
+      value: values.length
+        ? Math.round(values.reduce((sum, value) => sum + value, 0) / values.length)
+        : 0,
+    }
+  })
 }

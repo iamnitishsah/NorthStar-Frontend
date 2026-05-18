@@ -21,12 +21,15 @@ export const endpoints = {
   managerGoals: {
     review: "/manager/goals/review",
     approved: "/manager/goals/",
+    checkinReview: "/manager/goals/checkin-review",
     approve: (goalId: string) => `/manager/goals/${goalId}/approve`,
     return: (goalId: string) => `/manager/goals/${goalId}/return`,
     comment: (goalId: string) => `/manager/goals/${goalId}/comment`,
   },
 
   adminGoals: {
+    export: "/admin/goals/export",
+    completionDashboard: "/admin/goals/completion-dashboard",
     unlock: (goalId: string) => `/admin/goals/${goalId}/unlock`,
     unlockRequests: "/admin/goals/unlock-requests",
     approveUnlockRequest: (requestId: string) =>
@@ -34,6 +37,11 @@ export const endpoints = {
     rejectUnlockRequest: (requestId: string) =>
       `/admin/goals/unlock-requests/${requestId}/reject`,
     logs: "/admin/goals/logs",
+  },
+
+  adminAnalytics: {
+    qoq: "/admin/analytics/qoq",
+    distribution: "/admin/analytics/distribution",
   },
 
   sharedGoals: {

@@ -9,6 +9,7 @@ import type {
   QuarterKey,
   QuarterlyCheckinPayload,
 } from "@/types/goal"
+import { quarterKeys } from "@/modules/quarterly/utils/quarterly"
 
 type Props = {
   goal: Goal
@@ -36,6 +37,9 @@ function QuarterlyCheckinModal({
   onSubmit,
 }: Props) {
   const isTimeline = goal.uom_type === "TIMELINE"
+  const nextQuarter =
+    quarterKeys.find((quarter) => !goal.quarter?.[quarter]) ?? "4"
+  const hasOpenQuarter = !goal.quarter?.[nextQuarter]
   const checkinSchema = z.object({
     quarter: z.enum(["1", "2", "3", "4"]),
     achievement_value: isTimeline
@@ -46,7 +50,9 @@ function QuarterlyCheckinModal({
             /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}(:\d{2})?)?$/,
             "Use ISO date format (YYYY-MM-DD)"
           )
-      : z.number().gt(0, "Achievement value must be positive"),
+      : goal.uom_type === "ZERO_BASED"
+        ? z.number().min(0, "Achievement value cannot be negative")
+        : z.number().gt(0, "Achievement value must be positive"),
     progress_status: z.enum(progressStatusOptions),
   })
   const {
@@ -56,7 +62,7 @@ function QuarterlyCheckinModal({
   } = useForm<CheckinFormValues>({
     resolver: zodResolver(checkinSchema),
     defaultValues: {
-      quarter: "1",
+      quarter: nextQuarter,
       achievement_value: isTimeline ? "" : 0,
       progress_status: "ON_TRACK",
     },
@@ -110,12 +116,13 @@ function QuarterlyCheckinModal({
               <select
                 {...register("quarter")}
                 className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
+                disabled
               >
-                <option value="1">Q1</option>
-                <option value="2">Q2</option>
-                <option value="3">Q3</option>
-                <option value="4">Q4</option>
+                <option value={nextQuarter}>Q{nextQuarter}</option>
               </select>
+              <p className="text-xs text-slate-500">
+                Check-ins are submitted one quarter at a time in sequence.
+              </p>
             </label>
 
             <label className="space-y-1.5">
@@ -165,7 +172,7 @@ function QuarterlyCheckinModal({
             </button>
             <button
               className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
-              disabled={isSubmitting}
+              disabled={isSubmitting || !hasOpenQuarter}
               type="submit"
             >
               {isSubmitting ? "Saving..." : "Save Check-in"}

@@ -11,12 +11,23 @@ import type {
 } from "@/types/goal"
 
 export async function fetchMyGoals() {
-  const response =
-    await api.get<Goal[]>(
-      endpoints.employeeGoals.my
-    )
+  const [personalResponse, sharedResponse] =
+    await Promise.all([
+      api.get<Goal[]>(endpoints.employeeGoals.my),
+      api.get<Goal[]>(endpoints.employeeGoals.mySharedGoals),
+    ])
 
-  return response.data.map(normalizeQuarterMap)
+  return [
+    ...personalResponse.data,
+    ...sharedResponse.data,
+  ]
+    .map(normalizeQuarterMap)
+    .sort((left, right) => {
+      const leftDate = left.created_at ? Date.parse(left.created_at) : 0
+      const rightDate = right.created_at ? Date.parse(right.created_at) : 0
+
+      return rightDate - leftDate
+    })
 }
 
 export async function createGoal(

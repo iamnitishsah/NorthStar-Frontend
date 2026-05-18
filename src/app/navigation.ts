@@ -2,6 +2,7 @@ import {
   LayoutDashboard,
   Target,
   ClipboardCheck,
+  Share2,
   ShieldCheck,
   ScrollText,
   TrendingUp,
@@ -60,6 +61,11 @@ export const navigation = {
       path: "/manager/progress",
       icon: TrendingUp,
     },
+    {
+      label: "Shared Goals",
+      path: "/shared-goals",
+      icon: Share2,
+    },
   ],
 
   ADMIN: [
@@ -77,6 +83,11 @@ export const navigation = {
       label: "Audit Logs",
       path: "/admin/logs",
       icon: ScrollText,
+    },
+    {
+      label: "Shared Goals",
+      path: "/shared-goals",
+      icon: Share2,
     },
   ],
 
