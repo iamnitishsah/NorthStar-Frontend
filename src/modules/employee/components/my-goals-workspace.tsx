@@ -189,18 +189,21 @@ function MyGoalsWorkspace() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold">
+          <p className="text-xs font-semibold uppercase tracking-wide text-[#00897B]">
+            Employee Workspace
+          </p>
+          <h1 className="mt-1 text-3xl font-bold text-slate-950">
             My Goals
           </h1>
 
-          <p className="text-slate-500 mt-1">
-            Manage your goal sheet
+          <p className="mt-1 text-slate-500">
+            Build, submit, and track quarterly commitments with clear ownership.
           </p>
         </div>
 
         <div className="flex flex-wrap gap-3">
           <button
-            className="flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+            className="flex items-center gap-2 rounded-md border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 hover:border-[#00897B]/40 hover:bg-[#00897B]/5 disabled:cursor-not-allowed disabled:opacity-60"
             onClick={() => setModal({ mode: "create" })}
             type="button"
           >
@@ -211,7 +214,7 @@ function MyGoalsWorkspace() {
           <button
             onClick={handleSubmitGoals}
             disabled={!canSubmit}
-            className="rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+            className="rounded-md bg-[#0D47A1] px-6 py-3 text-sm font-semibold text-white hover:bg-[#0A3A85] disabled:cursor-not-allowed disabled:opacity-60"
             type="button"
           >
             {submitMutation.isPending ? "Submitting..." : "Submit Goals"}

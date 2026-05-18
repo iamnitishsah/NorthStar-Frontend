@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { AlertCircle, Building2, KeyRound, Mail, Sparkles, Star } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -6,10 +7,10 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { loginUser } from "@/modules/auth/auth-service"
 import { getRoleHomePath } from "@/app/navigation"
 import { useAuthStore } from "@/app/store/auth-store"
+import { getApiErrorMessage } from "@/services/api-error"
 
 import { toast } from "sonner"
 import { useNavigate } from "react-router-dom"
-import axios from "axios"
 
 const schema = z.object({
   identifier: z.string().min(1),
@@ -18,12 +19,24 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>
 
+function NorthStarMark() {
+  return (
+    <div className="relative flex h-14 w-14 items-center justify-center rounded-xl bg-[#0B1220] text-white shadow-lg shadow-[#0D47A1]/25">
+      <div className="absolute inset-1 rounded-lg border border-white/10" />
+      <Star className="relative fill-[#00897B] text-[#00897B]" size={30} />
+      <Sparkles className="absolute right-1.5 top-1.5 text-white" size={13} />
+      <span className="absolute -bottom-1 h-1.5 w-8 rounded-full bg-[#00897B]/40 blur-sm" />
+    </div>
+  )
+}
+
 function LoginPage() {
   const navigate = useNavigate()
 
   const [loginType, setLoginType] = useState<
     "email" | "employee_id"
   >("email")
+  const [loginError, setLoginError] = useState<string | null>(null)
 
   const setAuth = useAuthStore(
     (state) => state.setAuth
@@ -38,6 +51,8 @@ function LoginPage() {
   })
 
   async function onSubmit(data: FormData) {
+    setLoginError(null)
+
     try {
       const payload =
         loginType === "email"
@@ -52,6 +67,10 @@ function LoginPage() {
 
       const response = await loginUser(payload)
 
+      if (!response?.response?.user || !response.response.access) {
+        throw new Error("Login response was incomplete. Please contact Admin operations.")
+      }
+
       const user = {
         ...response.response.user,
         user_id: response.response.user_id,
@@ -65,44 +84,65 @@ function LoginPage() {
 
       navigate(getRoleHomePath(user.role))
     } catch (error: unknown) {
-      const message = axios.isAxiosError(error)
-        ? error.response?.data?.detail || "Login failed"
-        : "Login failed"
+      const message =
+        error instanceof Error && !("isAxiosError" in error)
+          ? error.message
+          : getApiErrorMessage(error, "Login failed")
 
+      setLoginError(message)
       toast.error(message)
     }
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-100 p-4">
+    <div className="flex min-h-screen items-center justify-center bg-[var(--ns-bg)] p-4">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white p-8 rounded-lg shadow-lg w-full max-w-[400px] space-y-5"
+        className="w-full max-w-[440px] space-y-6 rounded-lg border border-slate-200 bg-white p-8 shadow-xl shadow-slate-900/10"
       >
-        <div>
-          <h1 className="text-3xl font-bold">
+        <div className="space-y-4">
+          <NorthStarMark />
+          <div>
+          <h1 className="text-3xl font-bold text-slate-950">
             NorthStar
           </h1>
 
-          <p className="text-slate-500 mt-1">
-            Goal Management Portal
+          <p className="mt-1 text-sm text-slate-500">
+            Enterprise goal lifecycle and performance operations
           </p>
+          </div>
         </div>
 
-        <div className="flex gap-4">
-          <label className="flex items-center gap-2 text-sm">
+        {loginError && (
+          <div
+            className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-[#C62828]"
+            role="alert"
+          >
+            <AlertCircle className="mt-0.5 shrink-0" size={18} />
+            <div>
+              <p className="font-semibold">Login failed</p>
+              <p className="mt-0.5">{loginError}</p>
+            </div>
+          </div>
+        )}
+
+        <div className="grid grid-cols-2 gap-2 rounded-lg border border-slate-200 bg-slate-50 p-1">
+          <label className={`flex cursor-pointer items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition ${loginType === "email" ? "bg-white text-[#0D47A1] shadow-sm" : "text-slate-600 hover:text-slate-950"}`}>
             <input
+              className="sr-only"
               type="radio"
               checked={loginType === "email"}
               onChange={() =>
                 setLoginType("email")
               }
             />
+            <Mail size={16} />
             Email
           </label>
 
-          <label className="flex items-center gap-2 text-sm">
+          <label className={`flex cursor-pointer items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition ${loginType === "employee_id" ? "bg-white text-[#0D47A1] shadow-sm" : "text-slate-600 hover:text-slate-950"}`}>
             <input
+              className="sr-only"
               type="radio"
               checked={
                 loginType === "employee_id"
@@ -111,20 +151,24 @@ function LoginPage() {
                 setLoginType("employee_id")
               }
             />
+            <Building2 size={16} />
             Employee ID
           </label>
         </div>
 
         <div>
+          <label className="mb-1.5 block text-sm font-semibold text-slate-700">
+            {loginType === "email" ? "Work email" : "Employee ID"}
+          </label>
           <input
             type="text"
             placeholder={
               loginType === "email"
-                ? "Enter Email"
-                : "Enter Employee ID"
+                ? "name@company.com"
+                : "EMP-0000"
             }
             {...register("identifier")}
-            className="w-full border p-3 rounded-lg"
+            className="w-full rounded-md border border-slate-300 bg-white px-3 py-3 text-sm outline-none transition focus:border-[#0D47A1] focus:ring-2 focus:ring-[#0D47A1]/15"
           />
 
           {errors.identifier && (
@@ -135,11 +179,14 @@ function LoginPage() {
         </div>
 
         <div>
+          <label className="mb-1.5 block text-sm font-semibold text-slate-700">
+            Password
+          </label>
           <input
             type="password"
-            placeholder="Enter Password"
+            placeholder="Enter password"
             {...register("password")}
-            className="w-full border p-3 rounded-lg"
+            className="w-full rounded-md border border-slate-300 bg-white px-3 py-3 text-sm outline-none transition focus:border-[#0D47A1] focus:ring-2 focus:ring-[#0D47A1]/15"
           />
 
           {errors.password && (
@@ -151,14 +198,15 @@ function LoginPage() {
 
         <button
           disabled={isSubmitting}
-          className="w-full bg-slate-900 hover:bg-slate-800 transition text-white p-3 rounded-lg font-medium disabled:cursor-not-allowed disabled:opacity-60"
+          className="flex w-full items-center justify-center gap-2 rounded-md bg-[#0D47A1] p-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#0A3A85] disabled:cursor-not-allowed disabled:opacity-60"
         >
+          <KeyRound size={16} />
           {isSubmitting
             ? "Logging in..."
             : "Login"}
         </button>
 
-        <p className="text-center text-sm text-slate-600">
+        <p className="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-center text-xs text-slate-600">
           Accounts are provisioned internally by Admin operations.
         </p>
       </form>

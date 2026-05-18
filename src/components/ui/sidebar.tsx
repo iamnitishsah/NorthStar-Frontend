@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom"
-import { X } from "lucide-react"
+import { Sparkles, Star, X } from "lucide-react"
 
 import { navigation } from "@/app/navigation"
 import { useAuthStore } from "@/app/store/auth-store"
@@ -21,22 +21,26 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
 
   return (
     <>
-      <div className="border-b border-slate-800 p-6">
+      <div className="border-b border-white/10 p-6">
         <div className="flex items-start justify-between gap-4">
-          <div>
+          <div className="min-w-0">
+            <div className="relative mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-white text-[#0B1220] shadow-sm">
+              <Star className="fill-[#00897B] text-[#00897B]" size={25} />
+              <Sparkles className="absolute right-1 top-1 text-[#0D47A1]" size={11} />
+            </div>
             <h1 className="text-2xl font-bold">
               NorthStar
             </h1>
 
             <p className="mt-1 text-sm text-slate-400">
-              Goal Tracking Portal
+              Performance Operations
             </p>
           </div>
 
           {onClose && (
             <button
               aria-label="Close navigation"
-              className="rounded-lg p-2 text-slate-300 hover:bg-slate-800 md:hidden"
+              className="rounded-md p-2 text-slate-300 hover:bg-white/10 md:hidden"
               onClick={onClose}
               type="button"
             >
@@ -46,7 +50,7 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
         </div>
       </div>
 
-      <nav className="flex-1 space-y-2 p-4">
+      <nav className="flex-1 space-y-1 p-4" aria-label="Primary navigation">
         {items.map((item) => {
           const Icon = item.icon
 
@@ -57,11 +61,11 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
               to={item.path}
               className={({ isActive }) =>
                 `
-                flex items-center gap-3 rounded-lg px-4 py-3 transition
+                flex items-center gap-3 rounded-md px-4 py-3 text-sm font-medium transition
                 ${
                   isActive
-                    ? "bg-slate-800 text-white"
-                    : "text-slate-300 hover:bg-slate-800"
+                    ? "bg-[#0D47A1] text-white shadow-sm"
+                    : "text-slate-300 hover:bg-white/10 hover:text-white"
                 }
               `
               }
@@ -74,13 +78,13 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
         })}
       </nav>
 
-      <div className="border-t border-slate-800 p-4">
-        <div className="text-sm">
-          <p className="font-medium">
+      <div className="border-t border-white/10 p-4">
+        <div className="rounded-lg border border-white/10 bg-white/[0.03] p-3 text-sm">
+          <p className="font-semibold">
             {user.name}
           </p>
 
-          <p className="text-slate-400">
+          <p className="mt-1 text-xs uppercase tracking-wide text-slate-400">
             {user.role} · {user.department}
           </p>
         </div>
@@ -95,7 +99,7 @@ function Sidebar({
 }: Props) {
   return (
     <>
-      <aside className="hidden w-64 shrink-0 flex-col bg-slate-900 text-white md:flex">
+      <aside className="hidden w-72 shrink-0 flex-col bg-[#0B1220] text-white md:flex">
         <SidebarContent />
       </aside>
 
@@ -107,7 +111,7 @@ function Sidebar({
             onClick={onClose}
             type="button"
           />
-          <aside className="relative flex h-full w-72 max-w-[85vw] flex-col bg-slate-900 text-white shadow-xl">
+          <aside className="relative flex h-full w-72 max-w-[85vw] flex-col bg-[#0B1220] text-white shadow-xl">
             <SidebarContent onClose={onClose} />
           </aside>
         </div>

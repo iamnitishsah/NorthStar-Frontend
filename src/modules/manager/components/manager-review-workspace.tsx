@@ -100,7 +100,10 @@ function ManagerReviewWorkspace() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold">
+          <p className="text-xs font-semibold uppercase tracking-wide text-[#0D47A1]">
+            Manager Review Queue
+          </p>
+          <h1 className="mt-1 text-3xl font-bold text-slate-950">
             Review Goals
           </h1>
 
@@ -109,7 +112,7 @@ function ManagerReviewWorkspace() {
           </p>
         </div>
 
-        <div className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700">
+        <div className="rounded-lg border border-slate-200 bg-white px-4 py-3 font-mono text-sm font-semibold text-slate-700 shadow-sm">
           {totalReviewGoals} pending {totalReviewGoals === 1 ? "goal" : "goals"}
         </div>
       </div>

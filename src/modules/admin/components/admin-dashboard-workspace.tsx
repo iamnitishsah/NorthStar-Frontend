@@ -83,7 +83,10 @@ function AdminDashboardWorkspace() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-slate-950">
+          <p className="text-xs font-semibold uppercase tracking-wide text-[#EF6C00]">
+            Admin Governance
+          </p>
+          <h1 className="mt-1 text-3xl font-bold text-slate-950">
             Admin Control Center
           </h1>
           <p className="mt-1 text-slate-500">

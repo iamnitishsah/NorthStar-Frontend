@@ -26,8 +26,8 @@ type Props = {
 
 function fieldClassName(isReadonly = false) {
   return [
-    "w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none",
-    "focus:border-slate-500 focus:ring-2 focus:ring-slate-200",
+    "w-full rounded-md border border-slate-300 bg-white px-3 py-2.5 text-sm outline-none transition",
+    "focus:border-[#0D47A1] focus:ring-2 focus:ring-[#0D47A1]/15",
     isReadonly
       ? "pointer-events-none cursor-not-allowed bg-slate-100 text-slate-500"
       : "",
@@ -100,14 +100,23 @@ function GoalForm({
       onSubmit={handleSubmit(submit)}
     >
       {isShared && (
-        <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+        <div className="rounded-lg border border-orange-200 bg-orange-50 px-4 py-3 text-sm font-medium text-[#EF6C00]">
           Shared goal details are managed by the owner. Only editable fields can be changed here.
         </div>
       )}
 
+      <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+        <p className="text-sm font-semibold text-slate-950">
+          Goal Definition
+        </p>
+        <p className="mt-1 text-sm text-slate-500">
+          Capture the business outcome, measurement basis, and governance weightage.
+        </p>
+      </div>
+
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="space-y-1.5">
-          <span className="text-sm font-medium text-slate-700">
+          <span className="text-sm font-semibold text-slate-700">
             Thrust Area
           </span>
           <input
@@ -119,7 +128,7 @@ function GoalForm({
         </label>
 
         <label className="space-y-1.5">
-          <span className="text-sm font-medium text-slate-700">
+          <span className="text-sm font-semibold text-slate-700">
             Title
           </span>
           <input
@@ -132,7 +141,7 @@ function GoalForm({
       </div>
 
       <label className="block space-y-1.5">
-        <span className="text-sm font-medium text-slate-700">
+        <span className="text-sm font-semibold text-slate-700">
           Description
         </span>
         <textarea
@@ -146,7 +155,7 @@ function GoalForm({
 
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="space-y-1.5">
-          <span className="text-sm font-medium text-slate-700">
+          <span className="text-sm font-semibold text-slate-700">
             UOM Type
           </span>
           <select
@@ -166,7 +175,7 @@ function GoalForm({
 
         {!isZeroBased && (
           <label className="space-y-1.5">
-            <span className="text-sm font-medium text-slate-700">
+            <span className="text-sm font-semibold text-slate-700">
               Measurement Type
             </span>
             <select
@@ -188,7 +197,7 @@ function GoalForm({
 
       <div className="grid gap-4 sm:grid-cols-3">
         <label className="space-y-1.5">
-          <span className="text-sm font-medium text-slate-700">
+          <span className="text-sm font-semibold text-slate-700">
             Target Value
           </span>
           <input
@@ -202,7 +211,7 @@ function GoalForm({
         </label>
 
         <label className="space-y-1.5">
-          <span className="text-sm font-medium text-slate-700">
+          <span className="text-sm font-semibold text-slate-700">
             Weightage
           </span>
           <input
@@ -216,7 +225,7 @@ function GoalForm({
         </label>
 
         <label className="space-y-1.5">
-          <span className="text-sm font-medium text-slate-700">
+          <span className="text-sm font-semibold text-slate-700">
             Target Date
             {isTimeline ? " *" : ""}
           </span>
@@ -232,14 +241,14 @@ function GoalForm({
 
       <div className="flex justify-end gap-3 border-t border-slate-200 pt-5">
         <button
-          className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+          className="rounded-md border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"
           onClick={onCancel}
           type="button"
         >
           Cancel
         </button>
         <button
-          className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+          className="rounded-md bg-[#0D47A1] px-6 py-3 text-sm font-semibold text-white hover:bg-[#0A3A85] disabled:cursor-not-allowed disabled:opacity-60"
           disabled={isSubmitting}
           type="submit"
         >

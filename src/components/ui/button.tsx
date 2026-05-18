@@ -9,13 +9,13 @@ type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
 
 const variants: Record<Variant, string> = {
   primary:
-    "bg-slate-900 text-white hover:bg-slate-800 disabled:bg-slate-900",
+    "bg-[#0D47A1] text-white shadow-sm hover:bg-[#0A3A85] disabled:bg-[#0D47A1]",
   secondary:
-    "border border-slate-300 bg-white text-slate-700 hover:bg-slate-50",
+    "border border-slate-300 bg-white text-slate-700 hover:border-[#0D47A1]/30 hover:bg-[#0D47A1]/5",
   danger:
-    "bg-red-600 text-white hover:bg-red-700 disabled:bg-red-600",
+    "bg-[#C62828] text-white hover:bg-red-800 disabled:bg-[#C62828]",
   ghost:
-    "text-slate-700 hover:bg-slate-100",
+    "text-slate-700 hover:bg-slate-100 hover:text-[#0D47A1]",
 }
 
 function Button({
@@ -28,7 +28,7 @@ function Button({
 }: Props) {
   return (
     <button
-      className={`inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-60 ${variants[variant]} ${className}`}
+      className={`inline-flex items-center justify-center gap-2 rounded-md px-6 py-3 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-60 ${variants[variant]} ${className}`}
       type={type}
       {...props}
     >

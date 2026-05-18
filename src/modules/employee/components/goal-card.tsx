@@ -38,10 +38,10 @@ function GoalCard({
   const selectionId = `goal-select-${goal.goal_id}`
 
   return (
-    <article className="bg-white rounded-lg border border-slate-200 shadow-sm p-5 space-y-4">
+    <article className="space-y-4 rounded-lg border border-slate-200 bg-white p-5 shadow-sm shadow-slate-900/5 transition hover:-translate-y-0.5 hover:border-[#0D47A1]/25 hover:shadow-md">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
-          <p className="text-sm text-slate-500">
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
             {goal.thrust_area}
           </p>
 
@@ -53,12 +53,12 @@ function GoalCard({
         <div className="flex shrink-0 flex-col items-end gap-2">
           {showSelection && (
             <label
-              className="flex items-center gap-2 text-xs font-medium text-slate-600"
+              className="flex items-center gap-2 text-xs font-semibold text-slate-600"
               htmlFor={selectionId}
             >
               <input
                 checked={Boolean(isSelected)}
-                className="h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-400"
+                className="h-4 w-4 rounded border-slate-300 text-[#0D47A1] focus:ring-[#0D47A1]"
                 id={selectionId}
                 onChange={(event) =>
                   onSelectChange?.(goal, event.target.checked)
@@ -72,7 +72,7 @@ function GoalCard({
             status={goal.status}
           />
           {goal.is_shared && (
-            <span className="inline-flex items-center gap-1 rounded bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-700">
+            <span className="inline-flex items-center gap-1 rounded-md bg-[#00897B]/10 px-2 py-1 text-xs font-semibold text-[#00897B]">
               <Share2 size={13} />
               Shared
             </span>
@@ -84,13 +84,13 @@ function GoalCard({
         {description}
       </p>
 
-      <div className="grid grid-cols-2 gap-4 text-sm">
-        <div>
-          <p className="text-slate-500">
+      <div className="grid grid-cols-2 gap-3 text-sm">
+        <div className="rounded-md border border-slate-200 bg-slate-50 p-3">
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
             Target
           </p>
 
-          <p className="font-medium">
+          <p className="mt-1 font-mono font-semibold text-slate-950">
             {goal.target_value}{" "}
             <span className="text-slate-500">
               {goal.uom_type}
@@ -98,12 +98,12 @@ function GoalCard({
           </p>
         </div>
 
-        <div>
-          <p className="text-slate-500">
+        <div className="rounded-md border border-slate-200 bg-slate-50 p-3">
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
             Weightage
           </p>
 
-          <p className="font-medium">
+          <p className="mt-1 font-mono font-semibold text-slate-950">
             {goal.weightage}%
           </p>
         </div>
@@ -117,11 +117,11 @@ function GoalCard({
       )}
 
       {(canEdit || canCheckin || canRequestUnlock) && (
-        <div className="flex flex-wrap items-center gap-4 border-t border-slate-100 pt-4">
+        <div className="flex flex-wrap items-center gap-2 border-t border-slate-100 pt-4">
           {canEdit && (
             <button
               onClick={() => onEdit(goal)}
-              className="flex items-center gap-2 text-sm font-medium text-slate-700 hover:text-slate-950"
+              className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100 hover:text-[#0D47A1]"
               type="button"
             >
               <Pencil size={16} />
@@ -132,7 +132,7 @@ function GoalCard({
           {canCheckin && (
             <button
               onClick={() => onCheckin(goal)}
-              className="flex items-center gap-2 text-sm font-medium text-slate-700 hover:text-slate-950"
+              className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100 hover:text-[#00897B]"
               type="button"
             >
               <ClipboardCheck size={16} />
@@ -143,7 +143,7 @@ function GoalCard({
           {canRequestUnlock && (
             <button
               onClick={() => onRequestUnlock(goal)}
-              className="flex items-center gap-2 text-sm font-medium text-slate-700 hover:text-slate-950"
+              className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-orange-50 hover:text-[#EF6C00]"
               type="button"
             >
               <LockOpen size={16} />
@@ -156,7 +156,7 @@ function GoalCard({
               onClick={() =>
                 onDelete(goal.goal_id)
               }
-              className="flex items-center gap-2 text-sm font-medium text-red-600 hover:text-red-700"
+              className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold text-[#C62828] hover:bg-red-50"
               type="button"
             >
               <Trash2 size={16} />

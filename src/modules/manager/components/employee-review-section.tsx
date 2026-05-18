@@ -14,7 +14,7 @@ function EmployeeReviewSection({
   onReturn,
 }: Props) {
   return (
-    <section className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
+    <section className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm shadow-slate-900/5">
       <div className="flex flex-col gap-3 border-b border-slate-200 bg-slate-50 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-lg font-semibold text-slate-950">
@@ -25,7 +25,7 @@ function EmployeeReviewSection({
           </p>
         </div>
 
-        <div className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700">
+        <div className="rounded-md border border-slate-200 bg-white px-4 py-2 font-mono text-sm font-semibold text-slate-700">
           Total weightage: {group.totalWeightage}%
         </div>
       </div>

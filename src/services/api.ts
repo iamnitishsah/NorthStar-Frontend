@@ -41,7 +41,18 @@ api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (axios.isAxiosError(error) && error.response?.status === 401) {
+    const requestUrl = axios.isAxiosError(error)
+      ? error.config?.url || ""
+      : ""
+    const isAuthRequest =
+      requestUrl.includes("/auth/login") ||
+      requestUrl.includes("/auth/register")
+
+    if (
+      axios.isAxiosError(error) &&
+      error.response?.status === 401 &&
+      !isAuthRequest
+    ) {
       useAuthStore.getState().logout()
     }
 
