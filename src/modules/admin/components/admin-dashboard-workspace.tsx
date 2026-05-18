@@ -80,13 +80,13 @@ function AdminDashboardWorkspace() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="min-w-0 space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <div>
+        <div className="min-w-0">
           <p className="text-xs font-semibold uppercase tracking-wide text-[#EF6C00]">
             Admin Governance
           </p>
-          <h1 className="mt-1 text-3xl font-bold text-slate-950">
+          <h1 className="mt-1 text-2xl font-bold text-slate-950 dark:text-white sm:text-3xl">
             Admin Control Center
           </h1>
           <p className="mt-1 text-slate-500">
@@ -103,7 +103,7 @@ function AdminDashboardWorkspace() {
         </Button>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid min-w-0 gap-4 sm:grid-cols-2 2xl:grid-cols-4">
         <MetricCard
           icon={Users}
           label="Total Employees"
@@ -126,7 +126,7 @@ function AdminDashboardWorkspace() {
         />
       </div>
 
-      <div className="grid gap-4 xl:grid-cols-2">
+      <div className="grid min-w-0 gap-4 2xl:grid-cols-2">
         <UnlockRequestsPanel />
         <UnlockGoalPanel lockedGoalCandidates={getLockedGoalCandidates(logs)} />
       </div>

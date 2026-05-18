@@ -67,17 +67,17 @@ function UnlockRequestsPanel() {
   }
 
   return (
-    <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+    <section className="min-w-0 rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900">
       <div className="flex items-start justify-between gap-4">
-        <div>
-          <h2 className="text-lg font-semibold text-slate-950">
+        <div className="min-w-0">
+          <h2 className="text-lg font-semibold text-slate-950 dark:text-white">
             Pending Unlock Requests
           </h2>
           <p className="mt-1 text-sm text-slate-500">
             Review employee requests before locked goals move to admin unlocked.
           </p>
         </div>
-        <span className="rounded bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700">
+        <span className="shrink-0 rounded bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-200">
           {data.length} pending
         </span>
       </div>
@@ -101,7 +101,7 @@ function UnlockRequestsPanel() {
       )}
 
       {!isLoading && !isError && data.length > 0 && (
-        <div className="mt-5 divide-y divide-slate-100">
+        <div className="mt-5 divide-y divide-slate-100 dark:divide-slate-800">
           {data.map((request) => {
             const requestId = getRequestId(request)
             const isActing =
@@ -114,10 +114,10 @@ function UnlockRequestsPanel() {
               >
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
-                    <p className="font-medium text-slate-950">
+                    <p className="font-medium text-slate-950 dark:text-white">
                       {getRequester(request)}
                     </p>
-                    <span className="rounded bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800">
+                    <span className="rounded bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-400/15 dark:text-yellow-200">
                       {request.status}
                     </span>
                   </div>
@@ -125,13 +125,13 @@ function UnlockRequestsPanel() {
                     Goal ID: {request.goal_id}
                   </p>
                   {request.reason && (
-                    <p className="mt-2 text-sm leading-6 text-slate-700">
+                    <p className="mt-2 text-sm leading-6 text-slate-700 dark:text-slate-200">
                       {request.reason}
                     </p>
                   )}
                 </div>
 
-                <div className="flex shrink-0 gap-2">
+                <div className="flex shrink-0 flex-wrap gap-2">
                   <Button
                     disabled={!requestId || isActing}
                     icon={<Check size={16} />}

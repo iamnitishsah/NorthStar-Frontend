@@ -10,6 +10,7 @@ import Card from "@/components/ui/card"
 import ErrorState from "@/components/ui/error-state"
 import LoadingSkeleton from "@/components/ui/loading-skeleton"
 import PageHeader from "@/components/ui/page-header"
+import { getTodayDateInputValue } from "@/modules/employee/utils/goal-form"
 import { getApiErrorMessage } from "@/services/api-error"
 import type { MeasurementType, SharedGoalPushPayload, UOMType } from "@/types/goal"
 
@@ -44,6 +45,14 @@ const schema = z
       context.addIssue({
         code: "custom",
         message: "Target date is required for timeline goals",
+        path: ["target_date"],
+      })
+    }
+
+    if (value.target_date && value.target_date < getTodayDateInputValue()) {
+      context.addIssue({
+        code: "custom",
+        message: "Target date cannot be in the past",
         path: ["target_date"],
       })
     }
@@ -138,6 +147,7 @@ function SharedGoalsWorkspace() {
   }
 
   const pushedGoals = pushedQuery.data ?? []
+  const minTargetDate = getTodayDateInputValue()
 
   return (
     <div className="space-y-6">
@@ -260,8 +270,14 @@ function SharedGoalsWorkspace() {
               <input
                 {...register("target_date")}
                 className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
+                min={minTargetDate}
                 type="date"
               />
+              {errors.target_date && (
+                <p className="text-sm text-red-600">
+                  {errors.target_date.message}
+                </p>
+              )}
             </label>
           </div>
 

@@ -9,6 +9,7 @@ import type {
   QuarterKey,
   QuarterlyCheckinPayload,
 } from "@/types/goal"
+import { getTodayDateInputValue } from "@/modules/employee/utils/goal-form"
 import { quarterKeys } from "@/modules/quarterly/utils/quarterly"
 
 type Props = {
@@ -40,6 +41,7 @@ function QuarterlyCheckinModal({
   const nextQuarter =
     quarterKeys.find((quarter) => !goal.quarter?.[quarter]) ?? "4"
   const hasOpenQuarter = !goal.quarter?.[nextQuarter]
+  const minAchievementDate = getTodayDateInputValue()
   const checkinSchema = z.object({
     quarter: z.enum(["1", "2", "3", "4"]),
     achievement_value: isTimeline
@@ -49,6 +51,10 @@ function QuarterlyCheckinModal({
           .regex(
             /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}(:\d{2})?)?$/,
             "Use ISO date format (YYYY-MM-DD)"
+          )
+          .refine(
+            (value) => value.slice(0, 10) >= minAchievementDate,
+            "Achievement date cannot be in the past"
           )
       : goal.uom_type === "ZERO_BASED"
         ? z.number().min(0, "Achievement value cannot be negative")
@@ -134,7 +140,7 @@ function QuarterlyCheckinModal({
                   valueAsNumber: true,
                 })}
                 className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
-                min={isTimeline ? undefined : 0}
+                min={isTimeline ? minAchievementDate : 0}
                 step={isTimeline ? undefined : "any"}
                 type={isTimeline ? "date" : "number"}
               />

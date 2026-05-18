@@ -25,18 +25,52 @@ type Props = {
 }
 
 const chartColors = [
-  "#0f172a",
   "#2563eb",
   "#059669",
   "#d97706",
   "#dc2626",
   "#7c3aed",
+  "#0891b2",
+  "#475569",
 ]
+
+const chartAxisColor = "var(--ns-muted)"
+const chartGridColor = "var(--ns-border)"
+
+function compactLabel(label: string) {
+  return label.length > 16 ? `${label.slice(0, 15)}...` : label
+}
 
 function EmptyChart({ label }: { label: string }) {
   return (
-    <div className="flex h-64 items-center justify-center rounded-lg border border-dashed border-slate-300 text-sm text-slate-500">
+    <div className="flex h-64 items-center justify-center rounded-lg border border-dashed border-slate-300 bg-slate-50 px-4 text-center text-sm text-slate-500 dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-400">
       {label}
+    </div>
+  )
+}
+
+function ChartTooltip({
+  active,
+  payload,
+  label,
+}: {
+  active?: boolean
+  payload?: Array<{ name?: string; value?: number; payload?: ChartDatum }>
+  label?: string
+}) {
+  if (!active || !payload?.length) return null
+
+  const item = payload[0]
+  const name = label || item.payload?.name || item.name || "Value"
+
+  return (
+    <div className="rounded-md border border-slate-200 bg-white px-3 py-2 text-sm shadow-lg shadow-slate-900/10 dark:border-slate-700 dark:bg-slate-900">
+      <p className="max-w-56 break-words font-medium text-slate-950 dark:text-white">
+        {name}
+      </p>
+      <p className="mt-1 font-mono text-slate-600 dark:text-slate-300">
+        {item.value ?? 0}
+      </p>
     </div>
   )
 }
@@ -49,8 +83,8 @@ function ChartCard({
   children: React.ReactNode
 }) {
   return (
-    <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-      <h2 className="mb-4 text-lg font-semibold text-slate-950">
+    <section className="min-w-0 rounded-lg border border-slate-200 bg-white p-4 shadow-sm shadow-slate-900/5 dark:border-slate-700 dark:bg-slate-900 sm:p-5">
+      <h2 className="mb-4 text-base font-semibold text-slate-950 dark:text-white sm:text-lg">
         {title}
       </h2>
       {children}
@@ -67,18 +101,18 @@ function AdminCharts({
   uomCounts,
 }: Props) {
   return (
-    <div className="grid gap-5 xl:grid-cols-2">
+    <div className="grid min-w-0 gap-5 2xl:grid-cols-2">
       <ChartCard title="Department Headcount">
         {departmentCounts.length === 0 ? (
           <EmptyChart label="No department data available." />
         ) : (
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={departmentCounts}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="name" tick={{ fontSize: 12 }} />
-                <YAxis allowDecimals={false} />
-                <Tooltip />
+              <BarChart data={departmentCounts} margin={{ bottom: 8, left: -12, right: 8, top: 8 }}>
+                <CartesianGrid stroke={chartGridColor} strokeDasharray="3 3" vertical={false} />
+                <XAxis dataKey="name" interval={0} tick={{ fill: chartAxisColor, fontSize: 12 }} tickFormatter={compactLabel} tickLine={false} />
+                <YAxis allowDecimals={false} tick={{ fill: chartAxisColor, fontSize: 12 }} tickLine={false} />
+                <Tooltip content={<ChartTooltip />} cursor={{ fill: "rgba(148, 163, 184, 0.12)" }} />
                 <Bar dataKey="value" fill="#2563eb" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
@@ -108,7 +142,7 @@ function AdminCharts({
                     />
                   ))}
                 </Pie>
-                <Tooltip />
+                <Tooltip content={<ChartTooltip />} />
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -121,12 +155,13 @@ function AdminCharts({
         ) : (
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={quarterlyTrend}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="name" />
-                <YAxis allowDecimals={false} />
-                <Tooltip />
+              <LineChart data={quarterlyTrend} margin={{ bottom: 8, left: -12, right: 16, top: 8 }}>
+                <CartesianGrid stroke={chartGridColor} strokeDasharray="3 3" vertical={false} />
+                <XAxis dataKey="name" tick={{ fill: chartAxisColor, fontSize: 12 }} tickLine={false} />
+                <YAxis allowDecimals={false} tick={{ fill: chartAxisColor, fontSize: 12 }} tickLine={false} />
+                <Tooltip content={<ChartTooltip />} />
                 <Line
+                  dot={{ fill: "#059669", r: 4, strokeWidth: 0 }}
                   dataKey="value"
                   stroke="#059669"
                   strokeWidth={3}
@@ -144,11 +179,11 @@ function AdminCharts({
         ) : (
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={uomCounts}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="name" />
-                <YAxis allowDecimals={false} />
-                <Tooltip />
+              <BarChart data={uomCounts} margin={{ bottom: 8, left: -12, right: 8, top: 8 }}>
+                <CartesianGrid stroke={chartGridColor} strokeDasharray="3 3" vertical={false} />
+                <XAxis dataKey="name" interval={0} tick={{ fill: chartAxisColor, fontSize: 12 }} tickFormatter={compactLabel} tickLine={false} />
+                <YAxis allowDecimals={false} tick={{ fill: chartAxisColor, fontSize: 12 }} tickLine={false} />
+                <Tooltip content={<ChartTooltip />} cursor={{ fill: "rgba(148, 163, 184, 0.12)" }} />
                 <Bar dataKey="value" fill="#7c3aed" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
@@ -178,7 +213,7 @@ function AdminCharts({
                     />
                   ))}
                 </Pie>
-                <Tooltip />
+                <Tooltip content={<ChartTooltip />} />
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -191,12 +226,12 @@ function AdminCharts({
         ) : (
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={actionCounts}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              <BarChart data={actionCounts} margin={{ bottom: 8, left: -12, right: 8, top: 8 }}>
+                <CartesianGrid stroke={chartGridColor} strokeDasharray="3 3" vertical={false} />
                 <XAxis dataKey="name" hide />
-                <YAxis allowDecimals={false} />
-                <Tooltip />
-                <Bar dataKey="value" fill="#0f172a" radius={[4, 4, 0, 0]} />
+                <YAxis allowDecimals={false} tick={{ fill: chartAxisColor, fontSize: 12 }} tickLine={false} />
+                <Tooltip content={<ChartTooltip />} cursor={{ fill: "rgba(148, 163, 184, 0.12)" }} />
+                <Bar dataKey="value" fill="#0891b2" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
