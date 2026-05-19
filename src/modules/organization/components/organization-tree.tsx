@@ -16,6 +16,7 @@ type Props = {
 function getHierarchyStats(hierarchy: HierarchyNode[]) {
   let people = 0
   const departments = new Set<string>()
+  const rootDepartments = new Set<string>()
   let maxDepth = 0
 
   function walk(nodes: HierarchyNode[], depth: number) {
@@ -23,7 +24,16 @@ function getHierarchyStats(hierarchy: HierarchyNode[]) {
 
     nodes.forEach((node) => {
       people += 1
-      departments.add(node.department)
+      const department = node.department.trim()
+
+      if (department) {
+        departments.add(department)
+
+        if (depth === 1) {
+          rootDepartments.add(department)
+        }
+      }
+
       walk(node.children, depth + 1)
     })
   }
@@ -32,8 +42,8 @@ function getHierarchyStats(hierarchy: HierarchyNode[]) {
 
   return {
     people,
-    departments: departments.size,
-    levels: maxDepth,
+    departments: Math.max(departments.size - rootDepartments.size, 0),
+    levels: Math.max(maxDepth - 1, 0),
     roots: hierarchy.length,
   }
 }

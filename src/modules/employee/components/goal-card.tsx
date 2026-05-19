@@ -8,7 +8,6 @@ import type { Goal } from "@/types/goal"
 import GoalStatusBadge from "./goal-status-badge"
 import { isEditableGoal } from "../utils/goal-form"
 import QuarterlyTimeline from "@/modules/quarterly/components/quarterly-timeline"
-import { useAuthStore } from "@/app/store/auth-store"
 
 type Props = {
   goal: Goal
@@ -29,13 +28,10 @@ function GoalCard({
   isSelected,
   onSelectChange,
 }: Props) {
-  const currentEmployeeId = useAuthStore((state) => state.user?.employee_id)
   const description =
     goal.description || "No description provided."
   const canEdit = isEditableGoal(goal)
-  const canCheckin =
-    goal.status === "LOCKED" &&
-    (!goal.is_shared || goal.primary_owner_id === currentEmployeeId)
+  const canCheckin = goal.status === "LOCKED"
   const canRequestUnlock = goal.status === "LOCKED"
   const showSelection = Boolean(onSelectChange)
   const selectionId = `goal-select-${goal.goal_id}`
