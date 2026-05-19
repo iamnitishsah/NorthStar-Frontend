@@ -8,6 +8,7 @@ import type { AuditLogEntry } from "@/types/goal"
 import { FileSearch } from "lucide-react"
 
 type Props = {
+  allLogs: AuditLogEntry[]
   logs: AuditLogEntry[]
   actionFilter: string
   onActionFilterChange: (action: string) => void
@@ -20,6 +21,7 @@ function formatDetails(details: Record<string, unknown>) {
 }
 
 function AuditLogTable({
+  allLogs,
   logs,
   actionFilter,
   onActionFilterChange,
@@ -29,10 +31,10 @@ function AuditLogTable({
   const [search, setSearch] = useState("")
   const actions = useMemo(
     () =>
-      Array.from(new Set(logs.map((log) => log.action))).sort((a, b) =>
+      Array.from(new Set(allLogs.map((log) => log.action))).sort((a, b) =>
         a.localeCompare(b)
       ),
-    [logs]
+    [allLogs]
   )
   const visibleLogs = useMemo(() => {
     const normalizedSearch = search.trim().toLowerCase()

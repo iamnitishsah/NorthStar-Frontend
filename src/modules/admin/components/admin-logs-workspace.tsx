@@ -16,13 +16,14 @@ function AdminLogsWorkspace() {
     }),
     [actionFilter, userFilter]
   )
-  const { data = [], isLoading, isError } = useAuditLogs(filters)
+  const allLogsQuery = useAuditLogs()
+  const filteredLogsQuery = useAuditLogs(filters)
 
-  if (isLoading) {
+  if (allLogsQuery.isLoading || filteredLogsQuery.isLoading) {
     return <LoadingSkeleton rows={4} />
   }
 
-  if (isError) {
+  if (allLogsQuery.isError || filteredLogsQuery.isError) {
     return (
       <ErrorState message="Unable to load audit logs." />
     )
@@ -31,7 +32,8 @@ function AdminLogsWorkspace() {
   return (
     <AuditLogTable
       actionFilter={actionFilter}
-      logs={data}
+      allLogs={allLogsQuery.data ?? []}
+      logs={filteredLogsQuery.data ?? []}
       onActionFilterChange={setActionFilter}
       onUserFilterChange={setUserFilter}
       userFilter={userFilter}
