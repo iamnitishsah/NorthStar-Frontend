@@ -207,6 +207,7 @@ export interface HierarchyNode {
   designation: string
   department: string
   role: string
+  manager_id?: string | null
   children: HierarchyNode[]
 }
 
