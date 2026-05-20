@@ -7,6 +7,7 @@ import ErrorState from "@/components/ui/error-state"
 import LoadingSkeleton from "@/components/ui/loading-skeleton"
 import { Panel } from "@/components/ui/surface"
 import { StatusBadge } from "@/components/ui/status-badge"
+import { formatDateTimeIST, formatRelativeTimeIST } from "@/lib/datetime"
 import { getApiErrorMessage } from "@/services/api-error"
 import type { UnlockRequest } from "@/types/goal"
 
@@ -133,6 +134,19 @@ function UnlockRequestsPanel() {
                   <p className="mt-1 break-all text-sm text-muted-foreground">
                     Goal ID: {request.goal_id}
                   </p>
+                  {request.created_at && (
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Requested{" "}
+                      <time
+                        dateTime={request.created_at}
+                        title={formatDateTimeIST(request.created_at)}
+                      >
+                        {formatDateTimeIST(request.created_at)}
+                      </time>
+                      {" · "}
+                      {formatRelativeTimeIST(request.created_at)}
+                    </p>
+                  )}
                   {request.reason && (
                     <p className="mt-2 text-sm leading-6 text-surface-foreground">
                       {request.reason}

@@ -2,6 +2,7 @@ import { Share2 } from "lucide-react"
 
 import { MetricTile, Panel, SectionCard } from "@/components/ui/surface"
 import { StatusBadge } from "@/components/ui/status-badge"
+import { formatDateIST } from "@/lib/datetime"
 import type { Goal } from "@/types/goal"
 import QuarterlyTimeline from "@/modules/quarterly/components/quarterly-timeline"
 import ProgressBar from "@/modules/quarterly/components/progress-bar"
@@ -63,6 +64,14 @@ function ManagerProgressCard({
                 {goal.weightage}%
               </p>
             </MetricTile>
+            {goal.target_date && (
+              <MetricTile className="p-2">
+                <p className="text-muted-foreground">Target Date</p>
+                <p className="truncate font-medium text-surface-foreground">
+                  {formatDateIST(goal.target_date)}
+                </p>
+              </MetricTile>
+            )}
           </div>
         </SectionCard>
       </div>

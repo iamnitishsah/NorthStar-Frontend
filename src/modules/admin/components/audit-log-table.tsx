@@ -4,6 +4,11 @@ import EmptyState from "@/components/ui/empty-state"
 import { Input, Select } from "@/components/ui/form"
 import { Panel } from "@/components/ui/surface"
 import { StatusBadge } from "@/components/ui/status-badge"
+import {
+  formatDateTimeFieldsIST,
+  formatDateTimeIST,
+  formatRelativeTimeIST,
+} from "@/lib/datetime"
 import type { AuditLogEntry } from "@/types/goal"
 import { FileSearch } from "lucide-react"
 
@@ -17,7 +22,7 @@ type Props = {
 }
 
 function formatDetails(details: Record<string, unknown>) {
-  return JSON.stringify(details, null, 2)
+  return JSON.stringify(formatDateTimeFieldsIST(details), null, 2)
 }
 
 function AuditLogTable({
@@ -47,6 +52,7 @@ function AuditLogTable({
         log.user_id,
         formatDetails(log.details),
         log.timestamp,
+        formatDateTimeIST(log.timestamp),
       ]
         .join(" ")
         .toLowerCase()
@@ -130,7 +136,12 @@ function AuditLogTable({
                     {log.user_id}
                   </td>
                   <td className="whitespace-nowrap px-5 py-4 text-muted-foreground">
-                    {new Date(log.timestamp).toLocaleString()}
+                    <time dateTime={log.timestamp} title={formatDateTimeIST(log.timestamp)}>
+                      {formatDateTimeIST(log.timestamp)}
+                    </time>
+                    <span className="block text-xs">
+                      {formatRelativeTimeIST(log.timestamp)}
+                    </span>
                   </td>
                   <td className="max-w-xl px-5 py-4">
                     <pre className="max-h-32 overflow-auto whitespace-pre-wrap break-words rounded-md border border-border bg-surface p-3 text-xs text-surface-foreground">

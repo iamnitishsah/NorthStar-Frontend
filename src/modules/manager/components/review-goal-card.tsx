@@ -2,6 +2,7 @@ import { Check, RotateCcw } from "lucide-react"
 
 import Button from "@/components/ui/button"
 import { MetricTile, Panel } from "@/components/ui/surface"
+import { formatDateIST, formatDateTimeIST } from "@/lib/datetime"
 import type { Goal } from "@/types/goal"
 
 import ReviewStatusBadge from "./review-status-badge"
@@ -69,6 +70,24 @@ function ReviewGoalCard({
             {goal.goal_id}
           </dd>
         </MetricTile>
+
+        {goal.target_date && (
+          <MetricTile>
+            <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Target Date</dt>
+            <dd className="mt-1 truncate font-mono font-semibold text-surface-foreground">
+              {formatDateIST(goal.target_date)}
+            </dd>
+          </MetricTile>
+        )}
+
+        {goal.submitted_at && (
+          <MetricTile>
+            <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Submitted</dt>
+            <dd className="mt-1 truncate font-mono font-semibold text-surface-foreground">
+              {formatDateTimeIST(goal.submitted_at)}
+            </dd>
+          </MetricTile>
+        )}
       </dl>
 
       {canAct && (

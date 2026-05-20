@@ -11,6 +11,7 @@ import ErrorState from "@/components/ui/error-state"
 import LoadingSkeleton from "@/components/ui/loading-skeleton"
 import PageHeader from "@/components/ui/page-header"
 import { cn } from "@/lib/utils"
+import { formatDateIST, formatDateTimeIST } from "@/lib/datetime"
 import { getTodayDateInputValue } from "@/modules/employee/utils/goal-form"
 import { useOrganizationHierarchy } from "@/modules/organization/hooks/use-organization-hierarchy"
 import { getApiErrorMessage } from "@/services/api-error"
@@ -524,6 +525,15 @@ function SharedGoalsWorkspace() {
                     </h3>
                     <p className="mt-1 text-sm text-muted-foreground">
                       {goal.employee_name}
+                    </p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      {goal.target_date && (
+                        <span>Target date: {formatDateIST(goal.target_date)}</span>
+                      )}
+                      {goal.target_date && goal.created_at && <span> · </span>}
+                      {goal.created_at && (
+                        <span>Created: {formatDateTimeIST(goal.created_at)}</span>
+                      )}
                     </p>
                   </div>
                   <div className="text-sm text-muted-foreground">

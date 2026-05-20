@@ -3,6 +3,7 @@ import { ClipboardCheck, LockOpen, Pencil, Share2, Trash2 } from "lucide-react"
 import Button from "@/components/ui/button"
 import { MetricTile, Panel } from "@/components/ui/surface"
 import { StatusBadge } from "@/components/ui/status-badge"
+import { formatDateIST, formatDateTimeIST } from "@/lib/datetime"
 import type { Goal } from "@/types/goal"
 
 import GoalStatusBadge from "./goal-status-badge"
@@ -96,6 +97,30 @@ function GoalCard({
           </p>
         </MetricTile>
 
+        {goal.target_date && (
+          <MetricTile>
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Target Date
+            </p>
+
+            <p className="mt-1 truncate font-mono font-semibold text-surface-foreground">
+              {formatDateIST(goal.target_date)}
+            </p>
+          </MetricTile>
+        )}
+
+        {goal.created_at && (
+          <MetricTile>
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Created
+            </p>
+
+            <p className="mt-1 truncate font-mono font-semibold text-surface-foreground">
+              {formatDateTimeIST(goal.created_at)}
+            </p>
+          </MetricTile>
+        )}
+
         <MetricTile>
           <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             Weightage
@@ -106,6 +131,29 @@ function GoalCard({
           </p>
         </MetricTile>
       </div>
+
+      {(goal.approved_at || goal.returned_at || goal.updated_at) && (
+        <dl className="grid gap-2 text-xs text-muted-foreground sm:grid-cols-3">
+          {goal.approved_at && (
+            <div>
+              <dt className="font-semibold uppercase tracking-wide">Approved</dt>
+              <dd>{formatDateTimeIST(goal.approved_at)}</dd>
+            </div>
+          )}
+          {goal.returned_at && (
+            <div>
+              <dt className="font-semibold uppercase tracking-wide">Returned</dt>
+              <dd>{formatDateTimeIST(goal.returned_at)}</dd>
+            </div>
+          )}
+          {goal.updated_at && (
+            <div>
+              <dt className="font-semibold uppercase tracking-wide">Updated</dt>
+              <dd>{formatDateTimeIST(goal.updated_at)}</dd>
+            </div>
+          )}
+        </dl>
+      )}
 
       {canCheckin && (
         <QuarterlyTimeline

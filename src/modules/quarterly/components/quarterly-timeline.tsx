@@ -3,6 +3,7 @@ import { memo } from "react"
 
 import { MetricTile } from "@/components/ui/surface"
 import { ProgressBadge, StatusBadge } from "@/components/ui/status-badge"
+import { formatDateIST } from "@/lib/datetime"
 import type { Goal } from "@/types/goal"
 
 import ProgressBar from "./progress-bar"
@@ -24,6 +25,14 @@ function getProgressTone(status?: string) {
   if (status === "ON_TRACK") return "info"
   if (status === "AT_RISK" || status === "DELAYED") return "warning"
   return "default"
+}
+
+function formatAchievement(goal: Goal, achievement: number | string | null | undefined) {
+  if (achievement === null || achievement === undefined) return "-"
+
+  return goal.uom_type === "TIMELINE" && typeof achievement === "string"
+    ? formatDateIST(achievement)
+    : achievement
 }
 
 function QuarterlyTimeline({
@@ -67,9 +76,7 @@ function QuarterlyTimeline({
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Achievement</span>
                   <span className="font-medium text-surface-foreground">
-                    {achievement === null || achievement === undefined
-                      ? "-"
-                      : achievement}
+                    {formatAchievement(goal, achievement)}
                   </span>
                 </div>
 
