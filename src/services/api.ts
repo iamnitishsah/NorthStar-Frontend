@@ -4,8 +4,8 @@ import type { InternalAxiosRequestConfig } from "axios"
 import { useAuthStore } from "@/app/store/auth-store"
 
 const baseURL =
-  import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "") ||
-  "http://localhost:8000"
+    import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "") ||
+    (import.meta.env.PROD ? "/api" : "http://localhost:8000");
 
 export const api = axios.create({
   baseURL,
