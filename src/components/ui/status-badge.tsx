@@ -5,12 +5,12 @@ import { cn } from "@/lib/utils"
 type Tone = "default" | "success" | "warning" | "danger" | "info" | "accent"
 
 const tones: Record<Tone, string> = {
-  default: "bg-muted text-muted-foreground",
-  success: "bg-success/12 text-success",
-  warning: "bg-warning/12 text-warning",
-  danger: "bg-destructive/12 text-destructive",
-  info: "bg-info/12 text-info",
-  accent: "bg-accent/12 text-accent",
+  default: "border-border bg-muted text-surface-foreground",
+  success: "border-success/25 bg-success/12 text-success",
+  warning: "border-warning/25 bg-warning/12 text-warning",
+  danger: "border-destructive/25 bg-destructive/12 text-destructive",
+  info: "border-info/25 bg-info/12 text-info",
+  accent: "border-accent/25 bg-accent/12 text-accent",
 }
 
 type StatusBadgeProps = HTMLAttributes<HTMLSpanElement> & {
@@ -28,7 +28,7 @@ function StatusBadge({
   return (
     <span
       className={cn(
-        "inline-flex max-w-full items-center gap-1 rounded-md px-2 py-1 text-xs font-semibold",
+        "inline-flex max-w-full items-center gap-1.5 rounded-md border px-2.5 py-0.5 text-xs font-semibold tracking-wide",
         tones[tone],
         className
       )}

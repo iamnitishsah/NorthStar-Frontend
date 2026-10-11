@@ -6,7 +6,16 @@ import { toast } from "sonner"
 import { z } from "zod"
 
 import Button from "@/components/ui/button"
-import { Panel, SectionCard } from "@/components/ui/surface"
+import {
+  Field,
+  FieldError,
+  FieldLabel,
+  Input,
+  Select,
+} from "@/components/ui/form"
+import PageHeader from "@/components/ui/page-header"
+import { StatusBadge } from "@/components/ui/status-badge"
+import { Panel } from "@/components/ui/surface"
 import { registerUser } from "@/modules/auth/auth-service"
 import { useOrganizationHierarchy } from "@/modules/organization/hooks/use-organization-hierarchy"
 import { getApiErrorMessage } from "@/services/api-error"
@@ -56,14 +65,6 @@ function collectReportingManagers(nodes: HierarchyNode[]): ReportingManagerOptio
 
     return [...current, ...collectReportingManagers(node.children || [])]
   })
-}
-
-function fieldClass(hasError?: boolean) {
-  return `theme-transition w-full rounded-md border bg-card p-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:ring-2 disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground ${
-    hasError
-      ? "border-destructive focus:border-destructive focus:ring-destructive/20"
-      : "border-input focus:border-ring focus:ring-ring/20"
-  }`
 }
 
 function EmployeeOnboardingPage() {
@@ -123,165 +124,198 @@ function EmployeeOnboardingPage() {
 
   return (
     <div className="space-y-6">
-      <Panel className="p-6">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-          <div>
-            <p className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
-              Admin Operations
-            </p>
-            <h1 className="mt-1 text-2xl font-semibold text-card-foreground">
-              Employee Onboarding
-            </h1>
-            <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-              Provision workforce accounts internally. Public self-registration is disabled for this portal.
-            </p>
-          </div>
-          <SectionCard className="px-4 py-3 text-sm text-muted-foreground">
-            Roles supported: Employee, Manager, HR, Admin
-          </SectionCard>
-        </div>
-      </Panel>
+      <PageHeader
+        badge="Admin Operations"
+        title="Employee Onboarding"
+        description="Provision workforce accounts internally and bind reporting manager hierarchies."
+        actions={
+          <StatusBadge tone="info">
+            Roles: Employee · Manager · HR · Admin
+          </StatusBadge>
+        }
+      />
 
-      <form
-        className="dashboard-surface rounded-lg p-6 shadow-sm"
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <div className="grid gap-6 xl:grid-cols-[1.25fr_0.75fr]">
+      <Panel className="p-6 sm:p-8">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="grid gap-8 xl:grid-cols-[1.25fr_0.75fr]">
+            <section className="space-y-5">
+              <div className="border-b border-border pb-3">
+                <h2 className="text-base font-semibold text-card-foreground">Identity & Personal Profile</h2>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Employee ID and email must be unique across the organization.
+                </p>
+              </div>
+
+              <div className="grid gap-4 md:grid-cols-2">
+                <Field>
+                  <FieldLabel>Employee ID</FieldLabel>
+                  <Input
+                    placeholder="e.g. EMP042"
+                    {...register("employee_id")}
+                    hasError={Boolean(errors.employee_id)}
+                  />
+                  <FieldError message={errors.employee_id?.message} />
+                </Field>
+
+                <Field>
+                  <FieldLabel>Work Email</FieldLabel>
+                  <Input
+                    placeholder="e.g. user@northstar.io"
+                    type="email"
+                    {...register("email")}
+                    hasError={Boolean(errors.email)}
+                  />
+                  <FieldError message={errors.email?.message} />
+                </Field>
+
+                <Field className="md:col-span-2">
+                  <FieldLabel>Full Name</FieldLabel>
+                  <Input
+                    placeholder="e.g. Priya Sharma"
+                    {...register("name")}
+                    hasError={Boolean(errors.name)}
+                  />
+                  <FieldError message={errors.name?.message} />
+                </Field>
+
+                <Field>
+                  <FieldLabel>Age</FieldLabel>
+                  <Input
+                    placeholder="18 - 80"
+                    type="number"
+                    {...register("age")}
+                    hasError={Boolean(errors.age)}
+                  />
+                  <FieldError message={errors.age?.message} />
+                </Field>
+
+                <Field>
+                  <FieldLabel>Gender</FieldLabel>
+                  <Select {...register("gender")} hasError={Boolean(errors.gender)}>
+                    {genders.map((gender) => (
+                      <option key={gender} value={gender}>
+                        {gender}
+                      </option>
+                    ))}
+                  </Select>
+                  <FieldError message={errors.gender?.message} />
+                </Field>
+
+                <Field className="md:col-span-2">
+                  <FieldLabel>Phone Number</FieldLabel>
+                  <Input
+                    placeholder="e.g. 9876543210"
+                    {...register("phone")}
+                    hasError={Boolean(errors.phone)}
+                  />
+                  <FieldError message={errors.phone?.message} />
+                </Field>
+              </div>
+            </section>
+
+            <section className="space-y-5">
+              <div className="border-b border-border pb-3">
+                <h2 className="text-base font-semibold text-card-foreground">Access & Credentials</h2>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Assign the operational role and initial login credential.
+                </p>
+              </div>
+
+              <Field>
+                <FieldLabel>Portal Role</FieldLabel>
+                <Select {...register("role")} hasError={Boolean(errors.role)}>
+                  {roles.map((role) => (
+                    <option key={role} value={role}>
+                      {role}
+                    </option>
+                  ))}
+                </Select>
+                <FieldError message={errors.role?.message} />
+              </Field>
+
+              <Field>
+                <FieldLabel>Initial Password</FieldLabel>
+                <div className="relative">
+                  <Input
+                    {...register("password")}
+                    className="pr-10"
+                    hasError={Boolean(errors.password)}
+                    placeholder="Minimum 6 characters"
+                    type={showPassword ? "text" : "password"}
+                  />
+                  <button
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    onClick={() => setShowPassword((current) => !current)}
+                    type="button"
+                  >
+                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
+                <FieldError message={errors.password?.message} />
+              </Field>
+            </section>
+          </div>
+
+          <div className="my-6 border-t border-border" />
+
           <section className="space-y-5">
-            <div>
-              <h2 className="text-lg font-semibold text-card-foreground">Identity</h2>
-              <p className="text-sm text-muted-foreground">
-                Employee ID and email must be unique across the organization.
+            <div className="border-b border-border pb-3">
+              <h2 className="text-base font-semibold text-card-foreground">Department & Reporting</h2>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Manager assignment is optional for manager/admin accounts and validated by the backend when supplied.
               </p>
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">
-              <label className="space-y-1.5">
-                <span className="text-sm font-medium text-surface-foreground">Employee ID</span>
-                <input {...register("employee_id")} className={fieldClass(Boolean(errors.employee_id))} />
-                {errors.employee_id && <p className="text-sm text-destructive">{errors.employee_id.message}</p>}
-              </label>
-
-              <label className="space-y-1.5">
-                <span className="text-sm font-medium text-surface-foreground">Email</span>
-                <input {...register("email")} className={fieldClass(Boolean(errors.email))} type="email" />
-                {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
-              </label>
-
-              <label className="space-y-1.5 md:col-span-2">
-                <span className="text-sm font-medium text-surface-foreground">Full Name</span>
-                <input {...register("name")} className={fieldClass(Boolean(errors.name))} />
-                {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
-              </label>
-
-              <label className="space-y-1.5">
-                <span className="text-sm font-medium text-surface-foreground">Age</span>
-                <input {...register("age")} className={fieldClass(Boolean(errors.age))} type="number" />
-                {errors.age && <p className="text-sm text-destructive">{errors.age.message}</p>}
-              </label>
-
-              <label className="space-y-1.5">
-                <span className="text-sm font-medium text-surface-foreground">Gender</span>
-                <select {...register("gender")} className={fieldClass(Boolean(errors.gender))}>
-                  {genders.map((gender) => (
-                    <option key={gender} value={gender}>{gender}</option>
-                  ))}
-                </select>
-              </label>
-
-              <label className="space-y-1.5 md:col-span-2">
-                <span className="text-sm font-medium text-surface-foreground">Phone</span>
-                <input {...register("phone")} className={fieldClass(Boolean(errors.phone))} />
-                {errors.phone && <p className="text-sm text-destructive">{errors.phone.message}</p>}
-              </label>
-            </div>
-          </section>
-
-          <section className="space-y-5">
-            <div>
-              <h2 className="text-lg font-semibold text-card-foreground">Access</h2>
-              <p className="text-sm text-muted-foreground">
-                Assign the operational role and initial credential.
-              </p>
-            </div>
-
-            <label className="space-y-1.5">
-              <span className="text-sm font-medium text-surface-foreground">Role</span>
-              <select {...register("role")} className={fieldClass(Boolean(errors.role))}>
-                {roles.map((role) => (
-                  <option key={role} value={role}>{role}</option>
-                ))}
-              </select>
-            </label>
-
-            <label className="space-y-1.5">
-              <span className="text-sm font-medium text-surface-foreground">Password</span>
-              <div className="relative">
-                <input
-                  {...register("password")}
-                  className={`${fieldClass(Boolean(errors.password))} pr-11`}
-                  type={showPassword ? "text" : "password"}
+              <Field>
+                <FieldLabel>Department</FieldLabel>
+                <Input
+                  placeholder="e.g. Engineering"
+                  {...register("department")}
+                  hasError={Boolean(errors.department)}
                 />
-                <button
-                  aria-label={showPassword ? "Hide password" : "Show password"}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                  onClick={() => setShowPassword((current) => !current)}
-                  type="button"
-                >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
-              </div>
-              {errors.password && <p className="text-sm text-destructive">{errors.password.message}</p>}
-            </label>
-          </section>
-        </div>
+                <FieldError message={errors.department?.message} />
+              </Field>
 
-        <div className="my-6 border-t border-border" />
+              <Field>
+                <FieldLabel>Designation</FieldLabel>
+                <Input
+                  placeholder="e.g. Senior Systems Engineer"
+                  {...register("designation")}
+                  hasError={Boolean(errors.designation)}
+                />
+                <FieldError message={errors.designation?.message} />
+              </Field>
 
-        <section className="space-y-5">
-          <div>
-            <h2 className="text-lg font-semibold text-card-foreground">Department & Reporting</h2>
-            <p className="text-sm text-muted-foreground">
-              Manager assignment is optional for manager/admin accounts and validated by the backend when supplied.
-            </p>
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-2">
-            <label className="space-y-1.5">
-              <span className="text-sm font-medium text-surface-foreground">Department</span>
-              <input {...register("department")} className={fieldClass(Boolean(errors.department))} />
-              {errors.department && <p className="text-sm text-destructive">{errors.department.message}</p>}
-            </label>
-
-            <label className="space-y-1.5">
-              <span className="text-sm font-medium text-surface-foreground">Designation</span>
-              <input {...register("designation")} className={fieldClass(Boolean(errors.designation))} />
-              {errors.designation && <p className="text-sm text-destructive">{errors.designation.message}</p>}
-            </label>
-
-            <label className="space-y-1.5 md:col-span-2">
-              <span className="text-sm font-medium text-surface-foreground">Manager</span>
-              <select {...register("manager_id")} className={fieldClass(Boolean(errors.manager_id))}>
-                <option value="">
-                  {isLoadingManagers ? "Loading managers..." : "No manager assigned"}
-                </option>
-                {reportingManagers.map((manager) => (
-                  <option key={manager.employee_id} value={manager.employee_id}>
-                    {manager.name} ({manager.employee_id}) - {manager.role}, {manager.department}, {manager.designation}
+              <Field className="md:col-span-2">
+                <FieldLabel>Reporting Manager</FieldLabel>
+                <Select {...register("manager_id")} hasError={Boolean(errors.manager_id)}>
+                  <option value="">
+                    {isLoadingManagers ? "Loading managers..." : "No manager assigned"}
                   </option>
-                ))}
-              </select>
-              {errors.manager_id && <p className="text-sm text-destructive">{errors.manager_id.message}</p>}
-            </label>
-          </div>
-        </section>
+                  {reportingManagers.map((manager) => (
+                    <option key={manager.employee_id} value={manager.employee_id}>
+                      {manager.name} ({manager.employee_id}) — {manager.role}, {manager.department}, {manager.designation}
+                    </option>
+                  ))}
+                </Select>
+                <FieldError message={errors.manager_id?.message} />
+              </Field>
+            </div>
+          </section>
 
-        <div className="mt-6 flex flex-col gap-3 border-t border-border pt-5 sm:flex-row sm:items-center sm:justify-end">
-          <Button disabled={isSubmitting} icon={isSubmitting ? <Loader2 className="animate-spin" size={16} /> : <UserPlus size={16} />} type="submit">
-            {isSubmitting ? "Provisioning..." : "Provision Account"}
-          </Button>
-        </div>
-      </form>
+          <div className="mt-6 flex flex-col gap-3 border-t border-border pt-5 sm:flex-row sm:items-center sm:justify-end">
+            <Button
+              disabled={isSubmitting}
+              icon={isSubmitting ? <Loader2 className="animate-spin" size={16} /> : <UserPlus size={16} />}
+              type="submit"
+            >
+              {isSubmitting ? "Provisioning..." : "Provision Account"}
+            </Button>
+          </div>
+        </form>
+      </Panel>
     </div>
   )
 }

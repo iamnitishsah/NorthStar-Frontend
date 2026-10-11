@@ -1,4 +1,5 @@
 import type { HTMLAttributes } from "react"
+import { cn } from "@/lib/utils"
 
 type Props = HTMLAttributes<HTMLDivElement>
 
@@ -8,7 +9,10 @@ function Card({
 }: Props) {
   return (
     <div
-      className={`dashboard-surface theme-transition rounded-lg hover:shadow-enterprise-md ${className}`}
+      className={cn(
+        "dashboard-surface theme-transition rounded-xl hover:shadow-enterprise-md",
+        className
+      )}
       {...props}
     />
   )

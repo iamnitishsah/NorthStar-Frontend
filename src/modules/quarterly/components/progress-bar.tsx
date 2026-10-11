@@ -1,7 +1,5 @@
-import {
-  clampProgress,
-} from "../utils/quarterly"
 import { memo } from "react"
+import { clampProgress, getProgressBarClassName } from "../utils/quarterly"
 
 type Props = {
   value?: number | null
@@ -9,22 +7,22 @@ type Props = {
 
 function ProgressBar({ value }: Props) {
   const width = clampProgress(value)
-  const accentClassName =
-    value === null || value === undefined
-      ? "accent-slate-300"
-      : value >= 100
-        ? "accent-emerald-500"
-        : value >= 50
-          ? "accent-sky-500"
-          : "accent-amber-500"
+  const fillClassName = getProgressBarClassName(value)
 
   return (
-    <progress
+    <div
       aria-label="Goal progress"
-      className={`h-2 w-full overflow-hidden rounded-full bg-muted ${accentClassName}`}
-      max={100}
-      value={width}
-    />
+      aria-valuemax={100}
+      aria-valuemin={0}
+      aria-valuenow={Math.round(width)}
+      className="h-2.5 w-full overflow-hidden rounded-full border border-border/60 bg-muted"
+      role="progressbar"
+    >
+      <div
+        className={`h-full rounded-full transition-all duration-300 ease-out ${fillClassName}`}
+        style={{ width: `${width}%` }}
+      />
+    </div>
   )
 }
 

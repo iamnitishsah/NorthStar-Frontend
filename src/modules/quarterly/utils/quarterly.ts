@@ -66,21 +66,21 @@ export function normalizeQuarterMap(goal: Goal): Goal {
 export function getProgressStatusClassName(status?: ProgressStatus) {
   switch (status) {
     case "COMPLETED":
-      return "bg-emerald-100 text-emerald-800"
+      return "border border-success/25 bg-success/12 text-success"
     case "ON_TRACK":
-      return "bg-sky-100 text-sky-800"
+      return "border border-info/25 bg-info/12 text-info"
     case "NOT_STARTED":
-      return "bg-slate-100 text-slate-700"
+      return "border border-border bg-muted text-surface-foreground"
     default:
-      return "bg-slate-100 text-slate-500"
+      return "border border-border bg-muted text-muted-foreground"
   }
 }
 
 export function getProgressBarClassName(progress?: number | null) {
-  if (progress === null || progress === undefined) return "bg-slate-300"
-  if (progress >= 100) return "bg-emerald-500"
-  if (progress >= 50) return "bg-sky-500"
-  return "bg-amber-500"
+  if (progress === null || progress === undefined) return "bg-muted-foreground/30"
+  if (progress >= 100) return "bg-success"
+  if (progress >= 50) return "bg-info"
+  return "bg-warning"
 }
 
 export function getQuarterProgress(goal: Goal, quarter: QuarterKey) {

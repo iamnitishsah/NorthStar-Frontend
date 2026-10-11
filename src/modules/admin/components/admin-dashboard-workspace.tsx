@@ -10,6 +10,7 @@ import { toast } from "sonner"
 import Button from "@/components/ui/button"
 import ErrorState from "@/components/ui/error-state"
 import LoadingSkeleton from "@/components/ui/loading-skeleton"
+import PageHeader from "@/components/ui/page-header"
 import { getApiErrorMessage } from "@/services/api-error"
 import {
   useAuditLogs,
@@ -81,27 +82,20 @@ function AdminDashboardWorkspace() {
 
   return (
     <div className="min-w-0 space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <div className="min-w-0">
-          <p className="text-xs font-semibold uppercase tracking-wide text-warning">
-            Admin Governance
-          </p>
-          <h1 className="mt-1 text-2xl font-bold text-foreground sm:text-3xl">
-            Admin Control Center
-          </h1>
-          <p className="mt-1 text-muted-foreground">
-            Organization visibility, governance controls, and performance analytics.
-          </p>
-        </div>
-
-        <Button
-          disabled={exportMutation.isPending}
-          icon={<Download size={16} />}
-          onClick={handleExport}
-        >
-          {exportMutation.isPending ? "Exporting..." : "Export CSV"}
-        </Button>
-      </div>
+      <PageHeader
+        badge="Admin Governance"
+        title="Admin Control Center"
+        description="Organization visibility, governance controls, and performance analytics."
+        actions={
+          <Button
+            disabled={exportMutation.isPending}
+            icon={<Download size={16} />}
+            onClick={handleExport}
+          >
+            {exportMutation.isPending ? "Exporting..." : "Export CSV"}
+          </Button>
+        }
+      />
 
       <div className="grid min-w-0 gap-4 sm:grid-cols-2 2xl:grid-cols-4">
         <MetricCard

@@ -29,7 +29,10 @@ function FieldLabel({
 }: LabelHTMLAttributes<HTMLSpanElement>) {
   return (
     <span
-      className={cn("text-sm font-semibold text-surface-foreground", className)}
+      className={cn(
+        "block text-xs font-semibold uppercase tracking-wide text-surface-foreground",
+        className
+      )}
       {...props}
     />
   )
@@ -54,18 +57,22 @@ function FieldError({
   message?: string
   className?: string
 }) {
+  if (!message) {
+    return null
+  }
+
   return (
     <p
-      className={cn("min-h-5 text-sm leading-5 text-destructive", className)}
+      className={cn("text-xs font-medium leading-5 text-destructive", className)}
       aria-live="polite"
     >
-      {message ?? ""}
+      {message}
     </p>
   )
 }
 
 const controlClassName =
-  "theme-transition w-full rounded-md border border-input bg-card px-3 py-2.5 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-ring focus:ring-2 focus:ring-ring/20 disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground disabled:opacity-70 aria-[invalid=true]:border-destructive aria-[invalid=true]:focus:border-destructive aria-[invalid=true]:focus:ring-destructive/20"
+  "theme-transition w-full rounded-lg border border-input bg-surface/60 px-3.5 py-2.5 text-sm text-foreground shadow-enterprise-sm outline-none placeholder:text-muted-foreground focus:border-primary focus:bg-card focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground disabled:opacity-65 aria-[invalid=true]:border-destructive aria-[invalid=true]:focus:border-destructive aria-[invalid=true]:focus:ring-destructive/20"
 
 type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   hasError?: boolean

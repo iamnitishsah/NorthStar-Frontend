@@ -49,18 +49,19 @@ function ManagerDashboard() {
   return (
     <div className="space-y-6">
       <PageHeader
+        badge="Manager Console"
         title="Manager Dashboard"
         description="Review submitted goals and monitor quarterly progress across your team."
         actions={
           <>
             <Link
-              className="theme-transition inline-flex items-center justify-center gap-2 rounded-md border border-border bg-card px-6 py-3 text-sm font-semibold text-card-foreground hover:border-primary/35 hover:bg-hover"
+              className="theme-transition inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-card px-4 py-2.5 text-sm font-semibold text-card-foreground shadow-enterprise-xs hover:border-primary/35 hover:bg-hover"
               to="/manager/progress"
             >
               View Progress
             </Link>
             <Link
-              className="theme-transition inline-flex items-center justify-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-enterprise-sm hover:bg-primary/90"
+              className="theme-transition inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-enterprise-xs hover:bg-primary/90"
               to="/manager/review"
             >
               Review Goals
@@ -76,7 +77,7 @@ function ManagerDashboard() {
         <StatCard icon={LineChart} label="Tracked Groups" value={lockedGroups.length} />
       </div>
 
-      <Card className="p-5">
+      <Card className="p-6">
         <h2 className="text-lg font-semibold text-card-foreground">
           Review Queue
         </h2>
@@ -95,8 +96,8 @@ function ManagerDashboard() {
                 className="p-4"
                 key={group.employeeName}
               >
-                <p className="truncate font-medium text-surface-foreground">{group.employeeName}</p>
-                <p className="mt-1 text-sm text-muted-foreground">
+                <p className="truncate font-semibold text-surface-foreground">{group.employeeName}</p>
+                <p className="mt-1 font-mono text-xs text-muted-foreground">
                   {group.goalCount} goals · {group.totalWeightage}% weightage
                 </p>
               </MetricTile>

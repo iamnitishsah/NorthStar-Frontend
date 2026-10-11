@@ -161,52 +161,59 @@ function RegisterPage() {
   }
 
   return (
-    <div className="flex min-h-dvh items-center justify-center bg-background p-4 text-foreground sm:p-6 lg:p-8">
-      {/* Theme toggle */}
-      <button
-        aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
-        className="theme-transition absolute right-4 top-4 rounded-md border border-border bg-card p-2 text-muted-foreground shadow-enterprise-sm hover:bg-hover hover:text-foreground"
-        onClick={toggleTheme}
-        title={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
-        type="button"
-      >
-        {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
-      </button>
+    <div className="relative flex min-h-dvh items-center justify-center overflow-hidden bg-background p-4 text-foreground sm:p-6 lg:p-8">
+      {/* Subtle Ambient Background Glow */}
+      <div className="pointer-events-none absolute -top-32 left-1/2 -z-10 h-96 w-96 -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />
 
-      <div className="dashboard-surface w-full max-w-2xl space-y-6 rounded-lg p-6 shadow-enterprise-md sm:p-8">
-        {/* Navigation link & Header */}
-        <div className="space-y-4">
-          <Link
-            to="/login"
-            className="theme-transition inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground"
-          >
-            <ArrowLeft size={14} />
-            Back to Login
-          </Link>
+      {/* Top Controls */}
+      <div className="fixed left-4 right-4 top-4 z-20 flex items-center justify-between sm:left-8 sm:right-8">
+        <Link
+          to="/login"
+          className="theme-transition inline-flex items-center gap-1.5 rounded-lg border border-border bg-card/90 px-3 py-1.5 text-xs font-semibold text-muted-foreground shadow-enterprise-xs backdrop-blur-sm hover:bg-hover hover:text-foreground"
+        >
+          <ArrowLeft size={14} />
+          Back to Sign In
+        </Link>
 
-          <div className="flex items-center gap-4">
-            <NorthStarMark />
-            <div>
-              <h1 className="text-2xl font-bold tracking-tight text-card-foreground sm:text-3xl">
-                Create an Account
-              </h1>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Join NorthStar to set, track, and align your enterprise goals
-              </p>
-            </div>
+        <button
+          aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
+          className="theme-transition inline-flex items-center gap-1.5 rounded-lg border border-border bg-card/90 px-3 py-1.5 text-xs font-semibold text-muted-foreground shadow-enterprise-xs backdrop-blur-sm hover:bg-hover hover:text-foreground"
+          onClick={toggleTheme}
+          title={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
+          type="button"
+        >
+          {theme === "dark" ? <Sun size={15} className="text-warning" /> : <Moon size={15} />}
+          <span>{theme === "dark" ? "Light" : "Dark"}</span>
+        </button>
+      </div>
+
+      <div className="dashboard-surface my-12 w-full max-w-2xl space-y-6 rounded-2xl p-6 shadow-enterprise-lg sm:p-8">
+        {/* Header */}
+        <div className="flex items-center gap-4 border-b border-border pb-5">
+          <NorthStarMark />
+          <div>
+            <span className="inline-flex items-center rounded-md border border-primary/25 bg-primary/10 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-primary">
+              Self-Service Onboarding
+            </span>
+            <h1 className="mt-1 text-2xl font-bold tracking-tight text-card-foreground sm:text-3xl">
+              Create an Account
+            </h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Join NorthStar to set, track, and align your enterprise goals
+            </p>
           </div>
         </div>
 
         {/* Global error banner */}
         {registerError && (
           <div
-            className="flex items-start gap-3 rounded-lg border border-destructive/25 bg-destructive/10 px-4 py-3 text-sm text-destructive"
+            className="flex items-start gap-3 rounded-xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive"
             role="alert"
           >
             <AlertCircle className="mt-0.5 shrink-0" size={18} />
             <div>
               <p className="font-semibold">Registration failed</p>
-              <p className="mt-0.5">{registerError}</p>
+              <p className="mt-0.5 text-xs opacity-90">{registerError}</p>
             </div>
           </div>
         )}

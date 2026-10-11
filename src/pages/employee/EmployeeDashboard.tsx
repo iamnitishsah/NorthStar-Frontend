@@ -50,11 +50,12 @@ function EmployeeDashboard() {
   return (
     <div className="space-y-6">
       <PageHeader
+        badge="Employee Workspace"
         title="Employee Dashboard"
         description="Track goal readiness, approval state, and quarterly progress."
         actions={
           <Link
-            className="theme-transition inline-flex items-center justify-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-enterprise-sm hover:bg-primary/90"
+            className="theme-transition inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-enterprise-xs hover:bg-primary/90"
             to="/employee/goals"
           >
             Manage Goals
@@ -70,7 +71,7 @@ function EmployeeDashboard() {
       </div>
 
       <div className="grid gap-5 xl:grid-cols-3">
-        <Card className="p-5 xl:col-span-2">
+        <Card className="p-6 xl:col-span-2">
           <div className="flex items-center justify-between gap-4">
             <div>
               <h2 className="text-lg font-semibold text-card-foreground">
@@ -80,7 +81,7 @@ function EmployeeDashboard() {
                 Submission requires exactly 100% total weightage.
               </p>
             </div>
-            <span className="shrink-0 font-mono text-2xl font-semibold text-card-foreground">
+            <span className="shrink-0 font-mono text-2xl font-bold text-card-foreground">
               {totalWeightage}%
             </span>
           </div>
@@ -89,26 +90,26 @@ function EmployeeDashboard() {
           </div>
         </Card>
 
-        <Card className="p-5">
+        <Card className="p-6">
           <h2 className="text-lg font-semibold text-card-foreground">
             Workflow Summary
           </h2>
           <div className="mt-4 grid gap-3 text-sm">
-            <MetricTile className="flex justify-between">
+            <MetricTile className="flex items-center justify-between">
               <span className="text-muted-foreground">Draft / Returned</span>
-              <span className="font-medium text-surface-foreground">
+              <span className="font-mono font-bold text-surface-foreground">
                 {editableGoals.length}
               </span>
             </MetricTile>
-            <MetricTile className="flex justify-between">
+            <MetricTile className="flex items-center justify-between">
               <span className="text-muted-foreground">Completed</span>
-              <span className="font-medium text-surface-foreground">
+              <span className="font-mono font-bold text-surface-foreground">
                 {completedGoals.length}
               </span>
             </MetricTile>
-            <MetricTile className="flex justify-between">
+            <MetricTile className="flex items-center justify-between">
               <span className="text-muted-foreground">Shared Goals</span>
-              <span className="font-medium text-surface-foreground">
+              <span className="font-mono font-bold text-surface-foreground">
                 {data.filter((goal) => goal.is_shared).length}
               </span>
             </MetricTile>

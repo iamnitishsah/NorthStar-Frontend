@@ -13,7 +13,10 @@ import { cn } from "@/lib/utils"
 function Panel({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn("dashboard-surface theme-transition rounded-lg p-5", className)}
+      className={cn(
+        "dashboard-surface theme-transition rounded-xl p-5 sm:p-6",
+        className
+      )}
       {...props}
     />
   )
@@ -22,7 +25,10 @@ function Panel({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
 function SectionCard({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn("inset-panel theme-transition rounded-md p-4", className)}
+      className={cn(
+        "inset-panel theme-transition rounded-lg p-4",
+        className
+      )}
       {...props}
     />
   )
@@ -31,7 +37,10 @@ function SectionCard({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
 function MetricTile({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn("inset-panel theme-transition min-w-0 rounded-md p-3", className)}
+      className={cn(
+        "inset-panel theme-transition min-w-0 rounded-lg p-3.5",
+        className
+      )}
       {...props}
     />
   )
@@ -91,10 +100,10 @@ function ModalShell({
   }, [onClose])
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/50 p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 p-4 backdrop-blur-xs">
       <div
         className={cn(
-          "dashboard-surface flex max-h-[calc(100dvh-2rem)] w-full flex-col overflow-hidden rounded-lg shadow-enterprise-md",
+          "dashboard-surface flex max-h-[calc(100dvh-2rem)] w-full flex-col overflow-hidden rounded-xl border border-border shadow-enterprise-md",
           modalWidths[maxWidth]
         )}
         ref={dialogRef}
@@ -103,9 +112,9 @@ function ModalShell({
         aria-labelledby={titleId}
         tabIndex={-1}
       >
-        <div className="flex items-start justify-between gap-4 border-b border-border px-5 py-4">
+        <div className="flex items-start justify-between gap-4 border-b border-border bg-surface/50 px-6 py-4">
           <div className="min-w-0">
-            <h2 className="text-lg font-semibold text-card-foreground" id={titleId}>
+            <h2 className="text-lg font-bold text-card-foreground" id={titleId}>
               {title}
             </h2>
             {description && (
@@ -117,7 +126,7 @@ function ModalShell({
 
           <button
             aria-label="Close modal"
-            className="theme-transition shrink-0 rounded-md p-2 text-muted-foreground hover:bg-hover hover:text-foreground"
+            className="theme-transition shrink-0 rounded-lg border border-transparent p-2 text-muted-foreground hover:border-border hover:bg-hover hover:text-foreground"
             onClick={onClose}
             type="button"
           >
@@ -125,12 +134,12 @@ function ModalShell({
           </button>
         </div>
 
-        <div className="min-h-0 flex-1 overflow-y-auto p-5">
+        <div className="min-h-0 flex-1 overflow-y-auto p-6">
           {children}
         </div>
 
         {footer && (
-          <div className="border-t border-border px-5 py-4">
+          <div className="border-t border-border bg-surface/50 px-6 py-4">
             {footer}
           </div>
         )}
@@ -154,7 +163,10 @@ function IconButton({
 }: ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
     <button
-      className={cn("theme-transition rounded-md p-2 text-muted-foreground hover:bg-hover hover:text-foreground", className)}
+      className={cn(
+        "theme-transition rounded-lg p-2 text-muted-foreground hover:bg-hover hover:text-foreground",
+        className
+      )}
       type="button"
       {...props}
     />

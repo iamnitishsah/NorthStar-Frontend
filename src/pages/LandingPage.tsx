@@ -82,21 +82,22 @@ function LandingPage() {
           </nav>
 
           {/* Action CTAs & Theme Toggle */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
             <button
               aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
-              className="theme-transition rounded-md border border-border bg-card p-2 text-muted-foreground shadow-enterprise-sm hover:bg-hover hover:text-foreground"
+              className="theme-transition inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-semibold text-muted-foreground shadow-enterprise-xs hover:bg-hover hover:text-foreground"
               onClick={toggleTheme}
               title={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
               type="button"
             >
-              {theme === "dark" ? <Sun size={17} /> : <Moon size={17} />}
+              {theme === "dark" ? <Sun size={15} className="text-warning" /> : <Moon size={15} />}
+              <span className="hidden sm:inline">{theme === "dark" ? "Light" : "Dark"}</span>
             </button>
 
             {user && homePath ? (
               <Link
                 to={homePath}
-                className="theme-transition inline-flex items-center gap-1.5 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-enterprise-sm hover:opacity-90"
+                className="theme-transition inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-enterprise-xs hover:bg-primary/90"
               >
                 <span>Console ({user.role})</span>
                 <ArrowRight size={15} />
@@ -105,13 +106,13 @@ function LandingPage() {
               <>
                 <Link
                   to="/login"
-                  className="theme-transition rounded-md border border-border bg-card px-3.5 py-1.5 text-sm font-medium text-foreground shadow-enterprise-sm hover:bg-hover"
+                  className="theme-transition rounded-lg border border-border bg-card px-3.5 py-1.5 text-sm font-semibold text-foreground shadow-enterprise-xs hover:bg-hover"
                 >
                   Log In
                 </Link>
                 <Link
                   to="/register"
-                  className="theme-transition inline-flex items-center gap-1.5 rounded-md bg-primary px-3.5 py-1.5 text-sm font-medium text-primary-foreground shadow-enterprise-sm hover:opacity-90"
+                  className="theme-transition inline-flex items-center gap-1.5 rounded-lg bg-primary px-3.5 py-1.5 text-sm font-semibold text-primary-foreground shadow-enterprise-xs hover:bg-primary/90"
                 >
                   <span>Register</span>
                   <ArrowRight size={14} />
@@ -132,7 +133,7 @@ function LandingPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
             {/* Pill Badge */}
-            <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-semibold text-primary mb-6 shadow-enterprise-sm">
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-3.5 py-1 text-xs font-semibold text-primary mb-6 shadow-enterprise-xs">
               <Sparkles size={13} className="text-primary" />
               <span>Next-Gen Enterprise Goal Lifecycle & Performance Operations</span>
             </div>
@@ -153,7 +154,7 @@ function LandingPage() {
               {user && homePath ? (
                 <Link
                   to={homePath}
-                  className="theme-transition inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3 text-base font-semibold text-primary-foreground shadow-enterprise-md hover:opacity-95 sm:w-auto"
+                  className="theme-transition inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 text-base font-semibold text-primary-foreground shadow-enterprise-md hover:bg-primary/90 sm:w-auto"
                 >
                   <span>Open Your Workspace</span>
                   <ArrowRight size={18} />
@@ -162,14 +163,14 @@ function LandingPage() {
                 <>
                   <Link
                     to="/register"
-                    className="theme-transition inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3 text-base font-semibold text-primary-foreground shadow-enterprise-md hover:opacity-95 sm:w-auto"
+                    className="theme-transition inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 text-base font-semibold text-primary-foreground shadow-enterprise-md hover:bg-primary/90 sm:w-auto"
                   >
                     <span>Get Started — Self Register</span>
                     <ArrowRight size={18} />
                   </Link>
                   <Link
                     to="/login"
-                    className="theme-transition inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-card px-6 py-3 text-base font-semibold text-foreground shadow-enterprise-sm hover:bg-hover sm:w-auto"
+                    className="theme-transition inline-flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-card px-6 py-3 text-base font-semibold text-foreground shadow-enterprise-sm hover:bg-hover sm:w-auto"
                   >
                     <span>Sign In to Console</span>
                   </Link>
@@ -180,19 +181,19 @@ function LandingPage() {
             {/* Key stats banner */}
             <div className="mt-12 grid grid-cols-2 gap-4 border-t border-border pt-8 sm:grid-cols-4">
               <div>
-                <p className="text-2xl font-bold text-foreground sm:text-3xl">100%</p>
+                <p className="font-mono text-2xl font-bold text-foreground sm:text-3xl">100%</p>
                 <p className="text-xs text-muted-foreground mt-1">Weightage Rigor Enforced</p>
               </div>
               <div>
-                <p className="text-2xl font-bold text-foreground sm:text-3xl">Q1–Q4</p>
+                <p className="font-mono text-2xl font-bold text-foreground sm:text-3xl">Q1–Q4</p>
                 <p className="text-xs text-muted-foreground mt-1">Continuous Check-In Pulse</p>
               </div>
               <div>
-                <p className="text-2xl font-bold text-foreground sm:text-3xl">4 UoMs</p>
+                <p className="font-mono text-2xl font-bold text-foreground sm:text-3xl">4 UoMs</p>
                 <p className="text-xs text-muted-foreground mt-1">Mathematical Metric Scoring</p>
               </div>
               <div>
-                <p className="text-2xl font-bold text-foreground sm:text-3xl">Immutable</p>
+                <p className="font-mono text-2xl font-bold text-foreground sm:text-3xl">Immutable</p>
                 <p className="text-xs text-muted-foreground mt-1">Audit Trail & Governance</p>
               </div>
             </div>
@@ -203,9 +204,9 @@ function LandingPage() {
       {/* ────────────────────────────────────────────────────────────────────── */}
       {/* LIVE TELEMETRY SIMULATION / HERO SHOWCASE                               */}
       {/* ────────────────────────────────────────────────────────────────────── */}
-      <section className="border-b border-border bg-surface/30 py-12">
+      <section className="border-b border-border bg-surface/40 py-12">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="dashboard-surface overflow-hidden rounded-xl border border-border p-6 shadow-enterprise-md sm:p-8">
+          <div className="dashboard-surface overflow-hidden rounded-2xl border border-border p-6 shadow-enterprise-md sm:p-8">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-border pb-6">
               <div>
                 <span className="text-xs font-semibold uppercase tracking-wider text-primary">
@@ -215,12 +216,12 @@ function LandingPage() {
                   Unified Goal Setting, Approval, & Tracking Workflow
                 </h3>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-success/25 bg-success/12 px-3 py-1 text-xs font-semibold text-success">
                   <CheckCircle2 size={13} />
                   Status: LOCKED & Active
                 </span>
-                <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary border border-primary/20">
+                <span className="rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
                   Weightage: 100/100%
                 </span>
               </div>
@@ -229,20 +230,20 @@ function LandingPage() {
             {/* Simulated goal cards */}
             <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
               {/* Card 1 */}
-              <div className="rounded-lg border border-border bg-card p-4 shadow-enterprise-sm">
+              <div className="rounded-xl border border-border bg-card p-4 shadow-enterprise-sm">
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
                   <span>Revenue Growth</span>
-                  <span className="font-semibold text-foreground">30% Weight</span>
+                  <span className="font-mono font-semibold text-foreground">30% Weight</span>
                 </div>
                 <h4 className="mt-2 font-semibold text-card-foreground text-sm">
                   Achieve Q3 Enterprise Pipeline Target
                 </h4>
                 <div className="mt-4 flex items-center justify-between text-xs">
                   <span className="text-muted-foreground">UoM: NUMERIC (MIN)</span>
-                  <span className="font-medium text-emerald-600 dark:text-emerald-400">85% Complete</span>
+                  <span className="font-mono font-semibold text-success">85% Complete</span>
                 </div>
-                <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-muted">
-                  <div className="h-full bg-emerald-500 rounded-full" style={{ width: "85%" }} />
+                <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-muted border border-border/50">
+                  <div className="h-full bg-success rounded-full" style={{ width: "85%" }} />
                 </div>
                 <div className="mt-3 flex items-center justify-between text-[11px] text-muted-foreground border-t border-border pt-2">
                   <span>Target: $500,000</span>
@@ -251,20 +252,20 @@ function LandingPage() {
               </div>
 
               {/* Card 2 */}
-              <div className="rounded-lg border border-border bg-card p-4 shadow-enterprise-sm">
+              <div className="rounded-xl border border-border bg-card p-4 shadow-enterprise-sm">
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
                   <span>Operational Excellence</span>
-                  <span className="font-semibold text-foreground">35% Weight</span>
+                  <span className="font-mono font-semibold text-foreground">35% Weight</span>
                 </div>
                 <h4 className="mt-2 font-semibold text-card-foreground text-sm">
                   Reduce Service Turnaround Time (TAT)
                 </h4>
                 <div className="mt-4 flex items-center justify-between text-xs">
                   <span className="text-muted-foreground">UoM: NUMERIC (MAX)</span>
-                  <span className="font-medium text-sky-600 dark:text-sky-400">92% On-Track</span>
+                  <span className="font-mono font-semibold text-info">92% On-Track</span>
                 </div>
-                <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-muted">
-                  <div className="h-full bg-sky-500 rounded-full" style={{ width: "92%" }} />
+                <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-muted border border-border/50">
+                  <div className="h-full bg-info rounded-full" style={{ width: "92%" }} />
                 </div>
                 <div className="mt-3 flex items-center justify-between text-[11px] text-muted-foreground border-t border-border pt-2">
                   <span>Target: 24 Hours</span>
@@ -273,25 +274,25 @@ function LandingPage() {
               </div>
 
               {/* Card 3 - Shared Goal */}
-              <div className="rounded-lg border border-primary/30 bg-card p-4 shadow-enterprise-sm relative">
+              <div className="rounded-xl border border-primary/35 bg-card p-4 shadow-enterprise-sm relative">
                 <div className="absolute top-2.5 right-2.5">
-                  <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
+                  <span className="rounded border border-primary/25 bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
                     SHARED KPI
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
                   <span>Safety & Compliance</span>
-                  <span className="font-semibold text-foreground">35% Weight</span>
+                  <span className="font-mono font-semibold text-foreground">35% Weight</span>
                 </div>
                 <h4 className="mt-2 font-semibold text-card-foreground text-sm pr-16">
                   Maintain Zero Critical Safety Incidents
                 </h4>
                 <div className="mt-4 flex items-center justify-between text-xs">
                   <span className="text-muted-foreground">UoM: ZERO_BASED</span>
-                  <span className="font-medium text-emerald-600 dark:text-emerald-400">100% (0 Incidents)</span>
+                  <span className="font-mono font-semibold text-success">100% (0 Incidents)</span>
                 </div>
-                <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-muted">
-                  <div className="h-full bg-emerald-500 rounded-full" style={{ width: "100%" }} />
+                <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-muted border border-border/50">
+                  <div className="h-full bg-success rounded-full" style={{ width: "100%" }} />
                 </div>
                 <div className="mt-3 flex items-center justify-between text-[11px] text-muted-foreground border-t border-border pt-2">
                   <span>Pushed by: Engineering VP</span>
@@ -325,8 +326,8 @@ function LandingPage() {
           </div>
 
           <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            <div className="rounded-lg border border-border bg-card p-6 shadow-enterprise-sm">
-              <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-primary/10 text-primary mb-4">
+            <div className="rounded-xl border border-border bg-card p-6 shadow-enterprise-sm">
+              <div className="flex h-11 w-11 items-center justify-center rounded-lg border border-primary/20 bg-primary/10 text-primary mb-4">
                 <Target size={22} />
               </div>
               <h3 className="text-base font-semibold text-card-foreground">
@@ -339,22 +340,22 @@ function LandingPage() {
               </p>
             </div>
 
-            <div className="rounded-lg border border-border bg-card p-6 shadow-enterprise-sm">
-              <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 mb-4">
+            <div className="rounded-xl border border-border bg-card p-6 shadow-enterprise-sm">
+              <div className="flex h-11 w-11 items-center justify-center rounded-lg border border-success/25 bg-success/12 text-success mb-4">
                 <Lock size={22} />
               </div>
               <h3 className="text-base font-semibold text-card-foreground">
                 Post-Approval Lockdown & Governance
               </h3>
               <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-                Once a manager signs off on goals, they transition to <code className="text-xs bg-muted px-1 py-0.5 rounded">LOCKED</code>.
+                Once a manager signs off on goals, they transition to <code className="text-xs bg-muted px-1 py-0.5 rounded font-mono text-foreground">LOCKED</code>.
                 No employee or manager can secretly modify targets. Edits require formal Admin Unlock Requests
                 with mandatory justifications and audit logs.
               </p>
             </div>
 
-            <div className="rounded-lg border border-border bg-card p-6 shadow-enterprise-sm">
-              <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-accent/10 text-accent mb-4">
+            <div className="rounded-xl border border-border bg-card p-6 shadow-enterprise-sm">
+              <div className="flex h-11 w-11 items-center justify-center rounded-lg border border-accent/25 bg-accent/12 text-accent mb-4">
                 <Workflow size={22} />
               </div>
               <h3 className="text-base font-semibold text-card-foreground">
@@ -390,9 +391,9 @@ function LandingPage() {
 
           <div className="mt-12 grid grid-cols-1 gap-8 lg:grid-cols-2">
             {/* Left: The Legacy Spreadsheet Pitfalls */}
-            <div className="rounded-xl border border-destructive/20 bg-card p-6 sm:p-8 shadow-enterprise-sm">
+            <div className="rounded-xl border border-destructive/25 bg-card p-6 sm:p-8 shadow-enterprise-sm">
               <div className="flex items-center gap-3 border-b border-destructive/15 pb-4">
-                <div className="rounded-lg bg-destructive/10 p-2 text-destructive">
+                <div className="rounded-lg border border-destructive/25 bg-destructive/12 p-2 text-destructive">
                   <FileSpreadsheet size={22} />
                 </div>
                 <div>
@@ -404,27 +405,27 @@ function LandingPage() {
               <ul className="mt-6 space-y-4 text-sm text-muted-foreground">
                 <li className="flex items-start gap-3">
                   <X size={18} className="text-destructive shrink-0 mt-0.5" />
-                  <span><strong>Zero Tamper Resistance:</strong> Targets and achievements can be edited days before performance reviews without any record of alterations.</span>
+                  <span><strong className="text-foreground">Zero Tamper Resistance:</strong> Targets and achievements can be edited days before performance reviews without any record of alterations.</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <X size={18} className="text-destructive shrink-0 mt-0.5" />
-                  <span><strong>Subjective Math & Inconsistent Formulas:</strong> Employees invent their own formulas; MIN vs. MAX metrics are often miscalculated.</span>
+                  <span><strong className="text-foreground">Subjective Math & Inconsistent Formulas:</strong> Employees invent their own formulas; MIN vs. MAX metrics are often miscalculated.</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <X size={18} className="text-destructive shrink-0 mt-0.5" />
-                  <span><strong>Version Proliferation:</strong> Multiple files circulating via email threads (v1_final_final.xlsx) cause massive reporting discrepancy.</span>
+                  <span><strong className="text-foreground">Version Proliferation:</strong> Multiple files circulating via email threads (v1_final_final.xlsx) cause massive reporting discrepancy.</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <X size={18} className="text-destructive shrink-0 mt-0.5" />
-                  <span><strong>No Strategic Alignment:</strong> Leadership has no bird’s-eye view of how departmental goals align with quarterly strategic thrust areas.</span>
+                  <span><strong className="text-foreground">No Strategic Alignment:</strong> Leadership has no bird’s-eye view of how departmental goals align with quarterly strategic thrust areas.</span>
                 </li>
               </ul>
             </div>
 
             {/* Right: The NorthStar Operating Standard */}
-            <div className="rounded-xl border border-emerald-500/25 bg-card p-6 sm:p-8 shadow-enterprise-sm">
-              <div className="flex items-center gap-3 border-b border-emerald-500/20 pb-4">
-                <div className="rounded-lg bg-emerald-500/10 p-2 text-emerald-600 dark:text-emerald-400">
+            <div className="rounded-xl border border-success/25 bg-card p-6 sm:p-8 shadow-enterprise-sm">
+              <div className="flex items-center gap-3 border-b border-success/20 pb-4">
+                <div className="rounded-lg border border-success/25 bg-success/12 p-2 text-success">
                   <ShieldCheck size={22} />
                 </div>
                 <div>
@@ -435,20 +436,20 @@ function LandingPage() {
 
               <ul className="mt-6 space-y-4 text-sm text-muted-foreground">
                 <li className="flex items-start gap-3">
-                  <Check size={18} className="text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-                  <span><strong>Cryptographic & Audit Governance:</strong> Every action—creation, submission, approval, unlock, and check-in—is permanently recorded in audit logs.</span>
+                  <Check size={18} className="text-success shrink-0 mt-0.5" />
+                  <span><strong className="text-foreground">Cryptographic & Audit Governance:</strong> Every action—creation, submission, approval, unlock, and check-in—is permanently recorded in audit logs.</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <Check size={18} className="text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-                  <span><strong>System-Automated Progress Scoring:</strong> Strict mathematical formulas for Numeric (MIN/MAX), Percentage, Zero-Based, and Timeline goals.</span>
+                  <Check size={18} className="text-success shrink-0 mt-0.5" />
+                  <span><strong className="text-foreground">System-Automated Progress Scoring:</strong> Strict mathematical formulas for Numeric (MIN/MAX), Percentage, Zero-Based, and Timeline goals.</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <Check size={18} className="text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-                  <span><strong>Single Source of Truth:</strong> Hosted API & MongoDB database with real-time org tree visualization built from live reporting links.</span>
+                  <Check size={18} className="text-success shrink-0 mt-0.5" />
+                  <span><strong className="text-foreground">Single Source of Truth:</strong> Hosted API & MongoDB database with real-time org tree visualization built from live reporting links.</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <Check size={18} className="text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-                  <span><strong>Real-Time Analytics & CSV Export:</strong> Admins access completion dashboards, QoQ progression trends, and one-click achievement report exports.</span>
+                  <Check size={18} className="text-success shrink-0 mt-0.5" />
+                  <span><strong className="text-foreground">Real-Time Analytics & CSV Export:</strong> Admins access completion dashboards, QoQ progression trends, and one-click achievement report exports.</span>
                 </li>
               </ul>
             </div>
@@ -479,13 +480,13 @@ function LandingPage() {
 
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5 relative z-10">
               {/* Step 1 */}
-              <div className="rounded-lg border border-border bg-card p-5 shadow-enterprise-sm flex flex-col justify-between">
+              <div className="rounded-xl border border-border bg-card p-5 shadow-enterprise-sm flex flex-col justify-between">
                 <div>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded">
+                    <span className="text-xs font-bold text-primary border border-primary/25 bg-primary/10 px-2 py-0.5 rounded">
                       Step 1
                     </span>
-                    <span className="text-xs font-mono text-muted-foreground">DRAFT</span>
+                    <span className="text-xs font-mono font-semibold text-muted-foreground">DRAFT</span>
                   </div>
                   <h4 className="mt-3 font-semibold text-card-foreground text-sm">
                     Creation & Alignment
@@ -494,19 +495,19 @@ function LandingPage() {
                     Employee defines 1 to 8 goals with thrust areas, targets, and weightages. Must balance to exactly 100% total.
                   </p>
                 </div>
-                <div className="mt-4 pt-3 border-t border-border text-[11px] text-muted-foreground">
+                <div className="mt-4 pt-3 border-t border-border text-[11px] font-medium text-muted-foreground">
                   Role: Employee
                 </div>
               </div>
 
               {/* Step 2 */}
-              <div className="rounded-lg border border-border bg-card p-5 shadow-enterprise-sm flex flex-col justify-between">
+              <div className="rounded-xl border border-border bg-card p-5 shadow-enterprise-sm flex flex-col justify-between">
                 <div>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-amber-600 bg-amber-500/10 px-2 py-0.5 rounded">
+                    <span className="text-xs font-bold text-warning border border-warning/25 bg-warning/12 px-2 py-0.5 rounded">
                       Step 2
                     </span>
-                    <span className="text-xs font-mono text-muted-foreground">SUBMITTED</span>
+                    <span className="text-xs font-mono font-semibold text-muted-foreground">SUBMITTED</span>
                   </div>
                   <h4 className="mt-3 font-semibold text-card-foreground text-sm">
                     Batch Submission
@@ -515,40 +516,40 @@ function LandingPage() {
                     System verifies 100% total weightage and triggers an automated email notification to the assigned reporting manager.
                   </p>
                 </div>
-                <div className="mt-4 pt-3 border-t border-border text-[11px] text-muted-foreground">
-                  Role: Employee $\to$ Manager
+                <div className="mt-4 pt-3 border-t border-border text-[11px] font-medium text-muted-foreground">
+                  Role: Employee → Manager
                 </div>
               </div>
 
               {/* Step 3 */}
-              <div className="rounded-lg border border-border bg-card p-5 shadow-enterprise-sm flex flex-col justify-between">
+              <div className="rounded-xl border border-border bg-card p-5 shadow-enterprise-sm flex flex-col justify-between">
                 <div>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-indigo-600 bg-indigo-500/10 px-2 py-0.5 rounded">
+                    <span className="text-xs font-bold text-info border border-info/25 bg-info/12 px-2 py-0.5 rounded">
                       Step 3
                     </span>
-                    <span className="text-xs font-mono text-muted-foreground">REVIEW</span>
+                    <span className="text-xs font-mono font-semibold text-muted-foreground">REVIEW</span>
                   </div>
                   <h4 className="mt-3 font-semibold text-card-foreground text-sm">
                     Manager Review
                   </h4>
                   <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
-                    Manager inspects goals. Can tweak targets inline, return for rework with notes (<code className="text-[10px]">RETURNED</code>), or approve.
+                    Manager inspects goals. Can tweak targets inline, return for rework with notes (<code className="text-[10px] font-mono text-foreground">RETURNED</code>), or approve.
                   </p>
                 </div>
-                <div className="mt-4 pt-3 border-t border-border text-[11px] text-muted-foreground">
+                <div className="mt-4 pt-3 border-t border-border text-[11px] font-medium text-muted-foreground">
                   Role: Manager
                 </div>
               </div>
 
               {/* Step 4 */}
-              <div className="rounded-lg border border-border bg-card p-5 shadow-enterprise-sm flex flex-col justify-between">
+              <div className="rounded-xl border border-border bg-card p-5 shadow-enterprise-sm flex flex-col justify-between">
                 <div>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-emerald-600 bg-emerald-500/10 px-2 py-0.5 rounded">
+                    <span className="text-xs font-bold text-success border border-success/25 bg-success/12 px-2 py-0.5 rounded">
                       Step 4
                     </span>
-                    <span className="text-xs font-mono text-muted-foreground">LOCKED</span>
+                    <span className="text-xs font-mono font-semibold text-muted-foreground">LOCKED</span>
                   </div>
                   <h4 className="mt-3 font-semibold text-card-foreground text-sm">
                     Lockdown & Check-Ins
@@ -557,19 +558,19 @@ function LandingPage() {
                     Approved goals lock. Employees record Q1–Q4 achievements chronologically. System computes objective progress scores.
                   </p>
                 </div>
-                <div className="mt-4 pt-3 border-t border-border text-[11px] text-muted-foreground">
+                <div className="mt-4 pt-3 border-t border-border text-[11px] font-medium text-muted-foreground">
                   Role: Employee & Manager
                 </div>
               </div>
 
               {/* Step 5 */}
-              <div className="rounded-lg border border-border bg-card p-5 shadow-enterprise-sm flex flex-col justify-between">
+              <div className="rounded-xl border border-border bg-card p-5 shadow-enterprise-sm flex flex-col justify-between">
                 <div>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-rose-600 bg-rose-500/10 px-2 py-0.5 rounded">
+                    <span className="text-xs font-bold text-destructive border border-destructive/25 bg-destructive/12 px-2 py-0.5 rounded">
                       Step 5
                     </span>
-                    <span className="text-xs font-mono text-muted-foreground">UNLOCKED?</span>
+                    <span className="text-xs font-mono font-semibold text-muted-foreground">UNLOCKED?</span>
                   </div>
                   <h4 className="mt-3 font-semibold text-card-foreground text-sm">
                     Governance & Unlocks
@@ -578,7 +579,7 @@ function LandingPage() {
                     If business priorities pivot, employee submits an Unlock Request. Admin reviews reason, approving or rejecting with full audit logs.
                   </p>
                 </div>
-                <div className="mt-4 pt-3 border-t border-border text-[11px] text-muted-foreground">
+                <div className="mt-4 pt-3 border-t border-border text-[11px] font-medium text-muted-foreground">
                   Role: Admin Governance
                 </div>
               </div>
@@ -588,7 +589,7 @@ function LandingPage() {
           {/* Mathematical Progress Computation Matrix */}
           <div className="mt-14 rounded-xl border border-border bg-card p-6 sm:p-8 shadow-enterprise-sm">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 rounded-lg bg-primary/10 text-primary">
+              <div className="p-2 rounded-lg border border-primary/20 bg-primary/10 text-primary">
                 <BarChart3 size={20} />
               </div>
               <div>
@@ -665,13 +666,13 @@ function LandingPage() {
 
           {/* Role selector tabs */}
           <div className="mt-10 flex justify-center">
-            <div className="inline-flex rounded-lg border border-border bg-card p-1 shadow-enterprise-sm">
+            <div className="inline-flex rounded-xl border border-border bg-card p-1 shadow-enterprise-sm">
               <button
                 type="button"
                 onClick={() => setActiveRoleTab("employee")}
-                className={`theme-transition rounded-md px-5 py-2 text-sm font-semibold ${
+                className={`theme-transition rounded-lg px-5 py-2 text-sm font-semibold ${
                   activeRoleTab === "employee"
-                    ? "bg-primary text-primary-foreground shadow-enterprise-sm"
+                    ? "bg-primary text-primary-foreground shadow-enterprise-xs"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
@@ -680,9 +681,9 @@ function LandingPage() {
               <button
                 type="button"
                 onClick={() => setActiveRoleTab("manager")}
-                className={`theme-transition rounded-md px-5 py-2 text-sm font-semibold ${
+                className={`theme-transition rounded-lg px-5 py-2 text-sm font-semibold ${
                   activeRoleTab === "manager"
-                    ? "bg-primary text-primary-foreground shadow-enterprise-sm"
+                    ? "bg-primary text-primary-foreground shadow-enterprise-xs"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
@@ -691,9 +692,9 @@ function LandingPage() {
               <button
                 type="button"
                 onClick={() => setActiveRoleTab("admin")}
-                className={`theme-transition rounded-md px-5 py-2 text-sm font-semibold ${
+                className={`theme-transition rounded-lg px-5 py-2 text-sm font-semibold ${
                   activeRoleTab === "admin"
-                    ? "bg-primary text-primary-foreground shadow-enterprise-sm"
+                    ? "bg-primary text-primary-foreground shadow-enterprise-xs"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
@@ -705,9 +706,9 @@ function LandingPage() {
           {/* Tab Content Display */}
           <div className="mt-8 mx-auto max-w-4xl">
             {activeRoleTab === "employee" && (
-              <div className="dashboard-surface rounded-xl border border-border p-6 sm:p-8 shadow-enterprise-md">
+              <div className="dashboard-surface rounded-2xl border border-border p-6 sm:p-8 shadow-enterprise-md">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2.5 rounded-lg bg-primary/10 text-primary">
+                  <div className="p-2.5 rounded-lg border border-primary/20 bg-primary/10 text-primary">
                     <Target size={24} />
                   </div>
                   <div>
@@ -738,9 +739,9 @@ function LandingPage() {
             )}
 
             {activeRoleTab === "manager" && (
-              <div className="dashboard-surface rounded-xl border border-border p-6 sm:p-8 shadow-enterprise-md">
+              <div className="dashboard-surface rounded-2xl border border-border p-6 sm:p-8 shadow-enterprise-md">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2.5 rounded-lg bg-accent/10 text-accent">
+                  <div className="p-2.5 rounded-lg border border-accent/25 bg-accent/12 text-accent">
                     <Users size={24} />
                   </div>
                   <div>
@@ -771,9 +772,9 @@ function LandingPage() {
             )}
 
             {activeRoleTab === "admin" && (
-              <div className="dashboard-surface rounded-xl border border-border p-6 sm:p-8 shadow-enterprise-md">
+              <div className="dashboard-surface rounded-2xl border border-border p-6 sm:p-8 shadow-enterprise-md">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2.5 rounded-lg bg-warning/10 text-warning">
+                  <div className="p-2.5 rounded-lg border border-warning/25 bg-warning/12 text-warning">
                     <ShieldCheck size={24} />
                   </div>
                   <div>
@@ -824,7 +825,7 @@ function LandingPage() {
           </div>
 
           <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="rounded-lg border border-border bg-card p-5 shadow-enterprise-sm">
+            <div className="rounded-xl border border-border bg-card p-5 shadow-enterprise-sm">
               <Cpu size={22} className="text-primary mb-3" />
               <h4 className="font-semibold text-card-foreground text-sm">FastAPI & Python 3.12</h4>
               <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
@@ -832,24 +833,24 @@ function LandingPage() {
               </p>
             </div>
 
-            <div className="rounded-lg border border-border bg-card p-5 shadow-enterprise-sm">
-              <Database size={22} className="text-emerald-600 dark:text-emerald-400 mb-3" />
+            <div className="rounded-xl border border-border bg-card p-5 shadow-enterprise-sm">
+              <Database size={22} className="text-success mb-3" />
               <h4 className="font-semibold text-card-foreground text-sm">MongoDB Motor</h4>
               <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
                 Async document store with auto-indexed queries on unique employee emails, IDs, goal statuses, and audit timestamps.
               </p>
             </div>
 
-            <div className="rounded-lg border border-border bg-card p-5 shadow-enterprise-sm">
-              <Mail size={22} className="text-sky-600 dark:text-sky-400 mb-3" />
+            <div className="rounded-xl border border-border bg-card p-5 shadow-enterprise-sm">
+              <Mail size={22} className="text-info mb-3" />
               <h4 className="font-semibold text-card-foreground text-sm">Celery + Redis + SMTP</h4>
               <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
                 Asynchronous, non-blocking email dispatching for goal submissions, approvals, and return notifications with retry policies.
               </p>
             </div>
 
-            <div className="rounded-lg border border-border bg-card p-5 shadow-enterprise-sm">
-              <ShieldCheck size={22} className="text-indigo-600 dark:text-indigo-400 mb-3" />
+            <div className="rounded-xl border border-border bg-card p-5 shadow-enterprise-sm">
+              <ShieldCheck size={22} className="text-accent mb-3" />
               <h4 className="font-semibold text-card-foreground text-sm">SHA-256 + Bcrypt + JWT</h4>
               <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
                 Pre-hash encryption bypassing bcrypt 72-byte limitations, paired with stateless Bearer JWTs and role guard middleware.

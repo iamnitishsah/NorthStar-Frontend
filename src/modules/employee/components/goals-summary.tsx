@@ -1,3 +1,6 @@
+import { CheckCircle2, AlertCircle } from "lucide-react"
+import { Panel } from "@/components/ui/surface"
+import { StatusBadge } from "@/components/ui/status-badge"
 import type { Goal } from "@/types/goal"
 
 type Props = {
@@ -20,37 +23,62 @@ function GoalsSummary({ goals, selectedGoals, lockedGoals = [] }: Props) {
   const isComplete = totalWeightage === 100 && goalCount <= 8 && goalCount > 0
 
   return (
-    <section className="rounded-lg border border-border bg-card p-5 shadow-sm shadow-enterprise-sm">
+    <Panel>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            Submission Summary
-          </p>
-          <p className="mt-1 font-mono text-2xl font-semibold text-card-foreground">
-            {totalWeightage}% weightage
+          <div className="flex items-center gap-2.5">
+            <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+              Submission Readiness
+            </p>
+            <StatusBadge
+              tone={isComplete ? "success" : "warning"}
+              icon={
+                isComplete ? (
+                  <CheckCircle2 size={12} />
+                ) : (
+                  <AlertCircle size={12} />
+                )
+              }
+            >
+              {isComplete ? "Ready to Submit" : "Requires 100% Weightage"}
+            </StatusBadge>
+          </div>
+          <p className="mt-2 font-mono text-2xl font-bold text-card-foreground sm:text-3xl">
+            {totalWeightage}% <span className="text-sm font-normal text-muted-foreground">/ 100% weightage</span>
           </p>
         </div>
 
-        <div className="rounded-md border border-border bg-surface px-4 py-2 font-mono text-sm font-semibold text-surface-foreground">
-          {goalCount} / 8 goals
+        <div className="flex items-center gap-2 self-start sm:self-center">
+          <div className="rounded-lg border border-border bg-surface px-4 py-2 font-mono text-sm font-bold text-surface-foreground">
+            {goalCount} / 8 Active Goals
+          </div>
         </div>
       </div>
 
-      <progress
+      <div
         aria-label="Selected goal weightage"
-        className={
-          isComplete
-            ? "mt-4 h-2.5 w-full overflow-hidden rounded-full bg-muted accent-accent"
-            : "mt-4 h-2.5 w-full overflow-hidden rounded-full bg-muted accent-warning"
-        }
-        max={100}
-        value={progressValue}
-      />
+        aria-valuemax={100}
+        aria-valuemin={0}
+        aria-valuenow={progressValue}
+        className="mt-4 h-3 w-full overflow-hidden rounded-full border border-border/60 bg-muted"
+        role="progressbar"
+      >
+        <div
+          className={`h-full rounded-full transition-all duration-300 ${
+            isComplete
+              ? "bg-success"
+              : totalWeightage > 100
+                ? "bg-destructive"
+                : "bg-warning"
+          }`}
+          style={{ width: `${progressValue}%` }}
+        />
+      </div>
 
-      <p className="mt-2 text-sm text-muted-foreground">
-        Submission is calculated from selected editable goals plus already locked goals. {totalGoals} total goals available.
+      <p className="mt-3 text-xs leading-5 text-muted-foreground">
+        Submission is calculated from selected editable goals plus already locked goals ({lockedGoals.length} locked, {totalGoals} total goals in workspace).
       </p>
-    </section>
+    </Panel>
   )
 }
 

@@ -8,8 +8,16 @@ import { toast } from "sonner"
 import Button from "@/components/ui/button"
 import Card from "@/components/ui/card"
 import ErrorState from "@/components/ui/error-state"
+import {
+  Field,
+  FieldError,
+  FieldLabel,
+  Input,
+  Select,
+} from "@/components/ui/form"
 import LoadingSkeleton from "@/components/ui/loading-skeleton"
 import PageHeader from "@/components/ui/page-header"
+import { StatusBadge } from "@/components/ui/status-badge"
 import { cn } from "@/lib/utils"
 import { formatDateIST, formatDateTimeIST } from "@/lib/datetime"
 import { getTodayDateInputValue } from "@/modules/employee/utils/goal-form"
@@ -243,31 +251,30 @@ function SharedGoalsWorkspace() {
   return (
     <div className="space-y-6">
       <PageHeader
+        badge="KPI Cascade"
         title="Shared Goals"
         description="Push departmental KPIs to employees and monitor shared goal copies."
       />
 
-      <Card className="p-5">
+      <Card className="p-6">
         <form className="space-y-5" onSubmit={handleSubmit(submit)}>
           <div className="grid gap-4 lg:grid-cols-2">
-            <div className="space-y-1.5">
-              <span className="text-sm font-medium text-surface-foreground">
-                Shared goal recipients
-              </span>
+            <Field>
+              <FieldLabel>Shared Goal Recipients</FieldLabel>
               <div className="relative">
                 <button
                   aria-expanded={isEmployeePickerOpen}
-                  className="theme-transition flex min-h-11 w-full items-center justify-between gap-3 rounded-lg border border-input bg-card px-3 py-2 text-left text-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
+                  className="theme-transition flex min-h-10 w-full items-center justify-between gap-3 rounded-lg border border-input bg-surface/60 px-3.5 py-2.5 text-left text-sm outline-none hover:bg-hover focus:border-ring focus:bg-card focus:ring-2 focus:ring-ring/20"
                   onClick={() =>
                     setIsEmployeePickerOpen((isOpen) => !isOpen)
                   }
                   type="button"
                 >
-                  <span className="flex items-center gap-2 text-muted-foreground">
-                    <UserCheck size={16} />
+                  <span className="flex items-center gap-2 text-foreground">
+                    <UserCheck size={16} className="text-primary" />
                     {selectedRecipientIds.length === 0
-                      ? "Select employees"
-                      : `${selectedRecipientIds.length} selected`}
+                      ? "Select employees..."
+                      : `${selectedRecipientIds.length} employee(s) selected`}
                   </span>
                   <ChevronDown
                     className={cn(
@@ -279,15 +286,15 @@ function SharedGoalsWorkspace() {
                 </button>
 
                 {isEmployeePickerOpen && (
-                  <div className="absolute z-20 mt-2 w-full rounded-lg border border-border bg-card p-3 shadow-enterprise-md">
-                    <div className="flex items-center gap-2 rounded-md border border-input px-3 py-2">
+                  <div className="absolute z-20 mt-2 w-full rounded-xl border border-border bg-card p-3 shadow-enterprise-lg">
+                    <div className="flex items-center gap-2 rounded-lg border border-input bg-surface/60 px-3 py-2">
                       <Search size={15} className="text-muted-foreground" />
                       <input
-                        className="w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+                        className="w-full bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
                         onChange={(event) =>
                           setEmployeeSearch(event.target.value)
                         }
-                        placeholder="Search employees"
+                        placeholder="Search employees..."
                         type="search"
                         value={employeeSearch}
                       />
@@ -309,7 +316,7 @@ function SharedGoalsWorkspace() {
                           return (
                             <button
                               className={cn(
-                                "flex w-full items-center gap-3 rounded-md px-2 py-2 text-left text-sm hover:bg-hover",
+                                "flex w-full items-center gap-3 rounded-lg px-2.5 py-2 text-left text-sm hover:bg-hover",
                                 isSelected && "bg-primary/10"
                               )}
                               key={employee.employee_id}
@@ -328,7 +335,7 @@ function SharedGoalsWorkspace() {
                                 {isSelected && <Check size={13} />}
                               </span>
                               <span className="min-w-0 flex-1">
-                                <span className="block truncate font-medium text-card-foreground">
+                                <span className="block truncate font-semibold text-card-foreground">
                                   {employee.name}
                                 </span>
                                 <span className="block truncate text-xs text-muted-foreground">
@@ -337,7 +344,7 @@ function SharedGoalsWorkspace() {
                                 </span>
                               </span>
                               {isPrimaryOwner && (
-                                <span className="rounded bg-primary/10 px-2 py-1 text-xs font-semibold text-primary">
+                                <span className="rounded border border-primary/25 bg-primary/10 px-2 py-0.5 text-[11px] font-semibold text-primary">
                                   Primary owner
                                 </span>
                               )}
@@ -354,7 +361,7 @@ function SharedGoalsWorkspace() {
                 <div className="flex flex-wrap gap-2 pt-1">
                   {selectedEmployees.map((employee, index) => (
                     <span
-                      className="inline-flex max-w-full items-center gap-2 rounded-md bg-muted px-2.5 py-1.5 text-xs font-medium text-surface-foreground"
+                      className="inline-flex max-w-full items-center gap-2 rounded-lg border border-border bg-surface px-2.5 py-1 text-xs font-medium text-surface-foreground"
                       key={employee.employee_id}
                     >
                       <span className="truncate">
@@ -374,117 +381,99 @@ function SharedGoalsWorkspace() {
                 </div>
               )}
 
-              {errors.recipient_employee_ids && (
-                <p className="text-sm text-destructive">
-                  {errors.recipient_employee_ids.message}
-                </p>
-              )}
-            </div>
+              <FieldError message={errors.recipient_employee_ids?.message} />
+            </Field>
 
-            <label className="space-y-1.5">
-              <span className="text-sm font-medium text-surface-foreground">
-                Thrust area
-              </span>
-              <input
+            <Field>
+              <FieldLabel>Thrust Area</FieldLabel>
+              <Input
+                placeholder="e.g. Operational Excellence"
                 {...register("thrust_area")}
-                className="w-full rounded-lg border border-input px-3 py-2 text-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
+                hasError={Boolean(errors.thrust_area)}
               />
-            </label>
+              <FieldError message={errors.thrust_area?.message} />
+            </Field>
           </div>
 
           <div className="grid gap-4 lg:grid-cols-2">
-            <label className="space-y-1.5">
-              <span className="text-sm font-medium text-surface-foreground">Title</span>
-              <input
+            <Field>
+              <FieldLabel>Title</FieldLabel>
+              <Input
+                placeholder="e.g. Maintain Zero Critical Security Incidents"
                 {...register("title")}
-                className="w-full rounded-lg border border-input px-3 py-2 text-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
+                hasError={Boolean(errors.title)}
               />
-            </label>
+              <FieldError message={errors.title?.message} />
+            </Field>
 
-            <label className="space-y-1.5">
-              <span className="text-sm font-medium text-surface-foreground">
-                Description
-              </span>
-              <input
+            <Field>
+              <FieldLabel>Description</FieldLabel>
+              <Input
+                placeholder="Optional context or KPI measurement notes"
                 {...register("description")}
-                className="w-full rounded-lg border border-input px-3 py-2 text-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
+                hasError={Boolean(errors.description)}
               />
-            </label>
+              <FieldError message={errors.description?.message} />
+            </Field>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-            <label className="space-y-1.5">
-              <span className="text-sm font-medium text-surface-foreground">
-                UoM type
-              </span>
-              <select
-                {...register("uom_type")}
-                className="w-full rounded-lg border border-input px-3 py-2 text-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
-              >
+            <Field>
+              <FieldLabel>UoM Type</FieldLabel>
+              <Select {...register("uom_type")}>
                 {uomOptions.map((option) => (
                   <option key={option} value={option}>
                     {option}
                   </option>
                 ))}
-              </select>
-            </label>
+              </Select>
+            </Field>
 
-            <label className="space-y-1.5">
-              <span className="text-sm font-medium text-surface-foreground">
-                Measurement
-              </span>
-              <select
-                {...register("measurement_type")}
-                className="w-full rounded-lg border border-input px-3 py-2 text-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
-              >
+            <Field>
+              <FieldLabel>Measurement</FieldLabel>
+              <Select {...register("measurement_type")} disabled={isZeroBased}>
                 {measurementOptions.map((option) => (
                   <option key={option} value={option}>
                     {option}
                   </option>
                 ))}
-              </select>
-            </label>
+              </Select>
+            </Field>
 
-            <label className="space-y-1.5">
-              <span className="text-sm font-medium text-surface-foreground">Target</span>
-              <input
+            <Field>
+              <FieldLabel>Target</FieldLabel>
+              <Input
                 {...register("target_value")}
-                className="w-full rounded-lg border border-input px-3 py-2 text-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
+                hasError={Boolean(errors.target_value)}
                 min={1}
                 step="any"
                 type="number"
               />
-            </label>
+              <FieldError message={errors.target_value?.message} />
+            </Field>
 
-            <label className="space-y-1.5">
-              <span className="text-sm font-medium text-surface-foreground">
-                Default weightage
-              </span>
-              <input
+            <Field>
+              <FieldLabel>Default Weightage (%)</FieldLabel>
+              <Input
                 {...register("default_weightage")}
-                className="w-full rounded-lg border border-input px-3 py-2 text-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
+                hasError={Boolean(errors.default_weightage)}
                 max={100}
                 min={10}
                 type="number"
               />
-            </label>
+              <FieldError message={errors.default_weightage?.message} />
+            </Field>
 
-            <label className="space-y-1.5">
-              <span className="text-sm font-medium text-surface-foreground">
-                Target date{isTimeline ? " *" : ""}
-              </span>
-              <input
+            <Field>
+              <FieldLabel>Target Date{isTimeline ? " *" : ""}</FieldLabel>
+              <Input
                 {...register("target_date")}
-                className="w-full rounded-lg border border-input px-3 py-2 text-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
+                hasError={Boolean(errors.target_date)}
                 min={minTargetDate}
                 type="date"
               />
-              {errors.target_date && (
-                <p className="text-sm text-destructive">
-                  {errors.target_date.message}
-                </p>
-              )}
-            </label>
+              <FieldError message={errors.target_date?.message} />
+            </Field>
           </div>
 
           <div className="flex justify-end border-t border-border pt-5">
@@ -499,14 +488,14 @@ function SharedGoalsWorkspace() {
         </form>
       </Card>
 
-      <Card className="p-5">
-        <div className="flex items-center justify-between gap-4">
+      <Card className="p-6">
+        <div className="flex items-center justify-between gap-4 border-b border-border pb-4">
           <h2 className="text-lg font-semibold text-card-foreground">
             Pushed Shared Goals
           </h2>
-          <span className="rounded bg-muted px-2.5 py-1 text-xs font-medium text-surface-foreground">
-            {pushedGoals.length}
-          </span>
+          <StatusBadge tone="info">
+            {pushedGoals.length} Total
+          </StatusBadge>
         </div>
 
         {pushedGoals.length === 0 ? (
@@ -519,12 +508,12 @@ function SharedGoalsWorkspace() {
               <div className="py-4 first:pt-0 last:pb-0" key={goal.goal_id}>
                 <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
                   <div>
-                    <p className="text-sm text-muted-foreground">{goal.thrust_area}</p>
-                    <h3 className="font-semibold text-card-foreground">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-primary">{goal.thrust_area}</p>
+                    <h3 className="mt-0.5 font-semibold text-card-foreground">
                       {goal.title}
                     </h3>
                     <p className="mt-1 text-sm text-muted-foreground">
-                      {goal.employee_name}
+                      Recipient: <span className="font-medium text-foreground">{goal.employee_name}</span>
                     </p>
                     <p className="mt-1 text-xs text-muted-foreground">
                       {goal.target_date && (
@@ -536,8 +525,13 @@ function SharedGoalsWorkspace() {
                       )}
                     </p>
                   </div>
-                  <div className="text-sm text-muted-foreground">
-                    {goal.weightage}% · {goal.status}
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono text-xs font-semibold text-foreground">
+                      {goal.weightage}%
+                    </span>
+                    <StatusBadge tone={goal.status === "LOCKED" ? "success" : "default"}>
+                      {goal.status}
+                    </StatusBadge>
                   </div>
                 </div>
               </div>

@@ -1,7 +1,10 @@
 import { useState } from "react"
 import {
   AlertCircle,
+  ArrowLeft,
   Building2,
+  Eye,
+  EyeOff,
   KeyRound,
   Mail,
   Moon,
@@ -10,6 +13,8 @@ import {
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { toast } from "sonner"
+import { Link, Navigate, useNavigate } from "react-router-dom"
 
 import { loginUser } from "@/modules/auth/auth-service"
 import { getRoleHomePath } from "@/app/navigation"
@@ -19,21 +24,18 @@ import Button from "@/components/ui/button"
 import { Field, FieldError, FieldLabel, Input } from "@/components/ui/form"
 import { getApiErrorMessage } from "@/services/api-error"
 
-import { toast } from "sonner"
-import { Link, Navigate, useNavigate } from "react-router-dom"
-
 const schema = z.object({
-  identifier: z.string().min(1),
-  password: z.string().min(3),
+  identifier: z.string().trim().min(1, "Please enter your email or employee ID"),
+  password: z.string().min(3, "Password must be at least 3 characters"),
 })
 
 type FormData = z.infer<typeof schema>
 
 function NorthStarMark() {
   return (
-    <div className="northstar-mark flex h-14 w-14 items-center justify-center overflow-hidden rounded-xl">
+    <div className="northstar-mark flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl">
       <img
-        alt=""
+        alt="NorthStar Logo"
         className="h-full w-full"
         src="/favicon.svg"
       />
@@ -46,15 +48,12 @@ function LoginPage() {
   const user = useAuthStore((state) => state.user)
   const token = useAuthStore((state) => state.accessToken)
 
-  const [loginType, setLoginType] = useState<
-    "email" | "employee_id"
-  >("email")
+  const [loginType, setLoginType] = useState<"email" | "employee_id">("email")
   const [loginError, setLoginError] = useState<string | null>(null)
+  const [showPassword, setShowPassword] = useState(false)
   const { theme, toggleTheme } = useTheme()
 
-  const setAuth = useAuthStore(
-    (state) => state.setAuth
-  )
+  const setAuth = useAuthStore((state) => state.setAuth)
 
   const {
     register,
@@ -75,32 +74,34 @@ function LoginPage() {
       const payload =
         loginType === "email"
           ? {
-              email: data.identifier,
+              email: data.identifier.trim(),
               password: data.password,
             }
           : {
-              employee_id: data.identifier,
+              employee_id: data.identifier.trim(),
               password: data.password,
             }
 
       const response = await loginUser(payload)
 
       if (!response?.response?.user || !response.response.access) {
-        throw new Error("Login response was incomplete. Please contact Admin operations.")
+        throw new Error(
+          "Login response was incomplete. Please contact Admin operations."
+        )
       }
 
-      const user = {
+      const authUser = {
         ...response.response.user,
         user_id: response.response.user_id,
       }
-      const token = response.response.access
+      const accessToken = response.response.access
       const refreshToken = response.response.refresh
 
-      setAuth(user, token, refreshToken)
+      setAuth(authUser, accessToken, refreshToken)
 
       toast.success("Login successful")
 
-      navigate(getRoleHomePath(user.role))
+      navigate(getRoleHomePath(authUser.role))
     } catch (error: unknown) {
       const message =
         error instanceof Error && !("isAxiosError" in error)
@@ -113,125 +114,158 @@ function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-dvh items-center justify-center bg-background p-4 text-foreground">
+    <div className="relative flex min-h-dvh items-center justify-center overflow-hidden bg-background p-4 text-foreground sm:p-6">
+      {/* Subtle Ambient Background Accent */}
+      <div className="pointer-events-none absolute -top-32 left-1/2 -z-10 h-80 w-80 -translate-x-1/2 rounded-full bg-primary/10 blur-3xl sm:h-[460px] sm:w-[460px]" />
+
       <button
         aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
-        className="theme-transition absolute right-4 top-4 rounded-md border border-border bg-card p-2 text-muted-foreground shadow-enterprise-sm hover:bg-hover hover:text-foreground"
+        className="theme-transition absolute right-4 top-4 inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-xs font-semibold text-surface-foreground shadow-enterprise-sm hover:border-primary/35 hover:bg-hover"
         onClick={toggleTheme}
         title={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
         type="button"
       >
-        {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+        {theme === "dark" ? (
+          <>
+            <Sun size={16} className="text-warning" />
+            <span>Light</span>
+          </>
+        ) : (
+          <>
+            <Moon size={16} className="text-primary" />
+            <span>Dark</span>
+          </>
+        )}
       </button>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="dashboard-surface w-full max-w-[440px] space-y-6 rounded-lg p-8 shadow-enterprise-md"
+        className="dashboard-surface w-full max-w-[440px] space-y-6 rounded-2xl border border-border p-7 shadow-enterprise-md sm:p-8"
       >
         <div className="space-y-4">
-          <NorthStarMark />
-          <div>
-          <h1 className="text-3xl font-bold text-card-foreground">
-            NorthStar
-          </h1>
+          <Link
+            to="/"
+            className="theme-transition inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground"
+          >
+            <ArrowLeft size={14} />
+            Back to Home
+          </Link>
 
-          <p className="mt-1 text-sm text-muted-foreground">
-            Enterprise goal lifecycle and performance operations
-          </p>
+          <div className="flex items-center gap-4">
+            <NorthStarMark />
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight text-card-foreground sm:text-3xl">
+                Sign In
+              </h1>
+              <p className="mt-0.5 text-xs text-muted-foreground sm:text-sm">
+                NorthStar Performance Operations Console
+              </p>
+            </div>
           </div>
         </div>
 
         {loginError && (
           <div
-            className="flex items-start gap-3 rounded-lg border border-destructive/25 bg-destructive/10 px-4 py-3 text-sm text-destructive"
+            className="flex items-start gap-3 rounded-xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive"
             role="alert"
           >
             <AlertCircle className="mt-0.5 shrink-0" size={18} />
             <div>
-              <p className="font-semibold">Login failed</p>
-              <p className="mt-0.5">{loginError}</p>
+              <p className="font-semibold">Authentication Error</p>
+              <p className="mt-0.5 text-xs leading-5">{loginError}</p>
             </div>
           </div>
         )}
 
-        <div className="grid grid-cols-2 gap-2 rounded-lg border border-border bg-surface p-1">
-          <label className={`theme-transition flex cursor-pointer items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium ${loginType === "email" ? "bg-card text-primary shadow-enterprise-sm" : "text-muted-foreground hover:text-foreground"}`}>
+        <div className="grid grid-cols-2 gap-1.5 rounded-xl border border-border bg-surface p-1.5">
+          <label
+            className={`theme-transition flex cursor-pointer items-center justify-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold sm:text-sm ${
+              loginType === "email"
+                ? "border border-primary/25 bg-card text-primary shadow-enterprise-sm"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
             <input
               className="sr-only"
               type="radio"
               checked={loginType === "email"}
-              onChange={() =>
-                setLoginType("email")
-              }
+              onChange={() => setLoginType("email")}
             />
-            <Mail size={16} />
-            Email
+            <Mail size={15} />
+            Work Email
           </label>
 
-          <label className={`theme-transition flex cursor-pointer items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium ${loginType === "employee_id" ? "bg-card text-primary shadow-enterprise-sm" : "text-muted-foreground hover:text-foreground"}`}>
+          <label
+            className={`theme-transition flex cursor-pointer items-center justify-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold sm:text-sm ${
+              loginType === "employee_id"
+                ? "border border-primary/25 bg-card text-primary shadow-enterprise-sm"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
             <input
               className="sr-only"
               type="radio"
-              checked={
-                loginType === "employee_id"
-              }
-              onChange={() =>
-                setLoginType("employee_id")
-              }
+              checked={loginType === "employee_id"}
+              onChange={() => setLoginType("employee_id")}
             />
-            <Building2 size={16} />
+            <Building2 size={15} />
             Employee ID
           </label>
         </div>
 
-        <Field>
-          <FieldLabel>
-            {loginType === "email" ? "Work email" : "Employee ID"}
-          </FieldLabel>
-          <Input
-            type="text"
-            placeholder={
-              loginType === "email"
-                ? "name@company.com"
-                : "EMP-0000"
-            }
-            {...register("identifier")}
-            className="py-3"
-            hasError={Boolean(errors.identifier)}
-          />
-          <FieldError message={errors.identifier?.message} />
-        </Field>
+        <div className="space-y-4">
+          <Field>
+            <FieldLabel>
+              {loginType === "email" ? "Work Email" : "Employee ID"}
+            </FieldLabel>
+            <Input
+              type="text"
+              placeholder={
+                loginType === "email" ? "name@company.com" : "e.g. EMP001"
+              }
+              {...register("identifier")}
+              hasError={Boolean(errors.identifier)}
+            />
+            <FieldError message={errors.identifier?.message} />
+          </Field>
 
-        <Field>
-          <FieldLabel>
-            Password
-          </FieldLabel>
-          <Input
-            type="password"
-            placeholder="Enter password"
-            {...register("password")}
-            className="py-3"
-            hasError={Boolean(errors.password)}
-          />
-          <FieldError message={errors.password?.message} />
-        </Field>
+          <Field>
+            <FieldLabel>Password</FieldLabel>
+            <div className="relative">
+              <Input
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter your password"
+                {...register("password")}
+                className="pr-10"
+                hasError={Boolean(errors.password)}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
+            <FieldError message={errors.password?.message} />
+          </Field>
+        </div>
 
         <Button
           disabled={isSubmitting}
-          className="w-full p-3"
+          className="w-full py-3"
           type="submit"
         >
           <KeyRound size={16} />
-          {isSubmitting
-            ? "Logging in..."
-            : "Login"}
+          {isSubmitting ? "Signing in..." : "Sign In to Console"}
         </Button>
 
-        <div className="rounded-md border border-border bg-surface px-3 py-2.5 text-center text-xs text-muted-foreground">
+        <div className="rounded-xl border border-border bg-surface px-4 py-3 text-center text-xs text-muted-foreground">
           <span>Don&apos;t have an account? </span>
           <Link
             to="/register"
-            className="font-semibold text-primary underline-offset-4 hover:underline"
+            className="font-bold text-primary underline-offset-4 hover:underline"
           >
             Register new account
           </Link>
