@@ -20,6 +20,13 @@ import {
   X,
 } from "lucide-react"
 
+import InfoTooltip from "@/components/ui/info-tooltip"
+import {
+  GOAL_HELP,
+  getGoalStatusHelp,
+  getMeasurementHelp,
+  getUomHelp,
+} from "@/lib/goal-help"
 import { useTheme } from "@/app/providers/use-theme"
 import { useAuthStore } from "@/app/store/auth-store"
 import { getRoleHomePath } from "@/app/navigation"
@@ -219,10 +226,12 @@ function LandingPage() {
               <div className="flex flex-wrap items-center gap-2">
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-success/25 bg-success/12 px-3 py-1 text-xs font-semibold text-success">
                   <CheckCircle2 size={13} />
-                  Status: LOCKED & Active
+                  <span>Status: LOCKED & Active</span>
+                  <InfoTooltip content={getGoalStatusHelp("LOCKED")} />
                 </span>
-                <span className="rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-                  Weightage: 100/100%
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+                  <span>Weightage: 100/100%</span>
+                  <InfoTooltip content={GOAL_HELP.submissionReadiness} />
                 </span>
               </div>
             </div>
@@ -232,21 +241,36 @@ function LandingPage() {
               {/* Card 1 */}
               <div className="rounded-xl border border-border bg-card p-4 shadow-enterprise-sm">
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
-                  <span>Revenue Growth</span>
-                  <span className="font-mono font-semibold text-foreground">30% Weight</span>
+                  <span className="inline-flex items-center gap-1">
+                    <span>Revenue Growth</span>
+                    <InfoTooltip content={GOAL_HELP.thrustArea} />
+                  </span>
+                  <span className="inline-flex items-center gap-1 font-mono font-semibold text-foreground">
+                    <span>30% Weight</span>
+                    <InfoTooltip content={GOAL_HELP.weightage} />
+                  </span>
                 </div>
-                <h4 className="mt-2 font-semibold text-card-foreground text-sm">
-                  Achieve Q3 Enterprise Pipeline Target
-                </h4>
+                <div className="mt-2 flex items-center gap-1.5">
+                  <h4 className="font-semibold text-card-foreground text-sm">
+                    Achieve Q3 Enterprise Pipeline Target
+                  </h4>
+                  <InfoTooltip content={GOAL_HELP.title} />
+                </div>
                 <div className="mt-4 flex items-center justify-between text-xs">
-                  <span className="text-muted-foreground">UoM: NUMERIC (MIN)</span>
+                  <span className="inline-flex items-center gap-1 text-muted-foreground">
+                    <span>UoM: NUMERIC (MIN)</span>
+                    <InfoTooltip content={getMeasurementHelp("MIN", "NUMERIC")} />
+                  </span>
                   <span className="font-mono font-semibold text-success">85% Complete</span>
                 </div>
                 <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-muted border border-border/50">
                   <div className="h-full bg-success rounded-full" style={{ width: "85%" }} />
                 </div>
                 <div className="mt-3 flex items-center justify-between text-[11px] text-muted-foreground border-t border-border pt-2">
-                  <span>Target: $500,000</span>
+                  <span className="inline-flex items-center gap-1">
+                    <span>Target: $500,000</span>
+                    <InfoTooltip content={GOAL_HELP.targetValue} />
+                  </span>
                   <span>Actual: $425,000</span>
                 </div>
               </div>
@@ -254,41 +278,69 @@ function LandingPage() {
               {/* Card 2 */}
               <div className="rounded-xl border border-border bg-card p-4 shadow-enterprise-sm">
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
-                  <span>Operational Excellence</span>
-                  <span className="font-mono font-semibold text-foreground">35% Weight</span>
+                  <span className="inline-flex items-center gap-1">
+                    <span>Operational Excellence</span>
+                    <InfoTooltip content={GOAL_HELP.thrustArea} />
+                  </span>
+                  <span className="inline-flex items-center gap-1 font-mono font-semibold text-foreground">
+                    <span>35% Weight</span>
+                    <InfoTooltip content={GOAL_HELP.weightage} />
+                  </span>
                 </div>
-                <h4 className="mt-2 font-semibold text-card-foreground text-sm">
-                  Reduce Service Turnaround Time (TAT)
-                </h4>
+                <div className="mt-2 flex items-center gap-1.5">
+                  <h4 className="font-semibold text-card-foreground text-sm">
+                    Reduce Service Turnaround Time (TAT)
+                  </h4>
+                  <InfoTooltip content={GOAL_HELP.title} />
+                </div>
                 <div className="mt-4 flex items-center justify-between text-xs">
-                  <span className="text-muted-foreground">UoM: NUMERIC (MAX)</span>
+                  <span className="inline-flex items-center gap-1 text-muted-foreground">
+                    <span>UoM: NUMERIC (MAX)</span>
+                    <InfoTooltip content={getMeasurementHelp("MAX", "NUMERIC")} />
+                  </span>
                   <span className="font-mono font-semibold text-info">92% On-Track</span>
                 </div>
                 <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-muted border border-border/50">
                   <div className="h-full bg-info rounded-full" style={{ width: "92%" }} />
                 </div>
                 <div className="mt-3 flex items-center justify-between text-[11px] text-muted-foreground border-t border-border pt-2">
-                  <span>Target: 24 Hours</span>
+                  <span className="inline-flex items-center gap-1">
+                    <span>Target: 24 Hours</span>
+                    <InfoTooltip content={GOAL_HELP.targetValue} />
+                  </span>
                   <span>Actual: 26 Hours</span>
                 </div>
               </div>
 
               {/* Card 3 - Shared Goal */}
               <div className="rounded-xl border border-primary/35 bg-card p-4 shadow-enterprise-sm relative">
-                <div className="absolute top-2.5 right-2.5">
+                <div className="absolute top-2.5 right-2.5 flex items-center gap-1">
                   <span className="rounded border border-primary/25 bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
                     SHARED KPI
                   </span>
+                  <InfoTooltip content={GOAL_HELP.sharedGoalBadge} />
                 </div>
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
-                  <span>Safety & Compliance</span>
-                  <span className="font-mono font-semibold text-foreground">35% Weight</span>
+                  <span className="inline-flex items-center gap-1">
+                    <span>Safety & Compliance</span>
+                    <InfoTooltip content={GOAL_HELP.thrustArea} />
+                  </span>
+                  <span className="inline-flex items-center gap-1 font-mono font-semibold text-foreground pr-20">
+                    <span>35% Weight</span>
+                    <InfoTooltip content={GOAL_HELP.weightage} />
+                  </span>
                 </div>
-                <h4 className="mt-2 font-semibold text-card-foreground text-sm pr-16">
-                  Maintain Zero Critical Safety Incidents
-                </h4>
+                <div className="mt-2 flex items-center gap-1.5 pr-16">
+                  <h4 className="font-semibold text-card-foreground text-sm">
+                    Maintain Zero Critical Safety Incidents
+                  </h4>
+                  <InfoTooltip content={GOAL_HELP.title} />
+                </div>
                 <div className="mt-4 flex items-center justify-between text-xs">
-                  <span className="text-muted-foreground">UoM: ZERO_BASED</span>
+                  <span className="inline-flex items-center gap-1 text-muted-foreground">
+                    <span>UoM: ZERO_BASED</span>
+                    <InfoTooltip content={getUomHelp("ZERO_BASED")} />
+                  </span>
                   <span className="font-mono font-semibold text-success">100% (0 Incidents)</span>
                 </div>
                 <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-muted border border-border/50">
@@ -486,7 +538,10 @@ function LandingPage() {
                     <span className="text-xs font-bold text-primary border border-primary/25 bg-primary/10 px-2 py-0.5 rounded">
                       Step 1
                     </span>
-                    <span className="text-xs font-mono font-semibold text-muted-foreground">DRAFT</span>
+                    <span className="inline-flex items-center gap-1 text-xs font-mono font-semibold text-muted-foreground">
+                      <span>DRAFT</span>
+                      <InfoTooltip content={getGoalStatusHelp("DRAFT")} />
+                    </span>
                   </div>
                   <h4 className="mt-3 font-semibold text-card-foreground text-sm">
                     Creation & Alignment
@@ -507,7 +562,10 @@ function LandingPage() {
                     <span className="text-xs font-bold text-warning border border-warning/25 bg-warning/12 px-2 py-0.5 rounded">
                       Step 2
                     </span>
-                    <span className="text-xs font-mono font-semibold text-muted-foreground">SUBMITTED</span>
+                    <span className="inline-flex items-center gap-1 text-xs font-mono font-semibold text-muted-foreground">
+                      <span>SUBMITTED</span>
+                      <InfoTooltip content={getGoalStatusHelp("SUBMITTED")} />
+                    </span>
                   </div>
                   <h4 className="mt-3 font-semibold text-card-foreground text-sm">
                     Batch Submission
@@ -528,7 +586,10 @@ function LandingPage() {
                     <span className="text-xs font-bold text-info border border-info/25 bg-info/12 px-2 py-0.5 rounded">
                       Step 3
                     </span>
-                    <span className="text-xs font-mono font-semibold text-muted-foreground">REVIEW</span>
+                    <span className="inline-flex items-center gap-1 text-xs font-mono font-semibold text-muted-foreground">
+                      <span>RETURNED</span>
+                      <InfoTooltip content={getGoalStatusHelp("RETURNED")} />
+                    </span>
                   </div>
                   <h4 className="mt-3 font-semibold text-card-foreground text-sm">
                     Manager Review
@@ -549,7 +610,10 @@ function LandingPage() {
                     <span className="text-xs font-bold text-success border border-success/25 bg-success/12 px-2 py-0.5 rounded">
                       Step 4
                     </span>
-                    <span className="text-xs font-mono font-semibold text-muted-foreground">LOCKED</span>
+                    <span className="inline-flex items-center gap-1 text-xs font-mono font-semibold text-muted-foreground">
+                      <span>LOCKED</span>
+                      <InfoTooltip content={getGoalStatusHelp("LOCKED")} />
+                    </span>
                   </div>
                   <h4 className="mt-3 font-semibold text-card-foreground text-sm">
                     Lockdown & Check-Ins
@@ -570,7 +634,10 @@ function LandingPage() {
                     <span className="text-xs font-bold text-destructive border border-destructive/25 bg-destructive/12 px-2 py-0.5 rounded">
                       Step 5
                     </span>
-                    <span className="text-xs font-mono font-semibold text-muted-foreground">UNLOCKED?</span>
+                    <span className="inline-flex items-center gap-1 text-xs font-mono font-semibold text-muted-foreground">
+                      <span>UNLOCKED?</span>
+                      <InfoTooltip content={getGoalStatusHelp("ADMIN_UNLOCKED")} />
+                    </span>
                   </div>
                   <h4 className="mt-3 font-semibold text-card-foreground text-sm">
                     Governance & Unlocks
@@ -604,7 +671,10 @@ function LandingPage() {
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <div className="rounded-lg border border-border bg-surface p-4">
-                <span className="font-semibold text-xs text-primary">NUMERIC / PERCENTAGE (MIN)</span>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-semibold text-xs text-primary">NUMERIC / PERCENTAGE (MIN)</span>
+                  <InfoTooltip content={getMeasurementHelp("MIN", "NUMERIC")} />
+                </div>
                 <p className="mt-1 font-mono text-xs font-bold text-foreground">
                   (Achievement / Target) × 100%
                 </p>
@@ -614,7 +684,10 @@ function LandingPage() {
               </div>
 
               <div className="rounded-lg border border-border bg-surface p-4">
-                <span className="font-semibold text-xs text-primary">NUMERIC / PERCENTAGE (MAX)</span>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-semibold text-xs text-primary">NUMERIC / PERCENTAGE (MAX)</span>
+                  <InfoTooltip content={getMeasurementHelp("MAX", "NUMERIC")} />
+                </div>
                 <p className="mt-1 font-mono text-xs font-bold text-foreground">
                   (Target / Achievement) × 100%
                 </p>
@@ -624,7 +697,10 @@ function LandingPage() {
               </div>
 
               <div className="rounded-lg border border-border bg-surface p-4">
-                <span className="font-semibold text-xs text-primary">ZERO_BASED</span>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-semibold text-xs text-primary">ZERO_BASED</span>
+                  <InfoTooltip content={getUomHelp("ZERO_BASED")} />
+                </div>
                 <p className="mt-1 font-mono text-xs font-bold text-foreground">
                   Achievement == 0 ? 100% : 0%
                 </p>
@@ -634,7 +710,10 @@ function LandingPage() {
               </div>
 
               <div className="rounded-lg border border-border bg-surface p-4">
-                <span className="font-semibold text-xs text-primary">TIMELINE</span>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-semibold text-xs text-primary">TIMELINE</span>
+                  <InfoTooltip content={getUomHelp("TIMELINE")} />
+                </div>
                 <p className="mt-1 font-mono text-xs font-bold text-foreground">
                   Date-Based Degradation
                 </p>

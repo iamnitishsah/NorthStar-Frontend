@@ -1,3 +1,5 @@
+import InfoTooltip from "@/components/ui/info-tooltip"
+import { GOAL_HELP } from "@/lib/goal-help"
 import type { Goal } from "@/types/goal"
 import type { EmployeeReviewGroup } from "../utils/review-goals"
 import ManagerProgressCard from "./manager-progress-card"
@@ -23,8 +25,9 @@ function ManagerProgressSection({
           </p>
         </div>
 
-        <div className="rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-surface-foreground">
-          Total weightage: {group.totalWeightage}%
+        <div className="flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-surface-foreground">
+          <span>Total weightage: {group.totalWeightage}%</span>
+          <InfoTooltip content={GOAL_HELP.weightage} />
         </div>
       </div>
 

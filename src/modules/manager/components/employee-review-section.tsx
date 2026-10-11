@@ -1,6 +1,8 @@
+import InfoTooltip from "@/components/ui/info-tooltip"
+import { GOAL_HELP } from "@/lib/goal-help"
+import type { Goal } from "@/types/goal"
 import type { EmployeeReviewGroup } from "../utils/review-goals"
 import ReviewGoalCard from "./review-goal-card"
-import type { Goal } from "@/types/goal"
 
 type Props = {
   group: EmployeeReviewGroup
@@ -25,8 +27,9 @@ function EmployeeReviewSection({
           </p>
         </div>
 
-        <div className="rounded-md border border-border bg-card px-4 py-2 font-mono text-sm font-semibold text-surface-foreground">
-          Total weightage: {group.totalWeightage}%
+        <div className="flex items-center gap-2 rounded-md border border-border bg-card px-4 py-2 font-mono text-sm font-semibold text-surface-foreground">
+          <span>Total weightage: {group.totalWeightage}%</span>
+          <InfoTooltip content={GOAL_HELP.submissionReadiness} />
         </div>
       </div>
 

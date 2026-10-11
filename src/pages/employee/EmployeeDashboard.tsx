@@ -3,10 +3,12 @@ import { CheckCircle2, Clock, Target, TrendingUp } from "lucide-react"
 
 import Card from "@/components/ui/card"
 import ErrorState from "@/components/ui/error-state"
+import InfoTooltip from "@/components/ui/info-tooltip"
 import LoadingSkeleton from "@/components/ui/loading-skeleton"
 import PageHeader from "@/components/ui/page-header"
 import StatCard from "@/components/ui/stat-card"
 import { MetricTile } from "@/components/ui/surface"
+import { GOAL_HELP, getGoalStatusHelp } from "@/lib/goal-help"
 import { useMyGoals } from "@/modules/employee/hooks/use-my-goals"
 import ProgressBar from "@/modules/quarterly/components/progress-bar"
 
@@ -64,19 +66,42 @@ function EmployeeDashboard() {
       />
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard icon={Target} label="Total Goals" value={data.length} />
-        <StatCard icon={CheckCircle2} label="Locked Goals" value={lockedGoals.length} />
-        <StatCard icon={Clock} label="In Review" value={submittedGoals.length} />
-        <StatCard icon={TrendingUp} label="Avg Progress" value={`${averageProgress}%`} />
+        <StatCard
+          icon={Target}
+          label="Total Goals"
+          tooltip={GOAL_HELP.goalDefinition}
+          value={data.length}
+        />
+        <StatCard
+          icon={CheckCircle2}
+          label="Locked Goals"
+          tooltip={getGoalStatusHelp("LOCKED")}
+          value={lockedGoals.length}
+        />
+        <StatCard
+          icon={Clock}
+          label="In Review"
+          tooltip={getGoalStatusHelp("SUBMITTED")}
+          value={submittedGoals.length}
+        />
+        <StatCard
+          icon={TrendingUp}
+          label="Avg Progress"
+          tooltip={GOAL_HELP.quarterlyProgressSection}
+          value={`${averageProgress}%`}
+        />
       </div>
 
       <div className="grid gap-5 xl:grid-cols-3">
         <Card className="p-6 xl:col-span-2">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <h2 className="text-lg font-semibold text-card-foreground">
-                Goal Sheet Readiness
-              </h2>
+              <div className="flex items-center gap-2">
+                <h2 className="text-lg font-semibold text-card-foreground">
+                  Goal Sheet Readiness
+                </h2>
+                <InfoTooltip content={GOAL_HELP.submissionReadiness} />
+              </div>
               <p className="text-sm text-muted-foreground">
                 Submission requires exactly 100% total weightage.
               </p>
@@ -96,19 +121,28 @@ function EmployeeDashboard() {
           </h2>
           <div className="mt-4 grid gap-3 text-sm">
             <MetricTile className="flex items-center justify-between">
-              <span className="text-muted-foreground">Draft / Returned</span>
+              <span className="flex items-center gap-1.5 text-muted-foreground">
+                <span>Draft / Returned</span>
+                <InfoTooltip content={getGoalStatusHelp("DRAFT")} />
+              </span>
               <span className="font-mono font-bold text-surface-foreground">
                 {editableGoals.length}
               </span>
             </MetricTile>
             <MetricTile className="flex items-center justify-between">
-              <span className="text-muted-foreground">Completed</span>
+              <span className="flex items-center gap-1.5 text-muted-foreground">
+                <span>Completed</span>
+                <InfoTooltip content={GOAL_HELP.progressStatus} />
+              </span>
               <span className="font-mono font-bold text-surface-foreground">
                 {completedGoals.length}
               </span>
             </MetricTile>
             <MetricTile className="flex items-center justify-between">
-              <span className="text-muted-foreground">Shared Goals</span>
+              <span className="flex items-center gap-1.5 text-muted-foreground">
+                <span>Shared Goals</span>
+                <InfoTooltip content={GOAL_HELP.sharedGoalBadge} />
+              </span>
               <span className="font-mono font-bold text-surface-foreground">
                 {data.filter((goal) => goal.is_shared).length}
               </span>

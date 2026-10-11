@@ -3,11 +3,13 @@ import { ClipboardCheck, LineChart, Target, Users } from "lucide-react"
 
 import Card from "@/components/ui/card"
 import ErrorState from "@/components/ui/error-state"
+import InfoTooltip from "@/components/ui/info-tooltip"
 import LoadingSkeleton from "@/components/ui/loading-skeleton"
 import PageHeader from "@/components/ui/page-header"
 import StatCard from "@/components/ui/stat-card"
 import EmptyState from "@/components/ui/empty-state"
 import { MetricTile } from "@/components/ui/surface"
+import { GOAL_HELP, getGoalStatusHelp } from "@/lib/goal-help"
 import {
   useManagerGoals,
   useReviewGoals,
@@ -71,16 +73,39 @@ function ManagerDashboard() {
       />
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard icon={ClipboardCheck} label="Pending Review" value={pendingGoals} />
-        <StatCard icon={Target} label="Locked Goals" value={lockedGoals} />
-        <StatCard icon={Users} label="Team Members" value={teamMembers} />
-        <StatCard icon={LineChart} label="Tracked Groups" value={lockedGroups.length} />
+        <StatCard
+          icon={ClipboardCheck}
+          label="Pending Review"
+          tooltip={getGoalStatusHelp("SUBMITTED")}
+          value={pendingGoals}
+        />
+        <StatCard
+          icon={Target}
+          label="Locked Goals"
+          tooltip={getGoalStatusHelp("LOCKED")}
+          value={lockedGoals}
+        />
+        <StatCard
+          icon={Users}
+          label="Team Members"
+          tooltip={GOAL_HELP.managerCalibration}
+          value={teamMembers}
+        />
+        <StatCard
+          icon={LineChart}
+          label="Tracked Groups"
+          tooltip={GOAL_HELP.quarterlyProgressSection}
+          value={lockedGroups.length}
+        />
       </div>
 
       <Card className="p-6">
-        <h2 className="text-lg font-semibold text-card-foreground">
-          Review Queue
-        </h2>
+        <div className="flex items-center gap-2">
+          <h2 className="text-lg font-semibold text-card-foreground">
+            Review Queue
+          </h2>
+          <InfoTooltip content={GOAL_HELP.managerCalibration} />
+        </div>
         <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
           {reviewGroups.length === 0 ? (
             <div className="md:col-span-2 xl:col-span-3">
@@ -97,8 +122,9 @@ function ManagerDashboard() {
                 key={group.employeeName}
               >
                 <p className="truncate font-semibold text-surface-foreground">{group.employeeName}</p>
-                <p className="mt-1 font-mono text-xs text-muted-foreground">
-                  {group.goalCount} goals · {group.totalWeightage}% weightage
+                <p className="mt-1 flex items-center gap-1.5 font-mono text-xs text-muted-foreground">
+                  <span>{group.goalCount} goals · {group.totalWeightage}% weightage</span>
+                  <InfoTooltip content={GOAL_HELP.weightage} />
                 </p>
               </MetricTile>
             ))

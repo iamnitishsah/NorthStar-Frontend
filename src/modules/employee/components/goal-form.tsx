@@ -12,7 +12,14 @@ import {
   Select,
   Textarea,
 } from "@/components/ui/form"
+import InfoTooltip from "@/components/ui/info-tooltip"
 import { SectionCard } from "@/components/ui/surface"
+import {
+  GOAL_HELP,
+  getMeasurementHelp,
+  getUomFieldHelp,
+  getUomHelp,
+} from "@/lib/goal-help"
 import type { Goal } from "@/types/goal"
 
 import {
@@ -63,9 +70,15 @@ function GoalForm({
     control,
     name: "uom_type",
   })
+  const measurementType = useWatch({
+    control,
+    name: "measurement_type",
+  })
   const isTimeline = uomType === "TIMELINE"
   const isZeroBased = uomType === "ZERO_BASED"
   const minTargetDate = getTodayDateInputValue()
+  const activeUomHelp = getUomHelp(uomType)
+  const activeMeasurementHelp = getMeasurementHelp(measurementType, uomType)
 
   useEffect(() => {
     reset(getGoalFormDefaultValues(goal))
@@ -99,9 +112,30 @@ function GoalForm({
       )}
 
       <SectionCard>
-        <p className="text-sm font-semibold text-surface-foreground">
-          Goal Definition
-        </p>
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-1.5">
+            <p className="text-sm font-semibold text-surface-foreground">
+              Goal Definition
+            </p>
+            <InfoTooltip content={GOAL_HELP.goalDefinition} />
+          </div>
+          <div className="flex flex-wrap items-center gap-2 text-xs">
+            <span className="inline-flex items-center gap-1 rounded-md border border-border bg-card px-2.5 py-1 font-mono font-semibold text-card-foreground">
+              <span>UoM: {uomType}</span>
+              <InfoTooltip content={activeUomHelp} />
+            </span>
+            <span className="inline-flex items-center gap-1 rounded-md border border-border bg-card px-2.5 py-1 font-mono font-semibold text-card-foreground">
+              <span>
+                Measure: {isZeroBased ? "MIN" : measurementType} (
+                {(isZeroBased ? "MIN" : measurementType) === "MIN"
+                  ? "Higher is better"
+                  : "Lower is better"}
+                )
+              </span>
+              <InfoTooltip content={activeMeasurementHelp} />
+            </span>
+          </div>
+        </div>
         <FieldHint className="mt-1 text-sm">
           Capture the business outcome, measurement basis, and governance weightage.
         </FieldHint>
@@ -109,7 +143,7 @@ function GoalForm({
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Field>
-          <FieldLabel>
+          <FieldLabel tooltip={GOAL_HELP.thrustArea}>
             Thrust Area
           </FieldLabel>
           <Input
@@ -122,7 +156,7 @@ function GoalForm({
         </Field>
 
         <Field>
-          <FieldLabel>
+          <FieldLabel tooltip={GOAL_HELP.title}>
             Title
           </FieldLabel>
           <Input
@@ -136,7 +170,7 @@ function GoalForm({
       </div>
 
       <Field>
-        <FieldLabel>
+        <FieldLabel tooltip={GOAL_HELP.description}>
           Description
         </FieldLabel>
         <Textarea
@@ -151,7 +185,7 @@ function GoalForm({
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Field>
-          <FieldLabel>
+          <FieldLabel tooltip={getUomFieldHelp(uomType)}>
             UOM Type
           </FieldLabel>
           <Select
@@ -170,32 +204,34 @@ function GoalForm({
           <FieldError message={errors.uom_type?.message} />
         </Field>
 
-        {!isZeroBased && (
-          <Field>
-            <FieldLabel>
-              Measurement Type
-            </FieldLabel>
-            <Select
-              {...register("measurement_type")}
-              aria-disabled={isEditMode && isShared}
-              className={isEditMode && isShared ? "pointer-events-none bg-muted text-muted-foreground" : undefined}
-              hasError={Boolean(errors.measurement_type)}
-              tabIndex={isEditMode && isShared ? -1 : undefined}
-            >
-              {measurementOptions.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </Select>
-            <FieldError message={errors.measurement_type?.message} />
-          </Field>
-        )}
+        <Field>
+          <FieldLabel tooltip={activeMeasurementHelp}>
+            Measurement Type (MIN / MAX)
+          </FieldLabel>
+          <Select
+            {...register("measurement_type")}
+            aria-disabled={isZeroBased || (isEditMode && isShared)}
+            className={
+              isZeroBased || (isEditMode && isShared)
+                ? "pointer-events-none bg-muted text-muted-foreground"
+                : undefined
+            }
+            hasError={Boolean(errors.measurement_type)}
+            tabIndex={isZeroBased || (isEditMode && isShared) ? -1 : undefined}
+          >
+            {measurementOptions.map((option) => (
+              <option key={option} value={option}>
+                {option} ({option === "MIN" ? "Higher is better" : "Lower is better"})
+              </option>
+            ))}
+          </Select>
+          <FieldError message={errors.measurement_type?.message} />
+        </Field>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
         <Field>
-          <FieldLabel>
+          <FieldLabel tooltip={GOAL_HELP.targetValue}>
             Target Value
           </FieldLabel>
           <Input
@@ -210,7 +246,7 @@ function GoalForm({
         </Field>
 
         <Field>
-          <FieldLabel>
+          <FieldLabel tooltip={GOAL_HELP.weightage}>
             Weightage
           </FieldLabel>
           <Input
@@ -224,7 +260,7 @@ function GoalForm({
         </Field>
 
         <Field>
-          <FieldLabel>
+          <FieldLabel tooltip={GOAL_HELP.targetDate}>
             Target Date
             {isTimeline ? " *" : ""}
           </FieldLabel>

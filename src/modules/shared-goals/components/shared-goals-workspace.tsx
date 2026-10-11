@@ -15,11 +15,20 @@ import {
   Input,
   Select,
 } from "@/components/ui/form"
+import InfoTooltip from "@/components/ui/info-tooltip"
 import LoadingSkeleton from "@/components/ui/loading-skeleton"
 import PageHeader from "@/components/ui/page-header"
 import { StatusBadge } from "@/components/ui/status-badge"
 import { cn } from "@/lib/utils"
 import { formatDateIST, formatDateTimeIST } from "@/lib/datetime"
+import {
+  GOAL_HELP,
+  getGoalStatusHelp,
+  getGoalTargetHelp,
+  getMeasurementHelp,
+  getUomFieldHelp,
+  getUomHelp,
+} from "@/lib/goal-help"
 import { getTodayDateInputValue } from "@/modules/employee/utils/goal-form"
 import { useOrganizationHierarchy } from "@/modules/organization/hooks/use-organization-hierarchy"
 import { getApiErrorMessage } from "@/services/api-error"
@@ -153,12 +162,17 @@ function SharedGoalsWorkspace() {
   })
 
   const uomType = useWatch({ control, name: "uom_type" })
+  const measurementType = useWatch({ control, name: "measurement_type" })
   const selectedRecipientIds = useWatch({
     control,
     name: "recipient_employee_ids",
   }) ?? []
   const isTimeline = uomType === "TIMELINE"
   const isZeroBased = uomType === "ZERO_BASED"
+  const activeMeasurementHelp = getMeasurementHelp(
+    isZeroBased ? "MIN" : (measurementType ?? "MIN"),
+    uomType
+  )
   const employeeOptions = useMemo(
     () => flattenEmployeeOptions(hierarchyQuery.data ?? []),
     [hierarchyQuery.data]
@@ -260,7 +274,9 @@ function SharedGoalsWorkspace() {
         <form className="space-y-5" onSubmit={handleSubmit(submit)}>
           <div className="grid gap-4 lg:grid-cols-2">
             <Field>
-              <FieldLabel>Shared Goal Recipients</FieldLabel>
+              <FieldLabel tooltip={GOAL_HELP.sharedRecipients}>
+                Shared Goal Recipients
+              </FieldLabel>
               <div className="relative">
                 <button
                   aria-expanded={isEmployeePickerOpen}
@@ -385,7 +401,7 @@ function SharedGoalsWorkspace() {
             </Field>
 
             <Field>
-              <FieldLabel>Thrust Area</FieldLabel>
+              <FieldLabel tooltip={GOAL_HELP.thrustArea}>Thrust Area</FieldLabel>
               <Input
                 placeholder="e.g. Operational Excellence"
                 {...register("thrust_area")}
@@ -397,7 +413,7 @@ function SharedGoalsWorkspace() {
 
           <div className="grid gap-4 lg:grid-cols-2">
             <Field>
-              <FieldLabel>Title</FieldLabel>
+              <FieldLabel tooltip={GOAL_HELP.title}>Title</FieldLabel>
               <Input
                 placeholder="e.g. Maintain Zero Critical Security Incidents"
                 {...register("title")}
@@ -407,7 +423,7 @@ function SharedGoalsWorkspace() {
             </Field>
 
             <Field>
-              <FieldLabel>Description</FieldLabel>
+              <FieldLabel tooltip={GOAL_HELP.description}>Description</FieldLabel>
               <Input
                 placeholder="Optional context or KPI measurement notes"
                 {...register("description")}
@@ -419,7 +435,7 @@ function SharedGoalsWorkspace() {
 
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
             <Field>
-              <FieldLabel>UoM Type</FieldLabel>
+              <FieldLabel tooltip={getUomFieldHelp(uomType)}>UoM Type</FieldLabel>
               <Select {...register("uom_type")}>
                 {uomOptions.map((option) => (
                   <option key={option} value={option}>
@@ -430,18 +446,18 @@ function SharedGoalsWorkspace() {
             </Field>
 
             <Field>
-              <FieldLabel>Measurement</FieldLabel>
+              <FieldLabel tooltip={activeMeasurementHelp}>Measurement</FieldLabel>
               <Select {...register("measurement_type")} disabled={isZeroBased}>
                 {measurementOptions.map((option) => (
                   <option key={option} value={option}>
-                    {option}
+                    {option} ({option === "MIN" ? "Higher is better" : "Lower is better"})
                   </option>
                 ))}
               </Select>
             </Field>
 
             <Field>
-              <FieldLabel>Target</FieldLabel>
+              <FieldLabel tooltip={GOAL_HELP.targetValue}>Target</FieldLabel>
               <Input
                 {...register("target_value")}
                 hasError={Boolean(errors.target_value)}
@@ -453,7 +469,7 @@ function SharedGoalsWorkspace() {
             </Field>
 
             <Field>
-              <FieldLabel>Default Weightage (%)</FieldLabel>
+              <FieldLabel tooltip={GOAL_HELP.weightage}>Default Weightage (%)</FieldLabel>
               <Input
                 {...register("default_weightage")}
                 hasError={Boolean(errors.default_weightage)}
@@ -465,7 +481,7 @@ function SharedGoalsWorkspace() {
             </Field>
 
             <Field>
-              <FieldLabel>Target Date{isTimeline ? " *" : ""}</FieldLabel>
+              <FieldLabel tooltip={GOAL_HELP.targetDate}>Target Date{isTimeline ? " *" : ""}</FieldLabel>
               <Input
                 {...register("target_date")}
                 hasError={Boolean(errors.target_date)}
@@ -490,9 +506,12 @@ function SharedGoalsWorkspace() {
 
       <Card className="p-6">
         <div className="flex items-center justify-between gap-4 border-b border-border pb-4">
-          <h2 className="text-lg font-semibold text-card-foreground">
-            Pushed Shared Goals
-          </h2>
+          <div className="flex items-center gap-2">
+            <h2 className="text-lg font-semibold text-card-foreground">
+              Pushed Shared Goals
+            </h2>
+            <InfoTooltip content={GOAL_HELP.sharedGoalBadge} />
+          </div>
           <StatusBadge tone="info">
             {pushedGoals.length} Total
           </StatusBadge>
@@ -506,32 +525,66 @@ function SharedGoalsWorkspace() {
           <div className="mt-4 divide-y divide-border">
             {pushedGoals.map((goal) => (
               <div className="py-4 first:pt-0 last:pb-0" key={goal.goal_id}>
-                <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
+                <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-wider text-primary">{goal.thrust_area}</p>
-                    <h3 className="mt-0.5 font-semibold text-card-foreground">
-                      {goal.title}
-                    </h3>
-                    <p className="mt-1 text-sm text-muted-foreground">
-                      Recipient: <span className="font-medium text-foreground">{goal.employee_name}</span>
-                    </p>
-                    <p className="mt-1 text-xs text-muted-foreground">
+                    <div className="flex items-center gap-1.5">
+                      <p className="text-xs font-semibold uppercase tracking-wider text-primary">
+                        {goal.thrust_area}
+                      </p>
+                      <InfoTooltip content={GOAL_HELP.thrustArea} />
+                    </div>
+                    <div className="mt-0.5 flex items-center gap-1.5">
+                      <h3 className="font-semibold text-card-foreground">
+                        {goal.title}
+                      </h3>
+                      <InfoTooltip content={GOAL_HELP.title} />
+                    </div>
+                    <div className="mt-1 flex items-center gap-1.5 text-sm text-muted-foreground">
+                      <span>
+                        Recipient: <span className="font-medium text-foreground">{goal.employee_name}</span>
+                      </span>
+                      <InfoTooltip content={GOAL_HELP.sharedRecipients} />
+                    </div>
+                    <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+                      <span className="inline-flex items-center gap-1 rounded border border-border bg-surface px-2 py-0.5 font-mono text-surface-foreground">
+                        <span>Target: {goal.target_value} {goal.uom_type}</span>
+                        <InfoTooltip content={getGoalTargetHelp(goal)} />
+                      </span>
+                      <span className="inline-flex items-center gap-1 rounded border border-border bg-surface px-2 py-0.5 font-mono text-surface-foreground">
+                        <span>UoM: {goal.uom_type}</span>
+                        <InfoTooltip content={getUomHelp(goal.uom_type)} />
+                      </span>
+                      <span className="inline-flex items-center gap-1 rounded border border-border bg-surface px-2 py-0.5 font-mono text-surface-foreground">
+                        <span>Measure: {goal.measurement_type}</span>
+                        <InfoTooltip
+                          content={getMeasurementHelp(goal.measurement_type, goal.uom_type)}
+                        />
+                      </span>
                       {goal.target_date && (
-                        <span>Target date: {formatDateIST(goal.target_date)}</span>
+                        <span className="inline-flex items-center gap-1">
+                          <span>Target date: {formatDateIST(goal.target_date)}</span>
+                          <InfoTooltip content={GOAL_HELP.targetDate} />
+                        </span>
                       )}
-                      {goal.target_date && goal.created_at && <span> · </span>}
                       {goal.created_at && (
-                        <span>Created: {formatDateTimeIST(goal.created_at)}</span>
+                        <span className="inline-flex items-center gap-1">
+                          <span>Created: {formatDateTimeIST(goal.created_at)}</span>
+                          <InfoTooltip content={GOAL_HELP.createdTimestamp} />
+                        </span>
                       )}
-                    </p>
+                    </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="font-mono text-xs font-semibold text-foreground">
-                      {goal.weightage}%
+                    <span className="inline-flex items-center gap-1 font-mono text-xs font-semibold text-foreground">
+                      <span>{goal.weightage}%</span>
+                      <InfoTooltip content={GOAL_HELP.weightage} />
                     </span>
-                    <StatusBadge tone={goal.status === "LOCKED" ? "success" : "default"}>
-                      {goal.status}
-                    </StatusBadge>
+                    <div className="flex items-center gap-1">
+                      <StatusBadge tone={goal.status === "LOCKED" ? "success" : "default"}>
+                        {goal.status}
+                      </StatusBadge>
+                      <InfoTooltip content={getGoalStatusHelp(goal.status)} />
+                    </div>
                   </div>
                 </div>
               </div>

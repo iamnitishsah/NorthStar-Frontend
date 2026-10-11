@@ -11,7 +11,15 @@ import {
   Input,
   Select,
 } from "@/components/ui/form"
-import { ModalFooter, ModalShell } from "@/components/ui/surface"
+import InfoTooltip from "@/components/ui/info-tooltip"
+import { ModalFooter, ModalShell, SectionCard } from "@/components/ui/surface"
+import {
+  GOAL_HELP,
+  getCheckinAchievementHelp,
+  getGoalTargetHelp,
+  getMeasurementHelp,
+  getUomHelp,
+} from "@/lib/goal-help"
 import type {
   Goal,
   ProgressStatus,
@@ -125,9 +133,46 @@ function QuarterlyCheckinModal({
           id="quarterly-checkin-form"
           onSubmit={handleSubmit(submit)}
         >
+          <SectionCard className="space-y-2 text-xs">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <span className="inline-flex items-center gap-1.5 font-semibold text-muted-foreground">
+                <span>Thrust Area: {goal.thrust_area}</span>
+                <InfoTooltip content={GOAL_HELP.thrustArea} />
+              </span>
+              <span className="inline-flex items-center gap-1.5 font-mono font-semibold text-surface-foreground">
+                <span>Weightage: {goal.weightage}%</span>
+                <InfoTooltip content={GOAL_HELP.weightage} />
+              </span>
+            </div>
+            <div className="flex flex-wrap items-center gap-2 pt-1 font-mono text-surface-foreground">
+              <span className="inline-flex items-center gap-1 rounded border border-border bg-card px-2 py-1">
+                <span>
+                  Target: <strong>{goal.target_value}</strong>
+                </span>
+                <InfoTooltip content={getGoalTargetHelp(goal)} />
+              </span>
+              <span className="inline-flex items-center gap-1 rounded border border-border bg-card px-2 py-1">
+                <span>UoM: {goal.uom_type}</span>
+                <InfoTooltip content={getUomHelp(goal.uom_type)} />
+              </span>
+              <span className="inline-flex items-center gap-1 rounded border border-border bg-card px-2 py-1">
+                <span>
+                  Measure: {goal.measurement_type} (
+                  {goal.measurement_type === "MIN"
+                    ? "Higher is better"
+                    : "Lower is better"}
+                  )
+                </span>
+                <InfoTooltip
+                  content={getMeasurementHelp(goal.measurement_type, goal.uom_type)}
+                />
+              </span>
+            </div>
+          </SectionCard>
+
           <div className="grid gap-4 sm:grid-cols-2">
             <Field>
-              <FieldLabel>
+              <FieldLabel tooltip={GOAL_HELP.quarterSequence}>
                 Quarter
               </FieldLabel>
               <Select
@@ -142,7 +187,7 @@ function QuarterlyCheckinModal({
             </Field>
 
             <Field>
-              <FieldLabel>
+              <FieldLabel tooltip={getCheckinAchievementHelp(goal)}>
                 {isTimeline ? "Achievement Date" : "Achievement Value"}
               </FieldLabel>
               <Input
@@ -159,7 +204,7 @@ function QuarterlyCheckinModal({
           </div>
 
           <Field>
-            <FieldLabel>
+            <FieldLabel tooltip={GOAL_HELP.progressStatus}>
               Progress Status
             </FieldLabel>
             <Select

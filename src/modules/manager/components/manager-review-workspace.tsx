@@ -2,6 +2,8 @@ import { useMemo, useState } from "react"
 import axios from "axios"
 import { toast } from "sonner"
 
+import InfoTooltip from "@/components/ui/info-tooltip"
+import { GOAL_HELP } from "@/lib/goal-help"
 import type {
   ApproveGoalPayload,
   Goal,
@@ -103,9 +105,12 @@ function ManagerReviewWorkspace() {
           <p className="text-xs font-semibold uppercase tracking-wide text-primary">
             Manager Review Queue
           </p>
-          <h1 className="mt-1 text-3xl font-bold text-card-foreground">
-            Review Goals
-          </h1>
+          <div className="mt-1 flex items-center gap-2">
+            <h1 className="text-3xl font-bold text-card-foreground">
+              Review Goals
+            </h1>
+            <InfoTooltip content={GOAL_HELP.managerCalibration} />
+          </div>
 
           <p className="mt-1 text-muted-foreground">
             Approve, tweak, or return submitted employee goals

@@ -4,7 +4,14 @@ import { z } from "zod"
 
 import Button from "@/components/ui/button"
 import { Field, FieldError, FieldLabel, Input } from "@/components/ui/form"
+import InfoTooltip from "@/components/ui/info-tooltip"
 import { ModalFooter, ModalShell, SectionCard } from "@/components/ui/surface"
+import {
+  GOAL_HELP,
+  getGoalTargetHelp,
+  getMeasurementHelp,
+  getUomHelp,
+} from "@/lib/goal-help"
 import type { ApproveGoalPayload, Goal } from "@/types/goal"
 
 type Props = {
@@ -82,18 +89,45 @@ function ApproveGoalModal({
           id="approve-goal-form"
           onSubmit={handleSubmit(submit)}
         >
-          <SectionCard>
-            <p className="text-sm text-muted-foreground">
-              {goal.thrust_area}
-            </p>
-            <h3 className="font-semibold text-surface-foreground">
-              {goal.title}
-            </h3>
+          <SectionCard className="space-y-2">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                <span>{goal.thrust_area}</span>
+                <InfoTooltip content={GOAL_HELP.thrustArea} />
+              </div>
+              <div className="flex flex-wrap items-center gap-2 font-mono text-xs text-surface-foreground">
+                <span className="inline-flex items-center gap-1 rounded border border-border bg-card px-2 py-0.5">
+                  <span>UoM: {goal.uom_type}</span>
+                  <InfoTooltip content={getUomHelp(goal.uom_type)} />
+                </span>
+                <span className="inline-flex items-center gap-1 rounded border border-border bg-card px-2 py-0.5">
+                  <span>
+                    Measure: {goal.measurement_type} (
+                    {goal.measurement_type === "MIN"
+                      ? "Higher is better"
+                      : "Lower is better"}
+                    )
+                  </span>
+                  <InfoTooltip
+                    content={getMeasurementHelp(
+                      goal.measurement_type,
+                      goal.uom_type
+                    )}
+                  />
+                </span>
+              </div>
+            </div>
+            <div className="flex items-center justify-between gap-2">
+              <h3 className="font-semibold text-surface-foreground">
+                {goal.title}
+              </h3>
+              <InfoTooltip content={getGoalTargetHelp(goal)} />
+            </div>
           </SectionCard>
 
           <div className="grid gap-4 sm:grid-cols-2">
             <Field>
-              <FieldLabel>
+              <FieldLabel tooltip={GOAL_HELP.targetValue}>
                 Target Value
               </FieldLabel>
               <Input
@@ -108,7 +142,7 @@ function ApproveGoalModal({
             </Field>
 
             <Field>
-              <FieldLabel>
+              <FieldLabel tooltip={GOAL_HELP.weightage}>
                 Weightage
               </FieldLabel>
               <Input

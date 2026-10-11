@@ -16,7 +16,9 @@ import {
 } from "recharts"
 
 import EmptyState from "@/components/ui/empty-state"
+import InfoTooltip from "@/components/ui/info-tooltip"
 import { Panel } from "@/components/ui/surface"
+import { GOAL_HELP, type GoalHelpContent } from "@/lib/goal-help"
 import type { ChartDatum } from "../utils/admin-analytics"
 
 type Props = {
@@ -84,18 +86,23 @@ function ChartTooltip({
 function ChartCard({
   title,
   subtitle,
+  tooltip,
   children,
 }: {
   title: string
   subtitle?: string
+  tooltip?: GoalHelpContent
   children: React.ReactNode
 }) {
   return (
     <Panel className="min-w-0 p-5">
       <div className="mb-4 border-b border-border pb-3">
-        <h2 className="text-base font-bold text-card-foreground sm:text-lg">
-          {title}
-        </h2>
+        <div className="flex items-center gap-2">
+          <h2 className="text-base font-bold text-card-foreground sm:text-lg">
+            {title}
+          </h2>
+          {tooltip && <InfoTooltip content={tooltip} />}
+        </div>
         {subtitle && (
           <p className="mt-0.5 text-xs text-muted-foreground">{subtitle}</p>
         )}
@@ -139,6 +146,7 @@ function AdminCharts({
       <ChartCard
         title="Goal Distribution by Thrust Area"
         subtitle="Strategic alignment breakdown across active goals"
+        tooltip={GOAL_HELP.thrustArea}
       >
         {distributionCounts.length === 0 ? (
           <EmptyChart label="No goal distribution data available." />
@@ -174,6 +182,7 @@ function AdminCharts({
       <ChartCard
         title="Team QoQ Average Progress"
         subtitle="Quarter-on-quarter progression trajectory across locked goals"
+        tooltip={GOAL_HELP.quarterlyProgressSection}
       >
         {quarterlyTrend.every((item) => item.value === 0) ? (
           <EmptyChart label="No QoQ analytics available." />
@@ -201,6 +210,7 @@ function AdminCharts({
       <ChartCard
         title="Goal Distribution by UoM"
         subtitle="Measurement model distribution across workforce goals"
+        tooltip={GOAL_HELP.uomType}
       >
         {uomCounts.length === 0 ? (
           <EmptyChart label="No UoM distribution data available." />
@@ -222,6 +232,7 @@ function AdminCharts({
       <ChartCard
         title="Goal Lifecycle Signals"
         subtitle="Current status distribution across active, locked, and returned goals"
+        tooltip={GOAL_HELP.goalDefinition}
       >
         {lifecycleCounts.every((item) => item.value === 0) ? (
           <EmptyChart label="No goal lifecycle data available." />

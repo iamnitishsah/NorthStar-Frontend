@@ -1,6 +1,8 @@
 import { CheckCircle2, AlertCircle } from "lucide-react"
+import InfoTooltip from "@/components/ui/info-tooltip"
 import { Panel } from "@/components/ui/surface"
 import { StatusBadge } from "@/components/ui/status-badge"
+import { GOAL_HELP } from "@/lib/goal-help"
 import type { Goal } from "@/types/goal"
 
 type Props = {
@@ -26,10 +28,11 @@ function GoalsSummary({ goals, selectedGoals, lockedGoals = [] }: Props) {
     <Panel>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <div className="flex items-center gap-2.5">
+          <div className="flex flex-wrap items-center gap-2">
             <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
               Submission Readiness
             </p>
+            <InfoTooltip content={GOAL_HELP.submissionReadiness} />
             <StatusBadge
               tone={isComplete ? "success" : "warning"}
               icon={
@@ -43,14 +46,17 @@ function GoalsSummary({ goals, selectedGoals, lockedGoals = [] }: Props) {
               {isComplete ? "Ready to Submit" : "Requires 100% Weightage"}
             </StatusBadge>
           </div>
-          <p className="mt-2 font-mono text-2xl font-bold text-card-foreground sm:text-3xl">
-            {totalWeightage}% <span className="text-sm font-normal text-muted-foreground">/ 100% weightage</span>
+          <p className="mt-2 flex items-center gap-2 font-mono text-2xl font-bold text-card-foreground sm:text-3xl">
+            <span>{totalWeightage}%</span>
+            <span className="text-sm font-normal text-muted-foreground">/ 100% weightage</span>
+            <InfoTooltip content={GOAL_HELP.weightage} />
           </p>
         </div>
 
         <div className="flex items-center gap-2 self-start sm:self-center">
-          <div className="rounded-lg border border-border bg-surface px-4 py-2 font-mono text-sm font-bold text-surface-foreground">
-            {goalCount} / 8 Active Goals
+          <div className="flex items-center gap-2 rounded-lg border border-border bg-surface px-4 py-2 font-mono text-sm font-bold text-surface-foreground">
+            <span>{goalCount} / 8 Active Goals</span>
+            <InfoTooltip content={GOAL_HELP.activeGoalsLimit} />
           </div>
         </div>
       </div>

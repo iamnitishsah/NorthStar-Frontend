@@ -2,6 +2,8 @@ import { useMemo, useState } from "react"
 import axios from "axios"
 import { toast } from "sonner"
 
+import InfoTooltip from "@/components/ui/info-tooltip"
+import { GOAL_HELP } from "@/lib/goal-help"
 import type { Goal, QuarterlyCommentPayload } from "@/types/goal"
 
 import {
@@ -75,9 +77,12 @@ function ManagerProgressWorkspace() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold">
-            Quarterly Progress
-          </h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-3xl font-bold">
+              Quarterly Progress
+            </h1>
+            <InfoTooltip content={GOAL_HELP.quarterlyProgressSection} />
+          </div>
 
           <p className="mt-1 text-muted-foreground">
             Track employee check-ins, progress trends, and manager comments

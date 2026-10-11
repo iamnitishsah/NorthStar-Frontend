@@ -4,10 +4,12 @@ import { toast } from "sonner"
 import Button from "@/components/ui/button"
 import EmptyState from "@/components/ui/empty-state"
 import ErrorState from "@/components/ui/error-state"
+import InfoTooltip from "@/components/ui/info-tooltip"
 import LoadingSkeleton from "@/components/ui/loading-skeleton"
 import { Panel } from "@/components/ui/surface"
 import { StatusBadge } from "@/components/ui/status-badge"
 import { formatDateTimeIST, formatRelativeTimeIST } from "@/lib/datetime"
+import { GOAL_HELP } from "@/lib/goal-help"
 import { getApiErrorMessage } from "@/services/api-error"
 import type { UnlockRequest } from "@/types/goal"
 
@@ -76,9 +78,12 @@ function UnlockRequestsPanel() {
     <Panel className="min-w-0">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
-          <h2 className="text-lg font-semibold text-card-foreground">
-            Pending Unlock Requests
-          </h2>
+          <div className="flex items-center gap-2">
+            <h2 className="text-lg font-semibold text-card-foreground">
+              Pending Unlock Requests
+            </h2>
+            <InfoTooltip content={GOAL_HELP.unlockReason} />
+          </div>
           <p className="mt-1 text-sm text-muted-foreground">
             Review employee requests before locked goals move to admin unlocked.
           </p>
@@ -131,9 +136,10 @@ function UnlockRequestsPanel() {
                       {request.status}
                     </StatusBadge>
                   </div>
-                  <p className="mt-1 break-all text-sm text-muted-foreground">
-                    Goal ID: {request.goal_id}
-                  </p>
+                  <div className="mt-1 flex items-center gap-1.5 text-sm text-muted-foreground">
+                    <span className="break-all">Goal ID: {request.goal_id}</span>
+                    <InfoTooltip content={GOAL_HELP.goalId} />
+                  </div>
                   {request.created_at && (
                     <p className="mt-1 text-xs text-muted-foreground">
                       Requested{" "}
@@ -148,9 +154,10 @@ function UnlockRequestsPanel() {
                     </p>
                   )}
                   {request.reason && (
-                    <p className="mt-2 text-sm leading-6 text-surface-foreground">
-                      {request.reason}
-                    </p>
+                    <div className="mt-2 flex items-start gap-1.5 text-sm leading-6 text-surface-foreground">
+                      <span>{request.reason}</span>
+                      <InfoTooltip content={GOAL_HELP.unlockReason} />
+                    </div>
                   )}
                 </div>
 

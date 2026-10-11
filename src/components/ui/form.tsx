@@ -6,7 +6,9 @@ import type {
   TextareaHTMLAttributes,
 } from "react"
 
+import type { GoalHelpContent } from "@/lib/goal-help"
 import { cn } from "@/lib/utils"
+import InfoTooltip from "./info-tooltip"
 
 type FieldProps = LabelHTMLAttributes<HTMLLabelElement> & {
   children: ReactNode
@@ -23,18 +25,27 @@ function Field({ children, className, ...props }: FieldProps) {
   )
 }
 
+type FieldLabelProps = LabelHTMLAttributes<HTMLSpanElement> & {
+  tooltip?: GoalHelpContent
+}
+
 function FieldLabel({
   className,
+  children,
+  tooltip,
   ...props
-}: LabelHTMLAttributes<HTMLSpanElement>) {
+}: FieldLabelProps) {
   return (
     <span
       className={cn(
-        "block text-xs font-semibold uppercase tracking-wide text-surface-foreground",
+        "flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-surface-foreground",
         className
       )}
       {...props}
-    />
+    >
+      <span>{children}</span>
+      {tooltip && <InfoTooltip content={tooltip} />}
+    </span>
   )
 }
 

@@ -5,8 +5,10 @@ import { toast } from "sonner"
 
 import Button from "@/components/ui/button"
 import { Input } from "@/components/ui/form"
+import InfoTooltip from "@/components/ui/info-tooltip"
 import { Panel } from "@/components/ui/surface"
 import { StatusBadge } from "@/components/ui/status-badge"
+import { getGoalStatusHelp } from "@/lib/goal-help"
 import { useUnlockGoal } from "../hooks/use-admin"
 
 type Props = {
@@ -47,9 +49,12 @@ function UnlockGoalPanel({ lockedGoalCandidates }: Props) {
           <LockOpen size={18} />
         </div>
         <div className="min-w-0">
-          <h2 className="text-lg font-semibold text-card-foreground">
-            Goal Unlock Control
-          </h2>
+          <div className="flex items-center gap-2">
+            <h2 className="text-lg font-semibold text-card-foreground">
+              Goal Unlock Control
+            </h2>
+            <InfoTooltip content={getGoalStatusHelp("ADMIN_UNLOCKED")} />
+          </div>
           <p className="text-sm text-muted-foreground">
             Unlock a locked goal by goal ID. Candidate IDs are inferred from audit logs when available.
           </p>

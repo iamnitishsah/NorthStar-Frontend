@@ -1,9 +1,16 @@
 import { MessageSquare, Share2 } from "lucide-react"
 import { memo } from "react"
 
+import InfoTooltip from "@/components/ui/info-tooltip"
 import { MetricTile } from "@/components/ui/surface"
 import { ProgressBadge, StatusBadge } from "@/components/ui/status-badge"
 import { formatDateIST } from "@/lib/datetime"
+import {
+  GOAL_HELP,
+  getCheckinAchievementHelp,
+  getMeasurementHelp,
+  getProgressStatusBadgeHelp,
+} from "@/lib/goal-help"
 import type { Goal } from "@/types/goal"
 
 import ProgressBar from "./progress-bar"
@@ -43,14 +50,20 @@ function QuarterlyTimeline({
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h4 className="text-sm font-semibold text-card-foreground">
-          Quarterly Progress
-        </h4>
+        <div className="flex items-center gap-1.5">
+          <h4 className="text-sm font-semibold text-card-foreground">
+            Quarterly Progress
+          </h4>
+          <InfoTooltip content={GOAL_HELP.quarterlyProgressSection} />
+        </div>
 
         {goal.is_shared && (
-          <StatusBadge tone="info" icon={<Share2 size={13} />}>
-            Synced shared goal
-          </StatusBadge>
+          <div className="flex items-center gap-1.5">
+            <StatusBadge tone="info" icon={<Share2 size={13} />}>
+              Synced shared goal
+            </StatusBadge>
+            <InfoTooltip content={GOAL_HELP.sharedGoalBadge} />
+          </div>
         )}
       </div>
 
@@ -64,24 +77,43 @@ function QuarterlyTimeline({
           return (
             <MetricTile key={quarter}>
               <div className="flex items-center justify-between gap-2">
-                <span className="font-medium text-surface-foreground">
-                  {getQuarterLabel(quarter)}
-                </span>
-                <ProgressBadge tone={getProgressTone(checkin?.progress_status)}>
-                  {checkin?.progress_status ?? "PENDING"}
-                </ProgressBadge>
+                <div className="flex items-center gap-1">
+                  <span className="font-medium text-surface-foreground">
+                    {getQuarterLabel(quarter)}
+                  </span>
+                  <InfoTooltip content={GOAL_HELP.quarterSequence} />
+                </div>
+                <div className="flex items-center gap-1">
+                  <ProgressBadge tone={getProgressTone(checkin?.progress_status)}>
+                    {checkin?.progress_status ?? "PENDING"}
+                  </ProgressBadge>
+                  <InfoTooltip
+                    content={getProgressStatusBadgeHelp(checkin?.progress_status)}
+                  />
+                </div>
               </div>
 
               <div className="mt-3 space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Achievement</span>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="flex items-center gap-1 text-muted-foreground">
+                    <span>Achievement</span>
+                    <InfoTooltip content={getCheckinAchievementHelp(goal)} />
+                  </span>
                   <span className="font-medium text-surface-foreground">
                     {formatAchievement(goal, achievement)}
                   </span>
                 </div>
 
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Progress</span>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="flex items-center gap-1 text-muted-foreground">
+                    <span>Progress</span>
+                    <InfoTooltip
+                      content={getMeasurementHelp(
+                        goal.measurement_type,
+                        goal.uom_type
+                      )}
+                    />
+                  </span>
                   <span className="font-medium text-surface-foreground">
                     {progress === null || progress === undefined
                       ? "-"
@@ -93,9 +125,17 @@ function QuarterlyTimeline({
               </div>
 
               {checkin?.manager_note && (
-                <p className="mt-3 rounded-md border border-border bg-card p-2 text-xs leading-5 text-muted-foreground">
-                  {checkin.manager_note}
-                </p>
+                <div className="mt-3 rounded-md border border-border bg-card p-2">
+                  <div className="mb-1 flex items-center gap-1">
+                    <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                      Manager Note
+                    </span>
+                    <InfoTooltip content={GOAL_HELP.managerQuarterlyComment} />
+                  </div>
+                  <p className="text-xs leading-5 text-muted-foreground">
+                    {checkin.manager_note}
+                  </p>
+                </div>
               )}
 
               {onComment && checkin && (

@@ -11,6 +11,7 @@ import Button from "@/components/ui/button"
 import ErrorState from "@/components/ui/error-state"
 import LoadingSkeleton from "@/components/ui/loading-skeleton"
 import PageHeader from "@/components/ui/page-header"
+import { GOAL_HELP, getGoalStatusHelp } from "@/lib/goal-help"
 import { getApiErrorMessage } from "@/services/api-error"
 import {
   useAuditLogs,
@@ -106,16 +107,19 @@ function AdminDashboardWorkspace() {
         <MetricCard
           icon={Target}
           label="Total Goals"
+          tooltip={GOAL_HELP.goalDefinition}
           value={metrics.totalGoals}
         />
         <MetricCard
           icon={Lock}
           label="Locked Goals"
+          tooltip={getGoalStatusHelp("LOCKED")}
           value={metrics.lockedGoals}
         />
         <MetricCard
           icon={CheckCircle2}
           label="Quarterly Completion"
+          tooltip={GOAL_HELP.quarterlyProgressSection}
           value={`${metrics.quarterlyCompletion}%`}
         />
       </div>

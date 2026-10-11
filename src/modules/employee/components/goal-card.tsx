@@ -1,9 +1,17 @@
 import { ClipboardCheck, LockOpen, Pencil, Share2, Trash2 } from "lucide-react"
 
 import Button from "@/components/ui/button"
+import InfoTooltip from "@/components/ui/info-tooltip"
 import { MetricTile, Panel } from "@/components/ui/surface"
 import { StatusBadge } from "@/components/ui/status-badge"
 import { formatDateIST, formatDateTimeIST } from "@/lib/datetime"
+import {
+  GOAL_HELP,
+  getGoalStatusHelp,
+  getGoalTargetHelp,
+  getMeasurementHelp,
+  getUomHelp,
+} from "@/lib/goal-help"
 import type { Goal } from "@/types/goal"
 
 import GoalStatusBadge from "./goal-status-badge"
@@ -41,13 +49,19 @@ function GoalCard({
     <Panel className="space-y-4 hover:border-primary/30 hover:shadow-enterprise-md">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
-          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            {goal.thrust_area}
-          </p>
+          <div className="flex items-center gap-1.5">
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              {goal.thrust_area}
+            </p>
+            <InfoTooltip content={GOAL_HELP.thrustArea} />
+          </div>
 
-          <h3 className="break-words text-lg font-semibold text-card-foreground">
-            {goal.title}
-          </h3>
+          <div className="mt-0.5 flex items-center gap-1.5">
+            <h3 className="break-words text-lg font-semibold text-card-foreground">
+              {goal.title}
+            </h3>
+            <InfoTooltip content={GOAL_HELP.title} />
+          </div>
         </div>
 
         <div className="flex shrink-0 flex-col items-end gap-2">
@@ -65,16 +79,23 @@ function GoalCard({
                 }
                 type="checkbox"
               />
-              Select
+              <span>Select</span>
+              <InfoTooltip content={GOAL_HELP.selectGoalForSubmission} />
             </label>
           )}
-          <GoalStatusBadge
-            status={goal.status}
-          />
+          <div className="flex items-center gap-1.5">
+            <GoalStatusBadge
+              status={goal.status}
+            />
+            <InfoTooltip content={getGoalStatusHelp(goal.status)} />
+          </div>
           {goal.is_shared && (
-            <StatusBadge tone="accent" icon={<Share2 size={13} />}>
-              Shared
-            </StatusBadge>
+            <div className="flex items-center gap-1.5">
+              <StatusBadge tone="accent" icon={<Share2 size={13} />}>
+                Shared
+              </StatusBadge>
+              <InfoTooltip content={GOAL_HELP.sharedGoalBadge} />
+            </div>
           )}
         </div>
       </div>
@@ -83,25 +104,75 @@ function GoalCard({
         {description}
       </p>
 
-      <div className="grid grid-cols-2 gap-3 text-sm">
-        <MetricTile>
-          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            Target
+      {goal.manager_note && (
+        <div className="rounded-lg border border-warning/30 bg-warning/10 p-3 text-xs">
+          <div className="flex items-center gap-1.5 font-semibold text-warning">
+            <span>Manager Feedback Note</span>
+            <InfoTooltip content={GOAL_HELP.managerReturnNote} />
+          </div>
+          <p className="mt-1 leading-relaxed text-surface-foreground">
+            {goal.manager_note}
           </p>
+        </div>
+      )}
 
-          <p className="mt-1 truncate font-mono font-semibold text-surface-foreground">
-            {goal.target_value}{" "}
+      <div className="grid grid-cols-2 gap-3 text-sm sm:grid-cols-3">
+        <MetricTile>
+          <div className="flex items-center justify-between gap-1.5">
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Target & UoM
+            </p>
+            <InfoTooltip content={getGoalTargetHelp(goal)} />
+          </div>
+
+          <p className="mt-1 flex items-center gap-1.5 truncate font-mono font-semibold text-surface-foreground">
+            <span>{goal.target_value}</span>
             <span className="text-muted-foreground">
               {goal.uom_type}
             </span>
+            <InfoTooltip content={getUomHelp(goal.uom_type)} />
+          </p>
+        </MetricTile>
+
+        <MetricTile>
+          <div className="flex items-center justify-between gap-1.5">
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Measure
+            </p>
+            <InfoTooltip
+              content={getMeasurementHelp(goal.measurement_type, goal.uom_type)}
+            />
+          </div>
+
+          <p className="mt-1 truncate font-mono font-semibold text-surface-foreground">
+            {goal.measurement_type}{" "}
+            <span className="text-xs font-normal text-muted-foreground">
+              ({goal.measurement_type === "MIN" ? "Higher is better" : "Lower is better"})
+            </span>
+          </p>
+        </MetricTile>
+
+        <MetricTile>
+          <div className="flex items-center justify-between gap-1.5">
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Weightage
+            </p>
+            <InfoTooltip content={GOAL_HELP.weightage} />
+          </div>
+
+          <p className="mt-1 truncate font-mono font-semibold text-surface-foreground">
+            {goal.weightage}%
           </p>
         </MetricTile>
 
         {goal.target_date && (
           <MetricTile>
-            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              Target Date
-            </p>
+            <div className="flex items-center justify-between gap-1.5">
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                Target Date
+              </p>
+              <InfoTooltip content={GOAL_HELP.targetDate} />
+            </div>
 
             <p className="mt-1 truncate font-mono font-semibold text-surface-foreground">
               {formatDateIST(goal.target_date)}
@@ -111,44 +182,46 @@ function GoalCard({
 
         {goal.created_at && (
           <MetricTile>
-            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              Created
-            </p>
+            <div className="flex items-center justify-between gap-1.5">
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                Created
+              </p>
+              <InfoTooltip content={GOAL_HELP.createdTimestamp} />
+            </div>
 
             <p className="mt-1 truncate font-mono font-semibold text-surface-foreground">
               {formatDateTimeIST(goal.created_at)}
             </p>
           </MetricTile>
         )}
-
-        <MetricTile>
-          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            Weightage
-          </p>
-
-          <p className="mt-1 truncate font-mono font-semibold text-surface-foreground">
-            {goal.weightage}%
-          </p>
-        </MetricTile>
       </div>
 
       {(goal.approved_at || goal.returned_at || goal.updated_at) && (
         <dl className="grid gap-2 text-xs text-muted-foreground sm:grid-cols-3">
           {goal.approved_at && (
             <div>
-              <dt className="font-semibold uppercase tracking-wide">Approved</dt>
+              <dt className="flex items-center gap-1 font-semibold uppercase tracking-wide">
+                <span>Approved</span>
+                <InfoTooltip content={GOAL_HELP.approvedTimestamp} />
+              </dt>
               <dd>{formatDateTimeIST(goal.approved_at)}</dd>
             </div>
           )}
           {goal.returned_at && (
             <div>
-              <dt className="font-semibold uppercase tracking-wide">Returned</dt>
+              <dt className="flex items-center gap-1 font-semibold uppercase tracking-wide">
+                <span>Returned</span>
+                <InfoTooltip content={GOAL_HELP.returnedTimestamp} />
+              </dt>
               <dd>{formatDateTimeIST(goal.returned_at)}</dd>
             </div>
           )}
           {goal.updated_at && (
             <div>
-              <dt className="font-semibold uppercase tracking-wide">Updated</dt>
+              <dt className="flex items-center gap-1 font-semibold uppercase tracking-wide">
+                <span>Updated</span>
+                <InfoTooltip content={GOAL_HELP.updatedTimestamp} />
+              </dt>
               <dd>{formatDateTimeIST(goal.updated_at)}</dd>
             </div>
           )}

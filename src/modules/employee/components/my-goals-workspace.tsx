@@ -5,7 +5,9 @@ import { toast } from "sonner"
 
 import Button from "@/components/ui/button"
 import ErrorState from "@/components/ui/error-state"
+import InfoTooltip from "@/components/ui/info-tooltip"
 import LoadingSkeleton from "@/components/ui/loading-skeleton"
+import { GOAL_HELP } from "@/lib/goal-help"
 import type { Goal } from "@/types/goal"
 import type { QuarterlyCheckinPayload } from "@/types/goal"
 
@@ -193,9 +195,12 @@ function MyGoalsWorkspace() {
           <p className="text-xs font-semibold uppercase tracking-wide text-accent">
             Employee Workspace
           </p>
-          <h1 className="mt-1 text-3xl font-bold text-card-foreground">
-            My Goals
-          </h1>
+          <div className="mt-1 flex items-center gap-2">
+            <h1 className="text-3xl font-bold text-card-foreground">
+              My Goals
+            </h1>
+            <InfoTooltip content={GOAL_HELP.goalDefinition} />
+          </div>
 
           <p className="mt-1 text-muted-foreground">
             Build, submit, and track quarterly commitments with clear ownership.
