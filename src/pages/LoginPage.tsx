@@ -20,7 +20,7 @@ import { Field, FieldError, FieldLabel, Input } from "@/components/ui/form"
 import { getApiErrorMessage } from "@/services/api-error"
 
 import { toast } from "sonner"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 const schema = z.object({
   identifier: z.string().min(1),
@@ -221,9 +221,15 @@ function LoginPage() {
             : "Login"}
         </Button>
 
-        <p className="rounded-md border border-border bg-surface px-3 py-2 text-center text-xs text-muted-foreground">
-          Accounts are provisioned internally by Admin operations.
-        </p>
+        <div className="rounded-md border border-border bg-surface px-3 py-2.5 text-center text-xs text-muted-foreground">
+          <span>Don&apos;t have an account? </span>
+          <Link
+            to="/register"
+            className="font-semibold text-primary underline-offset-4 hover:underline"
+          >
+            Register new account
+          </Link>
+        </div>
       </form>
     </div>
   )

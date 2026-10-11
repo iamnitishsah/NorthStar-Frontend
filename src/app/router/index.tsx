@@ -12,7 +12,9 @@ import ProtectedRoute from "@/components/auth/ProtectedRoute"
 import { roleHomePath } from "@/app/navigation"
 import RoleProtectedRoute from "@/components/auth/RoleProtectedRoute"
 
+const LandingPage = lazy(() => import("@/pages/LandingPage"))
 const LoginPage = lazy(() => import("@/pages/LoginPage"))
+const RegisterPage = lazy(() => import("@/pages/RegisterPage"))
 const NotFoundPage = lazy(() => import("@/pages/NotFoundPage"))
 const UnauthorizedPage = lazy(() => import("@/pages/UnauthorizedPage"))
 
@@ -54,7 +56,7 @@ function withSuspense(element: ReactNode) {
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Navigate to="/login" replace />,
+    element: withSuspense(<LandingPage />),
   },
   {
     path: "/login",
@@ -62,7 +64,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "/register",
-    element: <Navigate to="/login" replace />,
+    element: withSuspense(<RegisterPage />),
   },
   {
     path: "/unauthorized",
