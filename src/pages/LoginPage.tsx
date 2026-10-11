@@ -20,7 +20,7 @@ import { Field, FieldError, FieldLabel, Input } from "@/components/ui/form"
 import { getApiErrorMessage } from "@/services/api-error"
 
 import { toast } from "sonner"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, Navigate, useNavigate } from "react-router-dom"
 
 const schema = z.object({
   identifier: z.string().min(1),
@@ -43,6 +43,8 @@ function NorthStarMark() {
 
 function LoginPage() {
   const navigate = useNavigate()
+  const user = useAuthStore((state) => state.user)
+  const token = useAuthStore((state) => state.accessToken)
 
   const [loginType, setLoginType] = useState<
     "email" | "employee_id"
@@ -61,6 +63,10 @@ function LoginPage() {
   } = useForm<FormData>({
     resolver: zodResolver(schema),
   })
+
+  if (token && user) {
+    return <Navigate to={getRoleHomePath(user.role)} replace />
+  }
 
   async function onSubmit(data: FormData) {
     setLoginError(null)

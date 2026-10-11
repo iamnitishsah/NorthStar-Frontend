@@ -11,11 +11,13 @@ import {
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, Navigate, useNavigate } from "react-router-dom"
 import { toast } from "sonner"
 
 import { registerUser } from "@/modules/auth/auth-service"
 import { useTheme } from "@/app/providers/use-theme"
+import { useAuthStore } from "@/app/store/auth-store"
+import { getRoleHomePath } from "@/app/navigation"
 import Button from "@/components/ui/button"
 import {
   Field,
@@ -99,6 +101,9 @@ function NorthStarMark() {
 
 function RegisterPage() {
   const navigate = useNavigate()
+  const user = useAuthStore((state) => state.user)
+  const token = useAuthStore((state) => state.accessToken)
+
   const { theme, toggleTheme } = useTheme()
   const [registerError, setRegisterError] = useState<string | null>(null)
   const [showPassword, setShowPassword] = useState(false)
@@ -116,6 +121,10 @@ function RegisterPage() {
       manager_id: "",
     },
   })
+
+  if (token && user) {
+    return <Navigate to={getRoleHomePath(user.role)} replace />
+  }
 
   async function onSubmit(data: RegisterFormData) {
     setRegisterError(null)

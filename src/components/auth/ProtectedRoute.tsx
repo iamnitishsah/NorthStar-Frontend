@@ -14,7 +14,7 @@ function ProtectedRoute({ children }: Props) {
   const user = useAuthStore((state) => state.user)
 
   if (!token || !user) {
-    return <Navigate to="/login" replace />
+    return <Navigate to="/" replace />
   }
 
   return children

@@ -9,6 +9,7 @@ import {
 import LoadingSkeleton from "@/components/ui/loading-skeleton"
 import DashboardLayout from "@/layouts/DashboardLayout"
 import ProtectedRoute from "@/components/auth/ProtectedRoute"
+import PublicOnlyRoute from "@/components/auth/PublicOnlyRoute"
 import { roleHomePath } from "@/app/navigation"
 import RoleProtectedRoute from "@/components/auth/RoleProtectedRoute"
 
@@ -60,11 +61,19 @@ export const router = createBrowserRouter([
   },
   {
     path: "/login",
-    element: withSuspense(<LoginPage />),
+    element: (
+      <PublicOnlyRoute>
+        {withSuspense(<LoginPage />)}
+      </PublicOnlyRoute>
+    ),
   },
   {
     path: "/register",
-    element: withSuspense(<RegisterPage />),
+    element: (
+      <PublicOnlyRoute>
+        {withSuspense(<RegisterPage />)}
+      </PublicOnlyRoute>
+    ),
   },
   {
     path: "/unauthorized",

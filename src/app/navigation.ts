@@ -3,7 +3,6 @@ import {
   Target,
   ClipboardCheck,
   Share2,
-  ShieldCheck,
   ScrollText,
   TrendingUp,
   UserPlus,
@@ -14,7 +13,7 @@ import type { UserRole } from "@/types/auth"
 export const roleHomePath: Record<UserRole, string> = {
   EMPLOYEE: "/employee/dashboard",
   MANAGER: "/manager/dashboard",
-  HR: "/login",
+  HR: "/organization",
   ADMIN: "/admin/dashboard",
 }
 
@@ -99,9 +98,9 @@ export const navigation = {
 
   HR: [
     {
-      label: "Dashboard",
-      path: "/login",
-      icon: ShieldCheck,
+      label: "Organization",
+      path: "/organization",
+      icon: Users,
     },
   ],
 }
